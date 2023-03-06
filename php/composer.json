@@ -1,0 +1,19 @@
+{
+    "name": "csupcyber/pemead",
+    "description": "Csups cyber 22.1 PHP  project - E-learning solution",
+    "type": "project",
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.28"
+    },
+    "license": "GNU GENERAL PUBLIC LICENSE",
+    "autoload": {
+        "psr-4": {
+            "Csupcyber\\Pemead\\": "Pemead/"
+        }
+    },
+    "authors": [
+        {
+            "name": "PM WAGNER Ulric  PM THOMAS Frédéric"
+        }
+    ]
+}
