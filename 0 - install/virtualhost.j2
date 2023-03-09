@@ -1,0 +1,66 @@
+# Virtual host configuration for OSD_XX project
+
+<VirtualHost *:80>
+  ServerName {{ serverName }}
+ 
+  # Redirect all HTTP requests to HTTPS
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  </VirtualHost>
+
+  <VirtualHost *:8080>
+  ServerName {{ serverName }}
+ 
+  # Redirect all HTTP requests to HTTPS
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerAdmin {{ serverAdmin }}
+  ServerName {{ serverName }}
+  DocumentRoot {{ documentRoot }}
+  ErrorLog {{ errorLog }}
+  CustomLog {{ customLog }} combined
+
+  <Directory {{ documentRoot }}/php>
+   Order deny,allow
+   Deny from all
+  </Directory>
+
+  <Directory {{ documentRoot }}/ini>
+   Order deny,allow
+   Deny from all
+  </Directory>
+
+  <Directory {{ documentRoot }}/file>
+   Order deny,allow
+   Deny from all
+  </Directory>
+
+  <Directory {{ documentRoot }}/import>
+   Order deny,allow
+   Deny from all
+  </Directory>
+
+# Activer l'usage du protocole TLS
+  SSLEngine on
+# Forcer l'usage de TLS1.2
+  SSLProtocol +TLSv1.2
+# Fournir une chaîne de certification et une clé
+  SSLCertificateFile {{ssl_certificate_file}}
+  SSLCertificateKeyFile {{ssl_certificate_key_file}}
+  SSLCompression off
+# Désactiver la compression
+  SSLCompression off
+# Désactiver les renégociations non sécurisées
+  SSLInsecureRenegotiation off
+# Chiffrement fort
+SSLCipherSuite RC4-SHA:AES128-SHA:HIGH:!aNULL:!MD5
+SSLHonorCipherOrder on
+
+</VirtualHost>

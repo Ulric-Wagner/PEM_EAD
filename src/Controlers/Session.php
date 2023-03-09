@@ -5,16 +5,22 @@ class Session
 {
     public function __construct()
     {
-        $this->domain = 'pemead.gouv.fr'; //variable a mettre dans un fichier ini
         $this->dateFormat = 'D, j M Y G:i:s';
     }
 
-    public function set()
+    public function setPhp()
     {
         //activation strict mode
         ini_set('session.use_strict_mode', 1);
         //paramétrage de la durée de vie du cookie par defaut à 10 min
         ini_set('session.cookie_lifetime', 600);
+        //only be sent over secure connections
+        ini_set('session.cookie_secure', true);
+        //accessible only through the HTTP protocol
+        //cookie samesite strict -> no cross-domain post
+        ini_set('session.cookie_samesite', 'Strict');
+        //accessible only through the HTTP protocol
+        ini_set('session.cookie_httponly', true);
         //durée de vie de la session forcer à 1h max
         ini_set('session.gc_maxlifetime', 3600);
         // probabilité de suppression des sessions expirées
@@ -40,10 +46,22 @@ class Session
         header("X-Content-Type-Options: nosniff");
         header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
         header("X-Frame-Options: deny");
-        $csp = "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestor 'none'";
+        $csp = "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors";
         header("Content-Security-Policy: ".$csp);
         header("Referrer-Policy: same-origin");
         header("Cross-Origin-Opener-Policy: same-origin");
+    }
+
+    public function hostHeaderProtection()
+    {
+        //refuse l'accès depuis un domaine non autorisé
+        //lecture du fichier ini allowed_domains.ini
+         $iniArray = parse_ini_file("ini/allowed_domains.ini", true);
+         $allowedDomains = $iniArray['URL'];
+        if ( !in_array($_SERVER['SERVER_NAME'], $allowedDomains)) {
+        echo '<H1>Accès refusé</H1>';
+        exit();
+        }
     }
 
     public function destroyPHPDefaultCookie()
@@ -74,17 +92,6 @@ class Session
             //destruction de la session
             session_destroy();
             unset($_COOKIE['pemead']);
-            //préparation du cookie
-            $date = date($this->dateFormat, time()-600);
-            $cookieDate = $date.' GMT';
-            //invalidation de la session conté client
-            setcookie("pemead", null, ['expires' => $cookieDate,
-            'path' => '/',
-            'domain' => $this->domain,
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'strict']
-            );
         }
     }
     
@@ -101,24 +108,17 @@ class Session
                     //destruction de la session
                     session_destroy();
                 }
+            session_set_cookie_params(['lifetime' => '600',
+            'Path' => '/',
+            'Secure' => true,
+            'HttpOnly' => true,
+            'SameSite' => 'Strict']);
             session_name('pemead');
             session_start();
             session_regenerate_id();
             $_SESSION['deleted_time'] = time(); //définit l'horodatage de suppression de la session
             unset($_COOKIE['pemead']);
 
-            //préparation du cookie
-            $date = date($this->dateFormat, time()+600);
-            $cookieDate = $date.' GMT';
-
-            //expiration du cookie de session (token)
-            setcookie("pemead", session_id(), ['expires' => $cookieDate,
-            'path' => '/',
-            'domain' => $this->domain,
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'strict']
-            );
             }else {
             session_name('pemead');
             session_start();
@@ -126,17 +126,6 @@ class Session
             //définit l'horodatage de suppression de la session
             $_SESSION['deleted_time'] = time();
             unset($_COOKIE['pemead']);
-            //préparation du cookie
-            $date = date($this->dateFormat, time()+600);
-            $cookieDate = $date.' GMT';
-            //expiration du cookie de session (token)
-            setcookie("pemead", session_id(), ['expires' => $cookieDate,
-            'path' => '/',
-            'domain' => $this->domain,
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'strict']
-            );
             }
             
         } else {
@@ -146,27 +135,22 @@ class Session
             //définit l'horodatage de suppression de la session
             $_SESSION['deleted_time'] = time();
             unset($_COOKIE['pemead']);
-            //préparation du cookie
-            $date = date($this->dateFormat, time()+600);
-            $cookieDate = $date.' GMT';
-            //prologation du token suite activité utilisateur
-            setcookie("pemead", session_id(), ['expires' => $cookieDate,
-            'path' => '/',
-            'domain' => $this->domain,
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'strict']
-            );
+            ;
         }
     }
     
     public function open()
     {
-        $this->set();
-        $this->destroyPHPDefaultCookie();
+        $this->setPhp();
         $this->init();
-        $this->destroyOldSession();
         $this->setProjectCookie();
-        $this->setSecurityHeaders();
+        //$this->setSecurityHeaders();
+        $this->hostHeaderProtection();
+        $this->destroyPHPDefaultCookie();
+        $this->destroyOldSession();
+        if (!isset($_SESSION['authentication'])) {
+            //creation d'une variable pour l'authentification des utilisateurs
+            $_SESSION['authentication'] = 'none';
+        }
     }
 }
