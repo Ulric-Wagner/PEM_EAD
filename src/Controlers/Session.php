@@ -1,11 +1,14 @@
 <?php
 namespace Csupcyber\Pemead\Controlers;
 
+use Csupcyber\Pemead\Controlers\Cipher;
+
 class Session
 {
     public function __construct()
     {
         $this->dateFormat = 'D, j M Y G:i:s';
+        $this->cipher = new Cipher();
     }
 
     public function setPhp()
@@ -15,12 +18,14 @@ class Session
         //paramétrage de la durée de vie du cookie par defaut à 10 min
         ini_set('session.cookie_lifetime', 600);
         //only be sent over secure connections
-        ini_set('session.cookie_secure', true);
+        //ini_set('session.cookie_secure', true);
+        ini_set('session.cookie_secure', false); //test
         //accessible only through the HTTP protocol
         //cookie samesite strict -> no cross-domain post
         ini_set('session.cookie_samesite', 'Strict');
         //accessible only through the HTTP protocol
-        ini_set('session.cookie_httponly', true);
+        //ini_set('session.cookie_httponly', true);
+        ini_set('session.cookie_httponly', false); //test
         //durée de vie de la session forcer à 1h max
         ini_set('session.gc_maxlifetime', 3600);
         // probabilité de suppression des sessions expirées
@@ -108,11 +113,6 @@ class Session
                     //destruction de la session
                     session_destroy();
                 }
-            session_set_cookie_params(['lifetime' => '600',
-            'Path' => '/',
-            'Secure' => true,
-            'HttpOnly' => true,
-            'SameSite' => 'Strict']);
             session_name('pemead');
             session_start();
             session_regenerate_id();
@@ -138,16 +138,24 @@ class Session
             ;
         }
     }
+
+    public function tokenCSRF()
+    {
+        if (empty($_SESSION['CSRFToken'])){
+            $this->cipher->generateToken();
+        }
+    }
     
     public function open()
     {
         $this->setPhp();
         $this->init();
         $this->setProjectCookie();
-        //$this->setSecurityHeaders();
+        $this->setSecurityHeaders();
         $this->hostHeaderProtection();
         $this->destroyPHPDefaultCookie();
         $this->destroyOldSession();
+        $this->tokenCSRF();
         if (!isset($_SESSION['authentication'])) {
             //creation d'une variable pour l'authentification des utilisateurs
             $_SESSION['authentication'] = 'none';
