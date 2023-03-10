@@ -44,7 +44,7 @@ class LoginFormBody
       <!-- Submit button -->
       <div class="d-flex justify-content-center">
       <button type="submit" class="btn btn-secondary btn-block mb-3">Se connecter</button>
-      <a class="btn btn-dark btn-block mb-3" href="#" role="button">S'enregistrer</a>
+      <a class="btn btn-dark btn-block mb-3" href="?view=register" role="button">S'enregistrer</a>
     </div>
     </form>
   </div>

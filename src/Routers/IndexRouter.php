@@ -16,15 +16,15 @@ class IndexRouter{
         $ioCleaner->sqliFilter();
         $ioCleaner->xssFilter();
 
-        if (!isset($_GET['action'])
-            || ($_GET['action'] === 'signup')
+        if (!isset($_GET['view'])
+            || ($_GET['view'] === 'signup')
             && $_SESSION['authentication'] === 'none') {
             $login = new LoginForm();
             $login->header();
             $login->navbar();
             $login->body();
             $login->footer();
-        } elseif (($_GET['action'] === 'register')
+        } elseif (isset($_GET['view']) && ($_GET['view'] === 'register')
             && ($_SESSION['authentication'] === 'none')) {
             $register = new RegisterForm();
             $register->header();

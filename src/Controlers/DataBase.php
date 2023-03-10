@@ -2,12 +2,14 @@
 namespace Csupcyber\Pemead\Controlers;
 
 use Csupcyber\Pemead\Controlers\IOCleaner;
+use \PDO;
 
 class DataBase
 {
     public function __construct()
     {
         $this->iocleaner = new IOCleaner();
+        $this->connect();
     }
 
     public function connect()
@@ -34,7 +36,7 @@ class DataBase
         $sql = 'INSERT INTO users (Nom, Prenom, Matricule, Mail, Sha256, Statut)
                 VALUES (:Nom, :Prenom, :Maticule, :Mail, :Sha256, :Statut);';
         try {
-            $insert = $bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (Exception $e) {
             echo 'Une erreur est survenue lors de la préparation de la requête \
             vers la base de données, veuillez contacter un administrateur';
@@ -50,5 +52,10 @@ class DataBase
                     echo 'Une erreur est survenue lors de l\'execution \
                     de la requête vers la base de données, veuillez contacter un administrateur';
                 }
+    }
+
+    public function getPromotions()
+    {
+        //
     }
 }
