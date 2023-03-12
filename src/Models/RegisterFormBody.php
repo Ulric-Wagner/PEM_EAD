@@ -2,11 +2,12 @@
 namespace Csupcyber\Pemead\Models;
 
 use Csupcyber\Pemead\Controlers\DataBase;
+use Csupcyber\Pemead\Controlers\MessageToUser;
 
 class RegisterFormBody
 {
     public function __construct()
-    { 
+    {
       $this->bdd = new DataBase();
       ?>
 
@@ -20,35 +21,61 @@ class RegisterFormBody
     <H3>Veuillez vous enregistrer pour accéder au service:</H3>
   </div>
 </div>
+<form method="post" action="?process=register">
 <div class="d-flex justify-content-center mt-4">
 <div class="form-outline mb-4 col-4">
       <!-- Name input -->
       <div class="form-outline mb-4">
-        <input type="text" id="registerName" class="form-control d-flex justify-content-center" required/>
+        <input
+        type="text"
+        id="registerName"
+        class="form-control d-flex justify-content-center"
+        name="RegisterNom"
+        required/>
         <label class="form-label d-flex justify-content-center" for="registerName">Nom</label>
       </div>
 
       <!-- Firstname input -->
       <div class="form-outline mb-4">
-        <input type="text" id="registerFirstname" class="form-control d-flex justify-content-center" required/>
+        <input
+        type="text"
+        id="registerFirstname"
+        class="form-control d-flex justify-content-center"
+        name="RegisterPrenom"
+        required/>
         <label class="form-label d-flex justify-content-center" for="registerFirstname">Prénom</label>
       </div>
 
       <!-- RegistrationNumber input -->
       <div class="form-outline mb-4">
-        <input type="text" id="registerRegistrationNumber" class="form-control d-flex justify-content-center" required/>
+        <input
+        type="text"
+        id="registerRegistrationNumber"
+        class="form-control d-flex justify-content-center"
+        name="RegisterMatricule"
+        required/>
         <label class="form-label d-flex justify-content-center" for="registerRegistrationNumber">Matricule</label>
       </div>
 
       <!-- Email input -->
       <div class="form-outline mb-4">
-        <input type="email" id="registerEmail" class="form-control d-flex justify-content-center" required/>
+        <input
+        type="email"
+        id="registerEmail"
+        class="form-control d-flex justify-content-center"
+        name="RegisterMail"
+        required/>
         <label class="form-label d-flex justify-content-center" for="registerEmail">Email</label>
       </div>
 
       <!-- Password input -->
       <div class="form-outline mb-4">
-        <input type="password" id="registerPassword" class="form-control d-flex justify-content-center" required/>
+        <input
+        type="password"
+        id="registerPassword"
+        class="form-control d-flex justify-content-center"
+        name="RegisterPassword"
+        required/>
         <label class="form-label d-flex justify-content-center" for="registerPassword">Mot de passe</label>
       </div>
 
@@ -65,7 +92,7 @@ class RegisterFormBody
       <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
       <!-- Submit button -->
       <div class="d-flex justify-content-center">
-      <a class="btn btn-dark btn-block mb-3" href="#" role="button">S'enregistrer</a>
+      <button type="submit" class="btn btn-dark btn-block mb-3">S'enregistrer</button>
     </div>
     </form>
   </div>

@@ -37,7 +37,7 @@ class NavBar
     {
         if (isset($_SESSION['authentication'])
         && ($_SESSION['authentication'] != 'authenticated')
-        && (empty($_GET['view']))) {?>
+        && (empty($_GET['view']) || $_GET['view'] === 'signup')) {?>
           <li class="nav-item active">
           <a class="nav-link" href="?view=signup">Se connecter</a>
           <?php
@@ -75,6 +75,7 @@ class NavBar
 
     public function menu()
     {
+      //affichage du menu pour utilisateurs non connectés
       if (isset($_SESSION['authentication'])
       && $_SESSION['authentication'] != 'authenticated') {?>
       <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarScrollingDropdown">
@@ -84,6 +85,17 @@ class NavBar
         <hr class="dropdown-divider">
         </li>
         <li><a class="dropdown-item" href="?view=signup">Connexion</a></li>
+        </ul>
+      <?php
+      }
+
+      //affichage du menu pour utilisateurs connectés
+      if (isset($_SESSION['authentication'])
+      && $_SESSION['authentication'] === 'authenticated') {?>
+      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarScrollingDropdown">
+        <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" href="?process=logout">Se deconnecter</a></li>
         </ul>
       <?php
       }

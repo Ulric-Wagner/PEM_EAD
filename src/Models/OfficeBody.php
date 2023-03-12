@@ -1,14 +1,14 @@
 <?php
 namespace Csupcyber\Pemead\Models;
 
-class LoginFormBody
+class OfficeBody
 {
     public function __construct()
     { ?>
 
 <div class="d-flex justify-content-center mt-4">
   <div class="col-7 text-center">
-    <H1>Bienvenue sur le portail d'enseignement à distance du pôle écoles méditérranée.</H1>
+    <H1>Bienvenue dans votre bureau.</H1>
   </div>
 </div>
 <div class="d-flex justify-content-center mt-2">

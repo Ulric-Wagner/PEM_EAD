@@ -31,4 +31,9 @@ class Cipher
         }
     }
 
+    public function sha256($data)
+    {
+        return hash("sha256", $data, false);
+    }
+
 }

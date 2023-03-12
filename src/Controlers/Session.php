@@ -161,4 +161,18 @@ class Session
             $_SESSION['authentication'] = 'none';
         }
     }
+
+    public function close()
+    {
+        //Destruction des variable de session
+        foreach ($_SESSION as $key => $value) {
+            unset($_SESSION["$key"]);
+        }
+          
+        //destruction de la session
+        session_destroy();
+        unset($_COOKIE['pemead']);
+        
+        
+    }
 }
