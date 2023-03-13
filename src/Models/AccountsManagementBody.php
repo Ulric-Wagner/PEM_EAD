@@ -42,16 +42,29 @@ class AccountsManagementBody
         <td><?php echo $user['Matricule'] ?></td>
         <td><?php echo $user['Mail'] ?></td>
         <td>
-          <form method="post" action="?process=changeCourse">
-            <select name="Course" class="Select" id="Course" >
-              <option value="CSUP CYBER">CSUP CYBER</option>
-              <option value="BS SYNUM">BS SYNUM</option>
+          <form id="DisabledCourseForm" method="post" action="?process=setCourse">
+            <select name="Course" id="DisabledCourseSelect" >
+              <!--<option value="CSUP CYBER">CSUP CYBER</option>
+              <option value="BS SYNUM">BS SYNUM</option>-->
             </select>
-            <noscript><input type=”submit” value=”Submit”></noscript>
           </form>
         </td>
-        <td><?php echo $user['Mail'] ?></td>
-        <td><?php echo $user['Mail'] ?></td>
+        <td>
+          <form id="DisabledPromoForm" method="post" action="?process=setPromo">
+            <select name="Course" id="DisabledPromoSelect" >
+              
+            
+            </select>
+          </form>
+        </td>
+        <td>
+          <form id="DisabledRoleForm" method="post" action="?process=setRole">
+            <select name="Course" id="DisabledRoleSelect" >
+              <!--<option value="CSUP CYBER">CSUP CYBER</option>
+              <option value="BS SYNUM">BS SYNUM</option>-->
+            </select>
+          </form>
+        </td>
         <td class="row">
           <form class="col-6" method="post" action="?process=validUser">
             <input type="hidden" name="ValidatedUser" value="<?php echo $user['UID'] ?>" />
@@ -98,9 +111,27 @@ class AccountsManagementBody
         <td><?php echo $user['Prenom'] ?></td>
         <td><?php echo $user['Matricule'] ?></td>
         <td><?php echo $user['Mail'] ?></td>
-        <td><?php echo $user['Mail'] ?></td>
-        <td><?php echo $user['Mail'] ?></td>
-        <td><?php echo $user['Mail'] ?></td>
+        <td>
+        <form id="EnabledCourseForm" method="post" action="?process=setCourse">
+            <select name="Course" id="EnabledCourseSelect" >
+              
+            </select>
+          </form>
+        </td>
+        <td>
+        <form id="EnabledPromoForm" method="post" action="?process=setPromo">
+            <select name="Course" id="EnabledPromoSelect" >
+              
+            </select>
+          </form>
+        </td>
+        <td>
+        <form id="EnabledRoleForm" method="post" action="?process=setRole">
+            <select name="Course" id="EnabledRoleSelect" >
+              
+            </select>
+          </form>
+        </td>
         <td class="row">
           <form class="col-6" method="post" action="?process=disableUser">
             <input type="hidden" name="DisabledUser" value="<?php echo $user['UID'] ?>" />
