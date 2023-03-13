@@ -41,7 +41,7 @@ class MessageToUser
         if (isset($_GET['success'])
         && ($_GET['success'] === "done")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                <strong>OK !!</strong>Acction réalisée &#x1F609;.
+                <strong>OK !! </strong> Action réalisée &#x1F609;.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php

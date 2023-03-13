@@ -18,6 +18,12 @@ class HtmlFooter
         <script src="js/register.js"></script>
         <?php
     }
+
+    if (isset($_GET['view']) && $_GET['view'] === 'accountsManagement') {
+        ?>
+        <script src="js/accountsManagement.js"></script>
+        <?php
+    }
     ?>
     </body>
     <?php

@@ -176,7 +176,25 @@ class DataBase
             }
             try {
                 $reponse->execute();
-                return$reponse->fetchall();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //Wait
+            }
+    }
+
+    public function getEnabledUsers()
+    {
+        //retourne une array contenant les information sur les utilisateurs actifs
+        $sql = 'SELECT * FROM `users` WHERE `Statut` = 1';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetchall();
                    
             } catch (PDOException $e) {
                 //Wait
@@ -195,6 +213,23 @@ class DataBase
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
                                    'Statut' => '1'));
+        } catch (PDOException $e) {
+            //wait
+        }
+    }
+
+    public function disableUser($uid)
+    {
+        // validation d'un nouvel uilisateur
+        $sql = 'UPDATE users SET Statut = :Statut WHERE UID = :UID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header("location: ?view=setPassword&error=dbPrepare");
+        }
+        try {
+            $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
+                                   'Statut' => '0'));
         } catch (PDOException $e) {
             //wait
         }

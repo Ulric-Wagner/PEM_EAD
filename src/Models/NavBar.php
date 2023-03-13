@@ -68,7 +68,17 @@ class NavBar
           <li class="nav-item active">
           <a class="nav-link" href="?view=office">Mon Bureau</a>
           <?php
-        }?>
+        }
+        
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'accountsManagement')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=accountsManagement">Gestion des comptes</a>
+          <?php
+        }
+        ?>
         
           <!--</li>
           <li class="nav-item">
@@ -112,7 +122,7 @@ class NavBar
       if (isset($_SESSION['authentication'])
       && $_SESSION['authentication'] === 'authenticated') {?>
       <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarScrollingDropdown">
-        <li><a class="dropdown-item" href="#">Mon bureau</a></li>
+        <li><a class="dropdown-item" href="?view=office">Mon bureau</a></li>
         <li>
         <hr class="dropdown-divider">
         </li>

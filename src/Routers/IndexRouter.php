@@ -15,6 +15,7 @@ use Csupcyber\Pemead\Controlers\Office;
 use Csupcyber\Pemead\Controlers\AccountsManagement;
 use Csupcyber\Pemead\Controlers\ValidUserProcess;
 use Csupcyber\Pemead\Controlers\RejectUserProcess;
+use Csupcyber\Pemead\Controlers\DisableUserProcess;
 
 
 class IndexRouter{
@@ -49,6 +50,9 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'rejectUser')) {
             $process = new RejectUserProcess();
             $process->reject();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'disableUser')) {
+            $process = new DisableUserProcess();
+            $process->disable();
         }
 
         if ((!isset($_GET['view'])
