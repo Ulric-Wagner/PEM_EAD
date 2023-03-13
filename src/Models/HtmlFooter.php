@@ -12,6 +12,12 @@ class HtmlFooter
         <script src="js/setPassword.js"></script>
         <?php
     }
+
+    if (isset($_GET['view']) && $_GET['view'] === 'register') {
+        ?>
+        <script src="js/register.js"></script>
+        <?php
+    }
     ?>
     </body>
     <?php

@@ -12,7 +12,9 @@ use Csupcyber\Pemead\Controlers\RegisterProcess;
 use Csupcyber\Pemead\Controlers\SetPasswordForm;
 use Csupcyber\Pemead\Controlers\SetPasswordProcess;
 use Csupcyber\Pemead\Controlers\Office;
-
+use Csupcyber\Pemead\Controlers\AccountsManagement;
+use Csupcyber\Pemead\Controlers\ValidUserProcess;
+use Csupcyber\Pemead\Controlers\RejectUserProcess;
 
 
 class IndexRouter{
@@ -41,6 +43,12 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'setPassword')) {
             $process = new SetPasswordProcess();
             $process->updatePassword();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'validUser')) {
+            $process = new ValidUserProcess();
+            $process->valid();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'rejectUser')) {
+            $process = new RejectUserProcess();
+            $process->reject();
         }
 
         if ((!isset($_GET['view'])
@@ -84,6 +92,16 @@ class IndexRouter{
         $msg->success();
         $office->body();
         $office->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'accountsManagement')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $accounts = new AccountsManagement();
+        $accounts->header();
+        $accounts->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $accounts->body();
+        $accounts->footer();
     } elseif (isset($_GET['view'])
     && ($_GET['view'] === 'signup')
     && ($_SESSION['authentication'] === 'authenticated')) {

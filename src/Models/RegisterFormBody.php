@@ -90,6 +90,18 @@ class RegisterFormBody
         <label class="form-label d-flex justify-content-center" for="registerPassword">Mot de passe</label>
       </div>
 
+      <!-- Password confirmation input -->
+      <div class="form-outline mb-4">
+        <input
+        type="password"
+        id="ConfirmPassword"
+        class="form-control d-flex justify-content-center"
+        name="ConfirmPassword"
+        required/>
+        <label class="form-label d-flex justify-content-center" for="ConfirmPassword">
+        Confirmation du mot de passe</label>
+      </div>
+
       <!-- Checkbox -->
       <div class="form-check d-flex justify-content-center mb-4">
         <input class="me-2" type="checkbox" value="" id="registerCheck" checked

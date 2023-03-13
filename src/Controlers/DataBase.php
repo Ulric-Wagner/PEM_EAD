@@ -165,8 +165,54 @@ class DataBase
             }
     }
 
-    public function getPromotions()
+    public function getNewUsers()
     {
-        //wait
+        //retourne une array contenant les information sur les utilisateurs en attente de validation
+        $sql = 'SELECT * FROM `users` WHERE `Statut` = 0';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return$reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //Wait
+            }
+    }
+
+    public function validUser($uid)
+    {
+        // validation d'un nouvel uilisateur
+        $sql = 'UPDATE users SET Statut = :Statut WHERE UID = :UID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header("location: ?view=setPassword&error=dbPrepare");
+        }
+        try {
+            $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
+                                   'Statut' => '1'));
+        } catch (PDOException $e) {
+            //wait
+        }
+    }
+
+    public function rejectUser($uid)
+    {
+        // suppression de l'uilisateur rejeté
+        $sql = 'DELETE FROM users WHERE UID = :UID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header("location: ?view=setPassword&error=dbPrepare");
+        }
+        try {
+            $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid)));
+        } catch (PDOException $e) {
+            //wait
+        }
     }
 }

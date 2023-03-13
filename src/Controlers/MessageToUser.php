@@ -37,6 +37,15 @@ class MessageToUser
             </div>
         <?php
         }
+
+        if (isset($_GET['success'])
+        && ($_GET['success'] === "done")) {?>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <strong>OK !!</strong>Acction réalisée &#x1F609;.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
     }
 
     public function warning()
@@ -136,6 +145,16 @@ class MessageToUser
                 veuillez contacter un administrateur ou rééssayer plus tard.
                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
              </div>
+        <?php
+        }
+
+        // erreur dans le format de l'adresse mail dans le formulaire d'enregistrement
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "nok")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Oups!</strong> L'action n'a pas été éfectuée...
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
         <?php
         }
     
