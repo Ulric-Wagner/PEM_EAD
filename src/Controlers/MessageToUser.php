@@ -10,7 +10,7 @@ class MessageToUser
 
     public function success()
     {
-        if(isset($_GET['success'])
+        if (isset($_GET['success'])
         && ($_GET['success'] === "registred")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>Enregistré!!</strong> Votre compte utilisateur a été créé,
@@ -20,10 +20,19 @@ class MessageToUser
         <?php
         }
 
-        if(isset($_GET['success'])
+        if (isset($_GET['success'])
         && ($_GET['success'] === "logedIn")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>Vous revoilà!!</strong> Vous êtes connecté, au travail! &#x1F609;.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
+
+        if (isset($_GET['success'])
+        && ($_GET['success'] === "passwordChanged")) {?>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <strong>Mot de passe modifié !!</strong> Merci de contribuer à la sécurité de la plateforme &#x1F609;.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php

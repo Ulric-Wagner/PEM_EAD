@@ -13,6 +13,7 @@ class DataBase
         $this->iocleaner = new IOCleaner();
         $this->cipher = new Cipher();
         $this->connect();
+        $this->LOCATION_REGISTER_DBPREPARE_ERROR = "location: ?view=register&error=dbPrepare";
     }
 
     public function connect()
@@ -34,23 +35,24 @@ class DataBase
         }
     }
 
-    public function createUser($nom, $prenom, $matricule, $mail, $password)
+    public function createUser($grade, $nom, $prenom, $matricule, $mail, $password)
     {
         // création d'un nouvel uilisateur dans la base de donnée
-        $sha256 = $this->cipher->sha256($password);
-        $sql = 'INSERT INTO users (`Nom`, `Prenom`, `Matricule`, `Mail`, `Sha256`)
-                VALUES (:Nom, :Prenom, :Matricule, :Mail, :Sha256);';
+        $sha256 = $this->cipher->sha256($this->iocleaner->inputFilter($password));
+        $sql = 'INSERT INTO users (`Grade`, `Nom`, `Prenom`, `Matricule`, `Mail`, `Sha256`)
+                VALUES (:Grade, :Nom, :Prenom, :Matricule, :Mail, :Sha256);';
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header("location: ?view=register&error=dbPrepare");
+            header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
         }
         try {
-            $insert->execute(array('Nom' => $this->iocleaner->inputFilter($nom),
+            $insert->execute(array('Grade' => $this->iocleaner->inputFilter($grade),
+                                   'Nom' => $this->iocleaner->inputFilter($nom),
                                    'Prenom' => $this->iocleaner->inputFilter($prenom),
                                    'Matricule' => $this->iocleaner->inputFilter($matricule),
                                    'Mail' => $this->iocleaner->inputFilter($mail),
-                                   'Sha256' => $this->iocleaner->inputFilter($sha256)));
+                                   'Sha256' => $sha256));
             header('location: ?view=signup&success=registred');
         } catch (PDOException $e) {
 
@@ -77,7 +79,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header("location: ?view=register&error=dbPrepare");
+                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
@@ -94,7 +96,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header("location: ?view=register&error=dbPrepare");
+                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
@@ -110,7 +112,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header("location: ?view=register&error=dbPrepare");
+                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
@@ -121,7 +123,47 @@ class DataBase
             }
         }
 
-    
+    public function updateUserPassword($mail, $password)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sha256 = $this->cipher->sha256($this->iocleaner->inputFilter($password));
+        $sql = 'UPDATE users SET Sha256 = :Sha256 WHERE Mail = :Mail;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header("location: ?view=setPassword&error=dbPrepare");
+        }
+        try {
+            $insert->execute(array('Mail' => $this->iocleaner->inputFilter($mail),
+                                   'Sha256' => $sha256));
+            header('location: ?view=office&success=passwordChanged');
+        } catch (PDOException $e) {
+            //wait
+        }
+    }
+
+    public function getUserInfos($mail)
+    {
+        $sql = 'SELECT * FROM `users` WHERE `Mail` LIKE :Mail;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('Mail' => $mail));
+                $infos = $reponse->fetch();
+                $_SESSION['UID'] = $infos['UID'];
+                $_SESSION['Grade'] = $infos['Grade'];
+                $_SESSION['Nom'] = $infos['Nom'];
+                $_SESSION['Prenom'] = $infos['Prenom'];
+                $_SESSION['Matricule'] = $infos['Matricule'];
+
+                   
+            } catch (PDOException $e) {
+                //Wait
+            }
+    }
 
     public function getPromotions()
     {

@@ -3,42 +3,30 @@ namespace Csupcyber\Pemead\Controlers;
 
 use Csupcyber\Pemead\Controlers\DataBase;
 
-class RegisterProcess
+class SetPasswordProcess
 {
     public function __construct()
     {
         $this->db = new DataBase();
     }
 
-    public function enrol()
+    public function updatePassword()
     {
-        if (isset($_POST['RegisterNom'])
-        && isset($_POST['RegisterPrenom'])
-        && isset($_POST['RegisterMatricule'])
-        && isset($_POST['RegisterMail'])
-        && $this->verifyMailFormat($_POST['RegisterMail'])
-        && isset($_POST['RegisterPassword'])
-        && $this->verifyPasswordComplexity($_POST['RegisterPassword'])
+        if (isset($_POST['CurrentPassword'])
+        && $this->verifyPassword($_SESSION['Mail'], $_POST['CurrentPassword'])
+        && isset($_POST['NewPassword'])
+        && $this->verifyPasswordComplexity($_POST['NewPassword'])
         && isset($_POST['CSRFToken'])
         && $this->verifyCSRF($_POST['CSRFToken'])) {
-            $this->db->createUser(
-                strtoupper($_POST['RegisterGrade']),
-                strtoupper($_POST['RegisterNom']),
-                ucfirst($_POST['RegisterPrenom']),
-                $_POST['RegisterMatricule'],
-                strtolower($_POST['RegisterMail']),
-                $_POST['RegisterPassword']
-            );
-        } elseif (!$this->verifyMailFormat($_POST['RegisterMail'])) {
-            header('Location: ?view=register&error=mailFormat');
-        } elseif (!$this->verifyPasswordComplexity($_POST['RegisterPassword'])) {
-            header('Location: ?view=register&error=passwordComplexity');
+            $this->db->updateUserPassword($_SESSION['Mail'], $_POST['NewPassword']);
+        } elseif (!$this->verifyPasswordComplexity($_POST['NewPassword'])) {
+            header('Location: ?view=setPassword&error=passwordComplexity');
         }
     }
 
-    public function verifyMailFormat($mail)
+    public function verifyPassword($mail, $password)
     {
-        return filter_var($mail, FILTER_VALIDATE_EMAIL);
+        return $this->db->verifyPassword($mail, $password);
     }
 
     public function verifyPasswordComplexity($password)

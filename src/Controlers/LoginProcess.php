@@ -20,8 +20,10 @@ class LoginProcess
         && $this->verifyRegistration($_POST['LoginEmail'])
         && $this->verifyStatus($_POST['LoginEmail'])
         && $this->verifyPassword($_POST['LoginEmail'], $_POST['LoginPassword'])) {
-            $_SESSION['authentication'] = 'authenticated';
             header('location: ?view=office&success=logedIn');
+            $_SESSION['authentication'] = 'authenticated';
+            $_SESSION['Mail'] = $_POST['LoginEmail'];
+            $this->getUserInfos($_SESSION['Mail']);
         } elseif (!$this->verifyMailFormat($_POST['LoginEmail'])) {
             header('Location: ?view=signup&error=mailFormat');
         } elseif (!$this->verifyRegistration($_POST['LoginEmail'])) {
@@ -56,6 +58,11 @@ class LoginProcess
     public function verifyPassword($mail, $password)
     {
         return $this->db->verifyPassword($mail, $password);
+    }
+
+    public function getUserInfos($mail)
+    {
+        return $this->db->getUserInfos($mail);
     }
 
 }

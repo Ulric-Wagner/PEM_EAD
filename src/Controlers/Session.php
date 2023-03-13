@@ -13,6 +13,10 @@ class Session
 
     public function setPhp()
     {
+        //longueur de l'id de session
+        ini_set('session.sid_bits_per_character', 6);
+        //longueur de l'id de session
+        ini_set('session.sid_length', 48);
         //activation strict mode
         ini_set('session.use_strict_mode', 1);
         //paramétrage de la durée de vie du cookie par defaut à 10 min
@@ -168,7 +172,7 @@ class Session
         foreach ($_SESSION as $key => $value) {
             unset($_SESSION["$key"]);
         }
-          
+
         //destruction de la session
         session_destroy();
         unset($_COOKIE['pemead']);

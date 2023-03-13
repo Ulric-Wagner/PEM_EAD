@@ -24,6 +24,17 @@ class RegisterFormBody
 <form method="post" action="?process=register">
 <div class="d-flex justify-content-center mt-4">
 <div class="form-outline mb-4 col-4">
+      <!-- Rank input -->
+      <div class="form-outline mb-4">
+        <input
+        type="text"
+        id="registerRank"
+        class="form-control d-flex justify-content-center"
+        name="RegisterGrade"
+        required/>
+        <label class="form-label d-flex justify-content-center" for="registerRank">Grade / Civilité</label>
+      </div>
+
       <!-- Name input -->
       <div class="form-outline mb-4">
         <input

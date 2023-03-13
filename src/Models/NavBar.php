@@ -9,7 +9,7 @@ class NavBar
 
         <nav class="navbar navbar-dark navbar-expand-md bg-dark align-middle" aria-label="NavBar">
           <div class="container">
-              <a href="#" class="navbar-brand d-flex w-50 me-auto justify-content-center">
+              <a href="?view=signup" class="navbar-brand d-flex w-50 me-auto justify-content-center">
                PEM EAD</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
               data-bs-target="#collapsingNavbar3">
@@ -50,6 +50,24 @@ class NavBar
           <li class="nav-item active">
           <a class="nav-link" href="?view=register">S'enregister</a>
           <?php
+        }
+        
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'setPassword')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=setPassword">Mot de passe</a>
+          <?php
+        }
+        
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'office')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=office">Mon Bureau</a>
+          <?php
         }?>
         
           <!--</li>
@@ -64,14 +82,15 @@ class NavBar
    }
 
     public function rightLinks()
-      {?>
-        <!--<li class="nav-item">
-          <a class="nav-link" href="#">Right</a>
-        </li>
+      {
+        if (isset($_SESSION['authentication'])
+        && $_SESSION['authentication'] === 'authenticated') {?>?>
         <li class="nav-item">
-          <a class="nav-link" href="#">Right</a>
-        </li>-->
+          <a class="nav-link" href="#"><?php echo $_SESSION['Grade']?> <?php echo $_SESSION['Nom']?>
+          <?php echo $_SESSION['Prenom']?></a>
+        </li>
  <?php }
+      }
 
     public function menu()
     {
@@ -93,8 +112,11 @@ class NavBar
       if (isset($_SESSION['authentication'])
       && $_SESSION['authentication'] === 'authenticated') {?>
       <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarScrollingDropdown">
+        <li><a class="dropdown-item" href="#">Mon bureau</a></li>
+        <li>
         <hr class="dropdown-divider">
         </li>
+        <li><a class="dropdown-item" href="?view=setPassword">Modifier le mot de passe</a></li>
         <li><a class="dropdown-item" href="?process=logout">Se deconnecter</a></li>
         </ul>
       <?php

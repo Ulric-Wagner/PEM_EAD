@@ -9,7 +9,10 @@ use Csupcyber\Pemead\Controlers\LoginProcess;
 use Csupcyber\Pemead\Controlers\LogoutProcess;
 use Csupcyber\Pemead\Controlers\RegisterForm;
 use Csupcyber\Pemead\Controlers\RegisterProcess;
+use Csupcyber\Pemead\Controlers\SetPasswordForm;
+use Csupcyber\Pemead\Controlers\SetPasswordProcess;
 use Csupcyber\Pemead\Controlers\Office;
+
 
 
 class IndexRouter{
@@ -35,11 +38,14 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'logout')) {
             $process = new LogoutProcess();
             $process->logout();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'setPassword')) {
+            $process = new SetPasswordProcess();
+            $process->updatePassword();
         }
 
-        if (!isset($_GET['view'])
-            || ($_GET['view'] === 'signup')
-            && $_SESSION['authentication'] === 'none') {
+        if ((!isset($_GET['view'])
+            || ($_GET['view'] === 'signup'))
+            && ($_SESSION['authentication'] === 'none')) {
             $login = new LoginForm();
             $login->header();
             $login->navbar();
@@ -48,6 +54,16 @@ class IndexRouter{
             $msg->success();
             $login->body();
             $login->footer();
+        } elseif (isset($_GET['view']) && ($_GET['view'] === 'setPassword')
+            && ($_SESSION['authentication'] === 'authenticated')) {
+            $setPassword = new SetPasswordForm();
+            $setPassword->header();
+            $setPassword->navbar();
+            $msg->error();
+            $msg->warning();
+            $msg->success();
+            $setPassword->body();
+            $setPassword->footer();
         } elseif (isset($_GET['view']) && ($_GET['view'] === 'register')
             && ($_SESSION['authentication'] === 'none')) {
             $register = new RegisterForm();
@@ -68,7 +84,11 @@ class IndexRouter{
         $msg->success();
         $office->body();
         $office->footer();
-    }
+    } elseif (isset($_GET['view'])
+    && ($_GET['view'] === 'signup')
+    && ($_SESSION['authentication'] === 'authenticated')) {
+    header('Location: ?view=office');
+}
         
     }
 }
