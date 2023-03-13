@@ -16,10 +16,16 @@ let EnabledPromoSelect = document.getElementById("EnabledPromoSelect");
 let EnabledRoleForm = document.getElementById("EnabledRoleForm");
 let EnabledRoleSelect = document.getElementById("EnabledRoleSelect");
 
-DisabledCourseSelect.addEventListener('change', ()=>{DisabledCourseForm.submit()});
-DisabledPromoSelect.addEventListener('change', ()=>{DisabledPromoForm.submit()});
-DisabledRoleSelect.addEventListener('change', ()=>{DisabledRoleForm.submit()});
+if (DisabledCourseSelect){
+DisabledCourseSelect.addEventListener('change', ()=>{DisabledCourseForm.submit()});}
+if (DisabledPromoSelect){
+DisabledPromoSelect.addEventListener('change', ()=>{DisabledPromoForm.submit()});}
+if (DisabledRoleSelect){
+DisabledRoleSelect.addEventListener('change', ()=>{DisabledRoleForm.submit()});}
 
-EnabledCourseSelect.addEventListener('change', ()=>{EnabledCourseForm.submit()});
-EnabledPromoSelect.addEventListener('change', ()=>{EnabledPromoForm.submit()});
-EnabledRoleSelect.addEventListener('change', ()=>{EnabledRoleForm.submit()});
+if (EnabledCourseSelect){
+EnabledCourseSelect.addEventListener('change', ()=>{EnabledCourseForm.submit()});}
+if (EnabledPromoSelect){
+EnabledPromoSelect.addEventListener('change', ()=>{EnabledPromoForm.submit()});}
+if (EnabledRoleSelect){
+EnabledRoleSelect.addEventListener('change', ()=>{EnabledRoleForm.submit()});}

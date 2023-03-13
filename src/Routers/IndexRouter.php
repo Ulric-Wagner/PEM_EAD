@@ -6,16 +6,13 @@ use Csupcyber\Pemead\Controlers\IOCleaner;
 use Csupcyber\Pemead\Controlers\MessageToUser;
 use Csupcyber\Pemead\Controlers\LoginForm;
 use Csupcyber\Pemead\Controlers\LoginProcess;
-use Csupcyber\Pemead\Controlers\LogoutProcess;
 use Csupcyber\Pemead\Controlers\RegisterForm;
-use Csupcyber\Pemead\Controlers\RegisterProcess;
 use Csupcyber\Pemead\Controlers\SetPasswordForm;
-use Csupcyber\Pemead\Controlers\SetPasswordProcess;
 use Csupcyber\Pemead\Controlers\Office;
 use Csupcyber\Pemead\Controlers\AccountsManagement;
-use Csupcyber\Pemead\Controlers\ValidUserProcess;
-use Csupcyber\Pemead\Controlers\RejectUserProcess;
-use Csupcyber\Pemead\Controlers\DisableUserProcess;
+use Csupcyber\Pemead\Controlers\CoursesManagement;
+use Csupcyber\Pemead\Controlers\SetUserProcess;
+use Csupcyber\Pemead\Controlers\SetCourseProcess;
 
 
 class IndexRouter{
@@ -31,7 +28,7 @@ class IndexRouter{
         $msg = new MessageToUser();
 
         if (isset($_GET['process']) && ($_GET['process'] === 'register')) {
-            $process = new RegisterProcess();
+            $process = new SetUserProcess();
             $process->enrol();
 
 
@@ -39,20 +36,23 @@ class IndexRouter{
             $process = new LoginProcess();
             $process->login();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'logout')) {
-            $process = new LogoutProcess();
+            $process = new LoginProcess();
             $process->logout();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'setPassword')) {
-            $process = new SetPasswordProcess();
+            $process = new SetUserProcess();
             $process->updatePassword();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'validUser')) {
-            $process = new ValidUserProcess();
+            $process = new SetUserProcess();
             $process->valid();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'rejectUser')) {
-            $process = new RejectUserProcess();
+            $process = new SetUserProcess();
             $process->reject();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'disableUser')) {
-            $process = new DisableUserProcess();
+            $process = new SetUserProcess();
             $process->disable();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createCourse')) {
+            $process = new SetCourseProcess();
+            $process->create();
         }
 
         if ((!isset($_GET['view'])
@@ -106,11 +106,23 @@ class IndexRouter{
         $msg->success();
         $accounts->body();
         $accounts->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'coursesManagement')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $courses = new CoursesManagement();
+        $courses->header();
+        $courses->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $courses->body();
+        $courses->footer();
     } elseif (isset($_GET['view'])
     && ($_GET['view'] === 'signup')
     && ($_SESSION['authentication'] === 'authenticated')) {
     header('Location: ?view=office');
-}
+    } else {
+        header('Location: ?view=signup');
+    }
         
     }
 }

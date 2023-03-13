@@ -44,15 +44,14 @@ class AccountsManagementBody
         <td>
           <form id="DisabledCourseForm" method="post" action="?process=setCourse">
             <select name="Course" id="DisabledCourseSelect" >
-              <!--<option value="CSUP CYBER">CSUP CYBER</option>
-              <option value="BS SYNUM">BS SYNUM</option>-->
+              <option value="Student">Test</option>
             </select>
           </form>
         </td>
         <td>
           <form id="DisabledPromoForm" method="post" action="?process=setPromo">
             <select name="Course" id="DisabledPromoSelect" >
-              
+            <option value="Student">Test</option>
             
             </select>
           </form>
@@ -60,8 +59,9 @@ class AccountsManagementBody
         <td>
           <form id="DisabledRoleForm" method="post" action="?process=setRole">
             <select name="Course" id="DisabledRoleSelect" >
-              <!--<option value="CSUP CYBER">CSUP CYBER</option>
-              <option value="BS SYNUM">BS SYNUM</option>-->
+              <option value="Student">Elève</option>
+              <option value="Instructeur">Instructeur</option>
+              <option value="Administrateur">Administrateur</option>
             </select>
           </form>
         </td>
@@ -113,31 +113,37 @@ class AccountsManagementBody
         <td><?php echo $user['Mail'] ?></td>
         <td>
         <form id="EnabledCourseForm" method="post" action="?process=setCourse">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="EnabledCourseSelect" >
-              
+            <option value="Student">Test</option>
             </select>
           </form>
         </td>
         <td>
         <form id="EnabledPromoForm" method="post" action="?process=setPromo">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="EnabledPromoSelect" >
-              
+            <option value="Student">Test</option>
             </select>
           </form>
         </td>
         <td>
         <form id="EnabledRoleForm" method="post" action="?process=setRole">
-            <select name="Course" id="EnabledRoleSelect" >
-              
+            <select name="Course" id="EnabledRoleSelect">
+              <option value="Student">Elève</option>
+              <option value="Instructeur">Instructeur</option>
+              <option value="Administrateur">Administrateur</option>
             </select>
           </form>
         </td>
         <td class="row">
           <form class="col-6" method="post" action="?process=disableUser">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="DisabledUser" value="<?php echo $user['UID'] ?>" />
             <button type="submit" class="btn btn-warning">Désactiver</button>
           </form>
           <form class="col-6" method="post" action="?process=rejectUser">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="RejectedUser" value="<?php echo $user['UID'] ?>" />
             <button type="submit" class="btn btn-danger">Supprimer</button>
           </form>

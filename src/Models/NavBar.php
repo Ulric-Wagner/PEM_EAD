@@ -78,15 +78,16 @@ class NavBar
           <a class="nav-link" href="?view=accountsManagement">Gestion des comptes</a>
           <?php
         }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'coursesManagement')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=coursesManagement">Gestion des cours</a>
+          <?php
+        }
         ?>
-        
-          <!--</li>
-          <li class="nav-item">
-          <a class="nav-link" href="#">Codeply</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>-->
         <?php
         
    }
@@ -108,9 +109,6 @@ class NavBar
       if (isset($_SESSION['authentication'])
       && $_SESSION['authentication'] != 'authenticated') {?>
       <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarScrollingDropdown">
-        <!--<li><a class="dropdown-item" href="#">Item</a></li>
-        <li><a class="dropdown-item" href="#">Item</a></li>
-        <li>-->
         <hr class="dropdown-divider">
         </li>
         <li><a class="dropdown-item" href="?view=signup">Connexion</a></li>

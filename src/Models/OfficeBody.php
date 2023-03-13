@@ -33,12 +33,12 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-secondary">
-        <a href="?view=CourseCreation" class="btn stretched-link">
+        <a href="?view=coursesManagement" class="btn stretched-link">
           <div class="card-header">Administration</div>
           <div class="card-body">
-            <h5 class="card-title text-start">Créer un cours</h5>
+            <h5 class="card-title text-start">Gestion des cours</h5>
               <p class="card-text text-start">
-                Cette interface vous permet de créer un nouveau cours.
+                Cette interface vous permet de créer/modifier/supprimer un cours.
                 (ex: "CSUP CYBER", "BAT SYNUM")
               </p>
           </div>
@@ -49,14 +49,13 @@ class OfficeBody
 
     <!---->
     <div class="col">
-      <div class="card text-white bg-secondary">
-        <a href="?view=CourseEdition" class="btn stretched-link">
-          <div class="card-header">Administration</div>
+      <div class="card text-white bg-info">
+        <a href="?view=CourseAccountManagement" class="btn stretched-link">
+          <div class="card-header">Pilote de cours</div>
           <div class="card-body">
-            <h5 class="card-title text-start">Modifier un cours</h5>
+            <h5 class="card-title text-start">Gestion des comptes</h5>
               <p class="card-text text-start">
-                Cette interface vous permet de suprimer un cours.
-                (ex: "BS SITEL", "BAT SITEL")
+              Cette interface vous permet de valider/rejeter les accèss des élèves et instructeurs pour votre cours.
               </p>
           </div>
         </a>
@@ -66,20 +65,21 @@ class OfficeBody
 
     <!---->
     <div class="col">
-      <div class="card text-white bg-secondary">
-        <a href="?view=CourseRemove" class="btn stretched-link">
-          <div class="card-header">Administration</div>
+      <div class="card text-white bg-info">
+        <a href="?view=PromotionsManagement" class="btn stretched-link">
+          <div class="card-header">Pilote de cours</div>
           <div class="card-body">
-            <h5 class="card-title text-start">Supprimer un cours</h5>
+            <h5 class="card-title text-start">Gérer les promotions</h5>
               <p class="card-text text-start">
-                Cette interface vous permet de suprimer un cours.
-                (ex: "BS SITEL", "BAT SITEL")
+                Cette interface vous permet de créer/modifier/supprimer une promotion pour un cours.
+                (ex: BS SITEL: Promotion "18.2")
               </p>
           </div>
         </a>
       </div>
     </div>
     <!---->
+
   </div>
 </div>
 <?php }

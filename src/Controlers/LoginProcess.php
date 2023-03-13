@@ -35,6 +35,13 @@ class LoginProcess
         }
     }
 
+    public function logout()
+    {
+        $session = new Session();
+        $session->close();
+        header('Location: ?view=signup&warning=disconnected');
+    }
+
     public function verifyMailFormat($mail)
     {
         return filter_var($mail, FILTER_VALIDATE_EMAIL);

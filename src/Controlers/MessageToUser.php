@@ -82,6 +82,16 @@ class MessageToUser
         <?php
         }
 
+        // erreur: le mail saisi lors de l'enregistrement est déjà présent dans la base de données
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "courseAlreadyUsed")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Erreur!</strong> Le nom de cours <?php echo $_GET['mail'];?> est déjà utilisée.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
+
         //erreur de connexion à la bdd
         if (isset($_GET['error'])
         && ($_GET['error'] === "dbConnect")) {?>

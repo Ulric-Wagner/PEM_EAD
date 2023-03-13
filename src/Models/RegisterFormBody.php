@@ -124,8 +124,4 @@ class RegisterFormBody
 </div>
 <?php }
 
-      public function promotionList()
-      {
-//
-      }
 }

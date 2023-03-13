@@ -14,6 +14,7 @@ class DataBase
         $this->cipher = new Cipher();
         $this->connect();
         $this->LOCATION_REGISTER_DBPREPARE_ERROR = "location: ?view=register&error=dbPrepare";
+        $this->LOCATION_SETPASSWORD_DBPREPARE_ERROR = "location: ?view=setPassword&error=dbPrepare";
     }
 
     public function connect()
@@ -131,7 +132,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header("location: ?view=setPassword&error=dbPrepare");
+            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('Mail' => $this->iocleaner->inputFilter($mail),
@@ -201,6 +202,24 @@ class DataBase
             }
     }
 
+    public function getCourses()
+    {
+        //retourne une array contenant les information sur les utilisateurs actifs
+        $sql = 'SELECT * FROM `Cours`';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //Wait
+            }
+    }
+
     public function validUser($uid)
     {
         // validation d'un nouvel uilisateur
@@ -208,7 +227,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header("location: ?view=setPassword&error=dbPrepare");
+            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
@@ -225,7 +244,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header("location: ?view=setPassword&error=dbPrepare");
+            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
@@ -242,12 +261,38 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header("location: ?view=setPassword&error=dbPrepare");
+            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid)));
         } catch (PDOException $e) {
             //wait
         }
+    }
+
+    public function createCourse($cours)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sql = 'INSERT INTO cours (`Cours`)
+                VALUES (:Cours);';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('Cours' => $this->iocleaner->inputFilter($cours)));
+            header('location: ?view=coursesManagement&success=done');
+        } catch (PDOException $e) {
+
+            //Cours déjà existant
+            $patern = "#pour la clef 'Cours'$#";
+            $courseAlreadyUsed = preg_match($patern, $e->getMessage());
+            if ($courseAlreadyUsed) {
+                header("location: ?view=coursesManagement&error=coursAlreadyUsed&cours=$cours");
+            }
+
+        }
+
     }
 }
