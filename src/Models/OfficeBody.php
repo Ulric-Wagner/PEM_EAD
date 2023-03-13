@@ -14,48 +14,22 @@ class OfficeBody
 
 <div class="p-5">
   <div class="row row-cols-1 row-cols-md-4 g-4">
+    <!---->
     <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural lead-in to
-            additional content. This content is a little bit longer.
-          </p>
-        </div>
+      <div class="card text-white bg-secondary">
+        <a href="?view=accountsManagement" class="btn stretched-link">
+          <div class="card-header">Administration</div>
+          <div class="card-body">
+            <h5 class="card-title text-start">Gestion des comptes</h5>
+              <p class="card-text text-start">
+                Cette interface vous permet de valider/rejeter les accèss des utilisateurs,
+                modifier leurs profils et leurs rôles.
+              </p>
+          </div>
+        </a>
       </div>
     </div>
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural lead-in to
-            additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-            additional content.</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">
-            This is a longer card with supporting text below as a natural lead-in to
-            additional content. This content is a little bit longer.
-          </p>
-        </div>
-      </div>
-    </div>
+    <!---->
   </div>
 </div>
 <?php }
