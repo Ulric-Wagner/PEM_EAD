@@ -69,8 +69,19 @@ class RegisterFormBody
       </div>
 
       <!---->
+      <div class="form-outline mb-4">
+          <select class="form-select" name="RegisterRole">
+            <option selected class="text-center">Selectionner votre type de profil</option>
+            <option class="text-center" value="Student">Elève</option>
+            <option class="text-center" value="Instructeur">Instructeur</option>
+            <option class="text-center" value="Pilote">Pilote de cours ou adjoint</option>
+          </select>
+          <label class="form-label d-flex justify-content-center">Profil</label>
+        </div>
+
+      <!---->
         <div class="form-outline mb-4">
-          <select class="form-select" name="CID">
+          <select class="form-select" name="RegisterCourse">
             <option selected class="text-center">Selectionner un cours</option>
             <?php foreach ($this->getCourses() as $course) { ?>
             <option class="text-center" value="<?php echo $course['CID'] ?>">
@@ -83,8 +94,8 @@ class RegisterFormBody
 
       <!---->
       <div class="form-outline mb-4">
-          <select class="form-select" name="PID">
-            <option class="text-center" selected>Selectionner votre promotion</option>
+          <select class="form-select" name="RegisterPromotion">
+            <option class="text-center" selected>Selectionner votre promotion (instructeurs laisser vide)</option>
             <?php foreach ($this->getPromotions() as $promotion) { ?>
             <option class="text-center" value="<?php echo $promotion['PID'] ?>">
             <?php echo $promotion['Promotion'] ?></option>

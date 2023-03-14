@@ -97,6 +97,9 @@ class SetUserProcess
                 strtoupper($_POST['RegisterNom']),
                 ucfirst($_POST['RegisterPrenom']),
                 $_POST['RegisterMatricule'],
+                $_POST['RegisterRole'],
+                $_POST['RegisterCourse'],
+                $_POST['RegisterPromotion'],
                 strtolower($_POST['RegisterMail']),
                 $_POST['RegisterPassword']
             );

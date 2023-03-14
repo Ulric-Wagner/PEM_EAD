@@ -86,6 +86,44 @@ class DataBase
 
     }
 
+    public function getUserID($mail)
+        {
+            $sql = 'SELECT UID FROM `users` WHERE `Mail` LIKE :Mail;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('Mail' => $mail));
+                return $reponse->fetch();
+
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+        }
+
+        public function setRoleInstructor($uid, $cid)
+        {
+            $sql = "INSERT INTO `instructeurs` (`UID`, `CID`)
+            VALUE (:UID);";
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+        }
+
     public function verifyRegistration($mail)
     {
         $sql = 'SELECT Mail FROM `users` WHERE `Mail` LIKE :Mail;';
