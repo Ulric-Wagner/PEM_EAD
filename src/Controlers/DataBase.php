@@ -10,11 +10,18 @@ class DataBase
 {
     public function __construct()
     {
+        if (isset($_GET['view'])){
+            $view = $_GET['view'];
+        } else {
+            $view = "office";
+        }
+        $this->DONE = "Location: ?view=$view&success=done";
+        $this->DBNOK = "Location: ?view=$view&success=DBNOK";
+        $this->LOCATION_REGISTER_DBPREPARE_ERROR = "location: ?view=register&error=dbPrepare";
+        $this->LOCATION_SETPASSWORD_DBPREPARE_ERROR = "location: ?view=setPassword&error=dbPrepare";
         $this->iocleaner = new IOCleaner();
         $this->cipher = new Cipher();
         $this->connect();
-        $this->LOCATION_REGISTER_DBPREPARE_ERROR = "location: ?view=register&error=dbPrepare";
-        $this->LOCATION_SETPASSWORD_DBPREPARE_ERROR = "location: ?view=setPassword&error=dbPrepare";
     }
 
     public function connect()
@@ -62,14 +69,20 @@ class DataBase
             $mailAlreadyUsed = preg_match($patern, $e->getMessage());
             if ($mailAlreadyUsed) {
                 header("location: ?view=register&error=mailAlreadyUsed&mail=$mail");
+            } else {
+                //Matricule déjà existant
+                $patern = "#pour la clef 'Matricule'$#";
+                $matriculeAlreadyUsed = preg_match($patern, $e->getMessage());
+                if ($matriculeAlreadyUsed) {
+                    header("location: ?view=register&error=matriculeAlreadyUsed&matricule=$matricule");
+                } else {
+                    //erreur inatendue
+                    header($this->DBNOK);
+                }
             }
 
-            //Matricule déjà existant
-            $patern = "#pour la clef 'Matricule'$#";
-            $matriculeAlreadyUsed = preg_match($patern, $e->getMessage());
-            if ($matriculeAlreadyUsed) {
-                header("location: ?view=register&error=matriculeAlreadyUsed&matricule=$matricule");
-            }
+            
+            
         }
 
     }
@@ -87,7 +100,8 @@ class DataBase
                 return !empty($reponse->fetch());
                    
             } catch (PDOException $e) {
-                //Wait
+                //erreur inatendue
+                header($this->DBNOK);
             }
     }
 
@@ -103,7 +117,8 @@ class DataBase
                 $reponse->execute(array('Mail' => $mail));
                 return ($reponse->fetch()['Sha256'] === $this->cipher->sha256($password));
             } catch (PDOException $e) {
-                //Wait
+                //erreur inatendue
+                header($this->DBNOK);
             }
         }
 
@@ -120,7 +135,8 @@ class DataBase
                 return $reponse->fetch()['Statut'];
                    
             } catch (PDOException $e) {
-                //Wait
+                //erreur inatendue
+                header($this->DBNOK);
             }
         }
 
@@ -139,7 +155,8 @@ class DataBase
                                    'Sha256' => $sha256));
             header('location: ?view=office&success=passwordChanged');
         } catch (PDOException $e) {
-            //wait
+            //erreur inatendue
+            header($this->DBNOK);
         }
     }
 
@@ -162,7 +179,8 @@ class DataBase
 
                    
             } catch (PDOException $e) {
-                //Wait
+                //erreur inatendue
+                header($this->DBNOK);
             }
     }
 
@@ -180,7 +198,8 @@ class DataBase
                 return $reponse->fetchall();
                    
             } catch (PDOException $e) {
-                //Wait
+                //erreur inatendue
+                header($this->DBNOK);
             }
     }
 
@@ -198,7 +217,8 @@ class DataBase
                 return $reponse->fetchall();
                    
             } catch (PDOException $e) {
-                //Wait
+                //erreur inatendue
+                header($this->DBNOK);
             }
     }
 
@@ -216,7 +236,8 @@ class DataBase
                 return $reponse->fetchall();
                    
             } catch (PDOException $e) {
-                //Wait
+                //erreur inatendue
+                header($this->DBNOK);
             }
     }
 
@@ -232,8 +253,10 @@ class DataBase
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
                                    'Statut' => '1'));
+            header($this->DONE);
         } catch (PDOException $e) {
-            //wait
+            //erreur inatendue
+            header($this->DBNOK);
         }
     }
 
@@ -249,8 +272,10 @@ class DataBase
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
                                    'Statut' => '0'));
+            header($this->DONE);
         } catch (PDOException $e) {
-            //wait
+            //erreur inatendue
+            header($this->DBNOK);
         }
     }
 
@@ -265,8 +290,10 @@ class DataBase
         }
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid)));
+            header($this->DONE);
         } catch (PDOException $e) {
-            //wait
+            //erreur inatendue
+            header($this->DBNOK);
         }
     }
 
@@ -282,16 +309,39 @@ class DataBase
         }
         try {
             $insert->execute(array('Cours' => $this->iocleaner->inputFilter($cours)));
-            header('location: ?view=coursesManagement&success=done');
+            header($this->DONE);
         } catch (PDOException $e) {
 
             //Cours déjà existant
             $patern = "#pour la clef 'Cours'$#";
             $courseAlreadyUsed = preg_match($patern, $e->getMessage());
             if ($courseAlreadyUsed) {
-                header("location: ?view=coursesManagement&error=coursAlreadyUsed&cours=$cours");
+                header("location: ?view=coursesManagement&error=courseAlreadyUsed&course=$cours");
+            } else {
+                //erreur inatendue
+                header($this->DBNOK);
             }
 
+        }
+
+    }
+
+    public function renameCourse($cid, $cours)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sql = 'UPDATE cours SET Cours = :Cours WHERE CID = :CID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('Cours' => $this->iocleaner->inputFilter($cours),
+                                   'CID' => $this->iocleaner->inputFilter($cid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+            //erreur innatendue
+            header($this->DBNOK);
         }
 
     }

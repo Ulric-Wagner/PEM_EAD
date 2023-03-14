@@ -53,6 +53,9 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'createCourse')) {
             $process = new SetCourseProcess();
             $process->create();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameCourse')) {
+            $process = new SetCourseProcess();
+            $process->rename();
         }
 
         if ((!isset($_GET['view'])
@@ -120,6 +123,10 @@ class IndexRouter{
     && ($_GET['view'] === 'signup')
     && ($_SESSION['authentication'] === 'authenticated')) {
     header('Location: ?view=office');
+    } elseif (!isset($_GET['view'])
+    && isset($_GET['process'])
+    && ($_SESSION['authentication'] === 'authenticated')) {
+        //pass
     } else {
         header('Location: ?view=signup');
     }

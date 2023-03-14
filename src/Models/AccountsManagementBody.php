@@ -16,8 +16,8 @@ class AccountsManagementBody
     <H3>Gestion des comptes:</H3>
   </div>
 </div>
-<div class="p-5">
-  <table class="table">
+<div class="account-table-container tableFixHead p-5">
+  <table class="table table-hover">
   <figcaption><H5>Utilisateurs en attente de validation:</H5></figcaption>
     <thead>
       <tr>
@@ -42,14 +42,18 @@ class AccountsManagementBody
         <td><?php echo $user['Matricule'] ?></td>
         <td><?php echo $user['Mail'] ?></td>
         <td>
-          <form id="DisabledCourseForm" method="post" action="?process=setCourse">
+          <form id="DisabledCourseForm" method="post" action="?view=accountsManagement&process=setCourse">
+            <input type="hidden" name="UID" value="<?php echo $_SESSION['UID']; ?>">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="DisabledCourseSelect" >
               <option value="Student">Test</option>
             </select>
           </form>
         </td>
         <td>
-          <form id="DisabledPromoForm" method="post" action="?process=setPromo">
+          <form id="DisabledPromoForm" method="post" action="?view=accountsManagement&process=setPromo">
+            <input type="hidden" name="UID" value="<?php echo $_SESSION['UID']; ?>">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="DisabledPromoSelect" >
             <option value="Student">Test</option>
             
@@ -57,7 +61,9 @@ class AccountsManagementBody
           </form>
         </td>
         <td>
-          <form id="DisabledRoleForm" method="post" action="?process=setRole">
+          <form id="DisabledRoleForm" method="post" action="?view=accountsManagement&process=setRole">
+            <input type="hidden" name="UID" value="<?php echo $_SESSION['UID']; ?>">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="DisabledRoleSelect" >
               <option value="Student">Elève</option>
               <option value="Instructeur">Instructeur</option>
@@ -66,11 +72,13 @@ class AccountsManagementBody
           </form>
         </td>
         <td class="row">
-          <form class="col-6" method="post" action="?process=validUser">
+          <form class="col-5" method="post" action="?view=accountsManagement&process=validUser">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="ValidatedUser" value="<?php echo $user['UID'] ?>" />
             <button type="submit" class="btn btn-success">Valider</button>
           </form>
-          <form class="col-6" method="post" action="?process=rejectUser">
+          <form class="col-5" method="post" action="?view=accountsManagement&process=rejectUser">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="RejectedUser" value="<?php echo $user['UID'] ?>" />
             <button type="submit" class="btn btn-danger">Rejeter</button>
           </form>
@@ -86,8 +94,8 @@ class AccountsManagementBody
 
 <!---->
 
-<div class="p-5">
-  <table class="table">
+<div class="account-table-container tableFixHead p-5">
+  <table class="table table-hover">
   <figcaption><H5>Utilisateurs actifs:</H5></figcaption>
     <thead>
       <tr>
@@ -112,7 +120,7 @@ class AccountsManagementBody
         <td><?php echo $user['Matricule'] ?></td>
         <td><?php echo $user['Mail'] ?></td>
         <td>
-        <form id="EnabledCourseForm" method="post" action="?process=setCourse">
+        <form id="EnabledCourseForm" method="post" action="?view=accountsManagement&process=setCourse">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="EnabledCourseSelect" >
             <option value="Student">Test</option>
@@ -120,7 +128,7 @@ class AccountsManagementBody
           </form>
         </td>
         <td>
-        <form id="EnabledPromoForm" method="post" action="?process=setPromo">
+        <form id="EnabledPromoForm" method="post" action="?view=accountsManagement&process=setPromo">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="EnabledPromoSelect" >
             <option value="Student">Test</option>
@@ -128,7 +136,8 @@ class AccountsManagementBody
           </form>
         </td>
         <td>
-        <form id="EnabledRoleForm" method="post" action="?process=setRole">
+        <form id="EnabledRoleForm" method="post" action="?view=accountsManagement&process=setRole">
+          <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select name="Course" id="EnabledRoleSelect">
               <option value="Student">Elève</option>
               <option value="Instructeur">Instructeur</option>
@@ -137,19 +146,17 @@ class AccountsManagementBody
           </form>
         </td>
         <td class="row">
-          <form class="col-6" method="post" action="?process=disableUser">
+          <form class="col-5" method="post" action="?view=accountsManagement&process=disableUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="DisabledUser" value="<?php echo $user['UID'] ?>" />
             <button type="submit" class="btn btn-warning">Désactiver</button>
           </form>
-          <form class="col-6" method="post" action="?process=rejectUser">
+          <form class="col-5" method="post" action="?view=accountsManagement&process=rejectUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="RejectedUser" value="<?php echo $user['UID'] ?>" />
             <button type="submit" class="btn btn-danger">Supprimer</button>
           </form>
-
         </td>
-        
       </tr>
       <?php
       } ?>

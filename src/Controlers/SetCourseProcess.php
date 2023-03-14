@@ -8,7 +8,6 @@ class SetCourseProcess
     public function __construct()
     {
         $this->db = new DataBase();
-        $this->DONE = 'Location: ?view=coursesManagement&success=done';
         $this->NOK = 'Location: ?view=coursesManagement&error=nok';
     }
 
@@ -22,12 +21,44 @@ class SetCourseProcess
     public function create()
     {
         if (isset($_POST['createCourse'])
+        && !empty($_POST['createCourse'])
         && isset($_POST['CSRFToken'])
         && $this->verifyCSRF($_POST['CSRFToken'])) {
         $create = new DataBase();
-        $create->createCourse($_POST['createCourse']);
+        $create->createCourse(strtoupper($_POST['createCourse']));
         
-        header($this->DONE);
+        } else {
+            header($this->NOK);
+        }
+    }
+
+    public function rename()
+    {
+        if (isset($_POST['newCourseName'])
+        && !empty($_POST['newCourseName'])
+        && isset($_POST['CID'])
+        && !empty($_POST['CID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->renameCourse($_POST['CID'], strtoupper($_POST['newCourseName']));
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
+    public function remove()
+    {
+        if (isset($_POST['newCourseName'])
+        && !empty($_POST['newCourseName'])
+        && isset($_POST['CID'])
+        && !empty($_POST['CID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->removeCourse($_POST['CID'], $_POST['newCourseName']);
+        
         } else {
             header($this->NOK);
         }

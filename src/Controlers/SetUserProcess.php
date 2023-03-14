@@ -7,9 +7,9 @@ class SetUserProcess
 {
     public function __construct()
     {
+        $view = $_GET['view'];
         $this->db = new DataBase();
-        $this->DONE = 'Location: ?view=accountsManagement&success=done';
-        $this->NOK = 'Location: ?view=accountsManagement&error=nok';
+        $this->NOK = "Location: ?view=$view&error=nok";
     }
 
     public function valid()
@@ -20,7 +20,6 @@ class SetUserProcess
         $validation = new DataBase();
         $validation->validUser($_POST['ValidatedUser']);
         
-        header($this->DONE);
         } else {
             header($this->NOK);
         }
@@ -34,7 +33,6 @@ class SetUserProcess
         $validation = new DataBase();
         $validation->rejectUser($_POST['RejectedUser']);
         
-        header($this->DONE);
         } else {
             header($this->NOK);
         }
@@ -122,7 +120,6 @@ class SetUserProcess
         $disable = new DataBase();
         $disable->disableUser($_POST['DisabledUser']);
         
-        header($this->DONE);
         } else {
             header($this->NOK);
         }

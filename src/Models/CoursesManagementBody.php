@@ -17,42 +17,35 @@ class CoursesManagementBody
   </div>
 </div>
 
-<div class="d-flex justify-content-center mt-2">
+<div class="row g-3 align-items-center p-5">
   <div>
     <H3>Créer un cours:</H3>
   </div>
-</div>
-<div class="d-flex justify-content-center mt-2">
-<div class="form-outline mb-4 col-4">
-      <form method="post" action="?process=createCourse">
-      <!-- Course input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="createCourse" class="form-control d-flex justify-content-center"
-        name="createCourse" required/>
-        <label class="form-label d-flex justify-content-center" for="createCourse">Nom du cours</label>
+  <form method="post" action="?view=coursesManagement&process=createCourse">
+    <div class="row g-3 align-items-center">
+      <div class="col-auto">
+        <label for="createCourse" class="col-form-label">Nom du cours</label>
+        </div>
+        <div class="col-auto">
+          <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+          <input type="text" name="createCourse" id="createCourse" class="form-control" aria-describedby="HelpInline">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-secondary btn-block">Créer</button>
+        </div>
       </div>
-
-      <!-- Token CSRF -->
-      <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-      <!-- Submit button -->
-      <div class="d-flex justify-content-center">
-      <button type="submit" class="btn btn-secondary btn-block mb-3">Créer</button>
-    </div>
     </form>
-  </div>
+
 </div>
 <!--  -->
 </div>
-
-<div class="p-5 m-5 mt-2">
-  <table class="table">
-  <figcaption><H5>Cours actifs:</H5></figcaption>
+<div class="course-table-container tableFixHead px-5">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th scope="col">CID</th>
         <th scope="col">Nom du cours</th>
         <th scope="col">Nouveau nom</th>
-        <th scope="col"></th>
         <th scope="col"></th>
     </thead>
     <tbody>
@@ -61,7 +54,7 @@ class CoursesManagementBody
         <th scope="row"><?php echo $course['CID'] ?></th>
         <td><?php echo $course['Cours'] ?></td>
         <td>
-        <form method="post" action="?process=removeCourse">
+        <form method="post" action="?view=coursesManagement&process=renameCourse">
           <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
           <input type=text name="newCourseName"/>
         
@@ -70,7 +63,7 @@ class CoursesManagementBody
           </form>
        </td>
        <td>
-          <form method="post" action="?process=removeCourse">
+          <form method="post" action="?view=coursesManagement&process=removeCourse">
           <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="removeCourse" value="<?php echo $course['CID'] ?>" />
             <button type="submit" class="btn btn-danger">Supprimer</button>

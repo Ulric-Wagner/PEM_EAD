@@ -1,0 +1,21 @@
+.tableFixHead { 
+    overflow: auto; 
+    max-height: 100%;
+    min-height: 10%; 
+}
+
+thead { 
+    position: sticky; top: 0; 
+    z-index: 1; 
+    background-color: #e7eaee;
+}
+
+.course-table-container {
+    max-height: 500px;
+    margin-bottom: 12px;
+}
+
+.course-table-container {
+    max-height: 2500px;
+    margin-bottom: 12px;
+}
