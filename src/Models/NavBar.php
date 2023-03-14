@@ -75,7 +75,16 @@ class NavBar
         && isset($_GET['view'])
         && ($_GET['view'] === 'accountsManagement')) {?>
           <li class="nav-item active">
-          <a class="nav-link" href="?view=accountsManagement">Gestion des comptes</a>
+          <a class="nav-link" href="?view=accountsManagement">Gestion des comptes (Administration)</a>
+          <?php
+        }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'courseAccountsManagement')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=courseAccountsManagement">Gestion des comptes (Pilote de cours)</a>
           <?php
         }
 
@@ -85,6 +94,15 @@ class NavBar
         && ($_GET['view'] === 'coursesManagement')) {?>
           <li class="nav-item active">
           <a class="nav-link" href="?view=coursesManagement">Gestion des cours</a>
+          <?php
+        }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'promotionsManagement')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=promotionsManagement">Gestion des promotions</a>
           <?php
         }
         ?>

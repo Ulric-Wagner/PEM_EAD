@@ -3,10 +3,10 @@ namespace Csupcyber\Pemead\Models;
 
 use Csupcyber\Pemead\Controlers\DataBase;
 
-class AccountsManagementBody
+class CourseAccountsManagementBody
 {
     public function __construct()
-    {
+    { 
       $this->db = new DataBase();
       ?>
 
@@ -54,7 +54,7 @@ class AccountsManagementBody
           <form id="DisabledPromoForm" method="post" action="?view=accountsManagement&process=setPromo">
             <input type="hidden" name="UID" value="<?php echo $_SESSION['UID']; ?>">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-            <select class="form-select" name="Course" id="DisabledPromoSelect" >
+            <select class="form-select"  name="Course" id="DisabledPromoSelect" >
             <option value="Student">Test</option>
             
             </select>

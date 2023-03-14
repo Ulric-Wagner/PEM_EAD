@@ -50,7 +50,7 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-info">
-        <a href="?view=CourseAccountManagement" class="btn stretched-link">
+        <a href="?view=courseAccountsManagement" class="btn stretched-link">
           <div class="card-header">Pilote de cours</div>
           <div class="card-body">
             <h5 class="card-title text-start">Gestion des comptes</h5>
@@ -66,7 +66,7 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-info">
-        <a href="?view=PromotionsManagement" class="btn stretched-link">
+        <a href="?view=promotionsManagement" class="btn stretched-link">
           <div class="card-header">Pilote de cours</div>
           <div class="card-body">
             <h5 class="card-title text-start">Gérer les promotions</h5>

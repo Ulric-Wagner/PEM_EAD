@@ -17,8 +17,7 @@ class DataBase
         }
         $this->DONE = "Location: ?view=$view&success=done";
         $this->DBNOK = "Location: ?view=$view&success=DBNOK";
-        $this->LOCATION_REGISTER_DBPREPARE_ERROR = "location: ?view=register&error=dbPrepare";
-        $this->LOCATION_SETPASSWORD_DBPREPARE_ERROR = "location: ?view=setPassword&error=dbPrepare";
+        $this->LOCATION_DBPREPARE_ERROR = "location: ?view=$view&error=dbPrepare";
         $this->iocleaner = new IOCleaner();
         $this->cipher = new Cipher();
         $this->connect();
@@ -52,7 +51,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+            header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('Grade' => $this->iocleaner->inputFilter($grade),
@@ -93,7 +92,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+                header($this->LOCATION_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
@@ -111,7 +110,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+                header($this->LOCATION_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
@@ -128,7 +127,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+                header($this->LOCATION_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
@@ -148,7 +147,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
+            header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('Mail' => $this->iocleaner->inputFilter($mail),
@@ -166,7 +165,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+                header($this->LOCATION_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
@@ -191,7 +190,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+                header($this->LOCATION_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute();
@@ -210,7 +209,7 @@ class DataBase
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+                header($this->LOCATION_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute();
@@ -224,12 +223,31 @@ class DataBase
 
     public function getCourses()
     {
-        //retourne une array contenant les information sur les utilisateurs actifs
+        //retourne une array contenant les information sur les cours
         $sql = 'SELECT * FROM `Cours`';
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
-                header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getPromotions()
+    {
+        //retourne une array contenant les information sur les promotions
+        $sql = 'SELECT * FROM Cours JOIN Promotions ON Cours.CID = Promotions.CID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
             }
             try {
                 $reponse->execute();
@@ -248,7 +266,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
+            header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
@@ -267,7 +285,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
+            header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
@@ -286,7 +304,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header($this->LOCATION_SETPASSWORD_DBPREPARE_ERROR);
+            header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid)));
@@ -305,7 +323,7 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+            header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('Cours' => $this->iocleaner->inputFilter($cours)));
@@ -333,11 +351,90 @@ class DataBase
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
-            header($this->LOCATION_REGISTER_DBPREPARE_ERROR);
+            header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
             $insert->execute(array('Cours' => $this->iocleaner->inputFilter($cours),
                                    'CID' => $this->iocleaner->inputFilter($cid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+            //erreur innatendue
+            header($this->DBNOK);
+        }
+
+    }
+
+    public function removeCourse($cid)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sql = 'DELETE FROM cours WHERE CID = :CID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('CID' => $this->iocleaner->inputFilter($cid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+            //erreur innatendue
+            header($this->DBNOK);
+        }
+
+    }
+
+    public function createPromotion($cid, $promotion)
+    {
+        // création d'une nouvelle promotion dans la base de donnée
+        $sql = 'INSERT INTO promotions (`CID`, `Promotion`)
+                VALUES (:CID, :Promotion);';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('Promotion' => $this->iocleaner->inputFilter($promotion),
+                                   'CID' => $this->iocleaner->inputFilter($cid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+        }
+    }
+
+
+    public function renamePromotion($pid, $promotion)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sql = 'UPDATE promotions SET Promotion = :Promotion WHERE PID = :PID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('Promotion' => $this->iocleaner->inputFilter($promotion),
+                                   'PID' => $this->iocleaner->inputFilter($pid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+            //erreur innatendue
+            header($this->DBNOK);
+        }
+
+    }
+
+    public function removePromotion($pid)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sql = 'DELETE FROM promotions WHERE PID = :PID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('PID' => $this->iocleaner->inputFilter($pid)));
             header($this->DONE);
         } catch (PDOException $e) {
             //erreur innatendue

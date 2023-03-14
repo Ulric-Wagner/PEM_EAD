@@ -167,6 +167,17 @@ class MessageToUser
             </div>
         <?php
         }
+
+        // erreur dans le format de l'adresse mail dans le formulaire d'enregistrement
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "DBNOK")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Oups!</strong> L'action n'a pas été éfectuée...
+                erreur lors de l'insertion dans la base de donnée.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
     
     }
 

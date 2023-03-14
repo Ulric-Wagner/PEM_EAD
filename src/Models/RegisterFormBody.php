@@ -8,7 +8,7 @@ class RegisterFormBody
 {
     public function __construct()
     {
-      $this->bdd = new DataBase();
+      $this->db = new DataBase();
       ?>
 
 <div class="d-flex justify-content-center mt-4">
@@ -29,7 +29,7 @@ class RegisterFormBody
         <input
         type="text"
         id="registerRank"
-        class="form-control d-flex justify-content-center"
+        class="form-control d-flex justify-content-center text-center"
         name="RegisterGrade"
         required/>
         <label class="form-label d-flex justify-content-center" for="registerRank">Grade / Civilité</label>
@@ -40,7 +40,7 @@ class RegisterFormBody
         <input
         type="text"
         id="registerName"
-        class="form-control d-flex justify-content-center"
+        class="form-control d-flex justify-content-center text-center"
         name="RegisterNom"
         required/>
         <label class="form-label d-flex justify-content-center" for="registerName">Nom</label>
@@ -51,7 +51,7 @@ class RegisterFormBody
         <input
         type="text"
         id="registerFirstname"
-        class="form-control d-flex justify-content-center"
+        class="form-control d-flex justify-content-center text-center"
         name="RegisterPrenom"
         required/>
         <label class="form-label d-flex justify-content-center" for="registerFirstname">Prénom</label>
@@ -62,18 +62,44 @@ class RegisterFormBody
         <input
         type="text"
         id="registerRegistrationNumber"
-        class="form-control d-flex justify-content-center"
+        class="form-control d-flex justify-content-center text-center"
         name="RegisterMatricule"
         required/>
         <label class="form-label d-flex justify-content-center" for="registerRegistrationNumber">Matricule</label>
       </div>
+
+      <!---->
+        <div class="form-outline mb-4">
+          <select class="form-select" name="CID">
+            <option selected class="text-center">Selectionner un cours</option>
+            <?php foreach ($this->getCourses() as $course) { ?>
+            <option class="text-center" value="<?php echo $course['CID'] ?>">
+            <?php echo $course['Cours'] ?></option>
+            <?php
+            }?>
+          </select>
+          <label class="form-label d-flex justify-content-center">Cours</label>
+        </div>
+
+      <!---->
+      <div class="form-outline mb-4">
+          <select class="form-select" name="PID">
+            <option class="text-center" selected>Selectionner votre promotion</option>
+            <?php foreach ($this->getPromotions() as $promotion) { ?>
+            <option class="text-center" value="<?php echo $promotion['PID'] ?>">
+            <?php echo $promotion['Promotion'] ?></option>
+            <?php
+            }?>
+          </select>
+          <label class="form-label d-flex justify-content-center">Promotion</label>
+        </div>
 
       <!-- Email input -->
       <div class="form-outline mb-4">
         <input
         type="email"
         id="registerEmail"
-        class="form-control d-flex justify-content-center"
+        class="form-control d-flex justify-content-center text-center"
         name="RegisterMail"
         required/>
         <label class="form-label d-flex justify-content-center" for="registerEmail">Email</label>
@@ -84,7 +110,7 @@ class RegisterFormBody
         <input
         type="password"
         id="registerPassword"
-        class="form-control d-flex justify-content-center"
+        class="form-control d-flex justify-content-center text-center"
         name="RegisterPassword"
         required/>
         <label class="form-label d-flex justify-content-center" for="registerPassword">Mot de passe</label>
@@ -95,7 +121,7 @@ class RegisterFormBody
         <input
         type="password"
         id="ConfirmPassword"
-        class="form-control d-flex justify-content-center"
+        class="form-control d-flex justify-content-center text-center"
         name="ConfirmPassword"
         required/>
         <label class="form-label d-flex justify-content-center" for="ConfirmPassword">
@@ -122,6 +148,16 @@ class RegisterFormBody
 </div>
 <!-- Pills content -->
 </div>
-<?php }
+<?php
+    }
 
+    public function getCourses()
+    {
+      return $this->db->getCourses();
+    }
+
+    public function getPromotions()
+    {
+      return $this->db->getPromotions();
+    }
 }

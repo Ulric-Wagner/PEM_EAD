@@ -6,9 +6,14 @@ use Csupcyber\Pemead\Controlers\DataBase;
 class SetCourseProcess
 {
     public function __construct()
-    {
+    {   
+        if (isset($_GET['view'])){
+            $view = $_GET['view'];
+        } else {
+            $view = "office";
+        }
+        $this->NOK = "Location: ?view=$view&error=nok";
         $this->db = new DataBase();
-        $this->NOK = 'Location: ?view=coursesManagement&error=nok';
     }
 
     
@@ -18,7 +23,7 @@ class SetCourseProcess
         return $token === $_SESSION['CSRFToken'];
     }
 
-    public function create()
+    public function createCourse()
     {
         if (isset($_POST['createCourse'])
         && !empty($_POST['createCourse'])
@@ -32,7 +37,7 @@ class SetCourseProcess
         }
     }
 
-    public function rename()
+    public function renameCourse()
     {
         if (isset($_POST['newCourseName'])
         && !empty($_POST['newCourseName'])
@@ -48,16 +53,59 @@ class SetCourseProcess
         }
     }
 
-    public function remove()
+    public function removeCourse()
     {
-        if (isset($_POST['newCourseName'])
-        && !empty($_POST['newCourseName'])
-        && isset($_POST['CID'])
-        && !empty($_POST['CID'])
+        if (isset($_POST['removeCourse'])
+        && !empty($_POST['removeCourse'])
         && isset($_POST['CSRFToken'])
         && $this->verifyCSRF($_POST['CSRFToken'])) {
         $create = new DataBase();
-        $create->removeCourse($_POST['CID'], $_POST['newCourseName']);
+        $create->removeCourse($_POST['removeCourse']);
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
+    public function createPromotion()
+    {
+        if (isset($_POST['createPromotion'])
+        //&& !empty($_POST['createPromotion'])
+        && isset($_POST['CID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->createPromotion($_POST['CID'], strtoupper($_POST['createPromotion']));
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
+    public function renamePromotion()
+    {
+        if (isset($_POST['newPromotionName'])
+        && !empty($_POST['newPromotionName'])
+        && isset($_POST['PID'])
+        && !empty($_POST['PID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->renamePromotion($_POST['PID'], strtoupper($_POST['newPromotionName']));
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
+    public function removePromotion()
+    {
+        if (isset($_POST['removePromotion'])
+        && !empty($_POST['removePromotion'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->removePromotion($_POST['removePromotion']);
         
         } else {
             header($this->NOK);

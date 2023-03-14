@@ -13,6 +13,8 @@ use Csupcyber\Pemead\Controlers\AccountsManagement;
 use Csupcyber\Pemead\Controlers\CoursesManagement;
 use Csupcyber\Pemead\Controlers\SetUserProcess;
 use Csupcyber\Pemead\Controlers\SetCourseProcess;
+use Csupcyber\Pemead\Controlers\CourseAccountsManagement;
+use Csupcyber\Pemead\Controlers\PromotionsManagement;
 
 
 class IndexRouter{
@@ -52,10 +54,22 @@ class IndexRouter{
             $process->disable();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'createCourse')) {
             $process = new SetCourseProcess();
-            $process->create();
+            $process->createCourse();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameCourse')) {
             $process = new SetCourseProcess();
-            $process->rename();
+            $process->renameCourse();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removeCourse')) {
+            $process = new SetCourseProcess();
+            $process->removeCourse();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createPromotion')) {
+            $process = new SetCourseProcess();
+            $process->createPromotion();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renamePromotion')) {
+            $process = new SetCourseProcess();
+            $process->renamePromotion();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removePromotion')) {
+            $process = new SetCourseProcess();
+            $process->removePromotion();
         }
 
         if ((!isset($_GET['view'])
@@ -119,6 +133,26 @@ class IndexRouter{
         $msg->success();
         $courses->body();
         $courses->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'courseAccountsManagement')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $accounts = new CourseAccountsManagement();
+        $accounts->header();
+        $accounts->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $accounts->body();
+        $accounts->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'promotionsManagement')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $promotions = new PromotionsManagement();
+        $promotions->header();
+        $promotions->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $promotions->body();
+        $promotions->footer();
     } elseif (isset($_GET['view'])
     && ($_GET['view'] === 'signup')
     && ($_SESSION['authentication'] === 'authenticated')) {
