@@ -72,5 +72,25 @@ class LoginProcess
         return $this->db->getUserInfos($mail);
     }
 
+    public function userIsAdmin($uid)
+    {
+        return $this->db->userIsAdmin($uid);
+    }
+
+    public function userIsPilote($uid)
+    {
+        return $this->db->userIsPilote($uid);
+    }
+
+    public function userIsInstructor($uid)
+    {
+        return $this->db->userIsInstructor($uid);
+    }
+
+    public function userIsStudent($uid)
+    {
+        return $this->db->userIsStudent($uid);
+    }
+
 }
 

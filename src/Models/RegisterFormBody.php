@@ -21,7 +21,7 @@ class RegisterFormBody
     <H3>Veuillez vous enregistrer pour accéder au service:</H3>
   </div>
 </div>
-<form method="post" action="?process=register">
+<form method="post" action="?view=signup&process=register">
 <div class="d-flex justify-content-center mt-4">
 <div class="form-outline mb-4 col-4">
       <!-- Rank input -->
@@ -69,8 +69,8 @@ class RegisterFormBody
       </div>
 
       <!---->
-      <div class="form-outline mb-4">
-          <select class="form-select" name="RegisterRole">
+      <div class="form-outline mb-4" id="role">
+          <select class="form-select" name="RegisterRole" id="selectRole">
             <option selected class="text-center">Selectionner votre type de profil</option>
             <option class="text-center" value="Student">Elève</option>
             <option class="text-center" value="Instructeur">Instructeur</option>
@@ -80,9 +80,22 @@ class RegisterFormBody
         </div>
 
       <!---->
-        <div class="form-outline mb-4">
-          <select class="form-select" name="RegisterCourse">
-            <option selected class="text-center">Selectionner un cours</option>
+        <div class="form-outline mb-4" id="groupement">
+          <select class="form-select" name="RegisterGroupement" id="selectGroupement">
+            <option selected class="text-center">Selectionner votre groupement d'instruction</option>
+            <?php foreach ($this->getGroupements() as $groupement) { ?>
+            <option class="text-center" value="<?php echo $groupement['GID'] ?>">
+            <?php echo $groupement['Groupement'] ?></option>
+            <?php
+            }?>
+          </select>
+          <label class="form-label d-flex justify-content-center">Groupements</label>
+        </div>
+
+        <!---->
+        <div class="form-outline mb-4" id="course">
+          <select class="form-select" name="RegisterCourse" id="selectCourse">
+            <option selected class="text-center">Selectionner le cours que vous allez piloter</option>
             <?php foreach ($this->getCourses() as $course) { ?>
             <option class="text-center" value="<?php echo $course['CID'] ?>">
             <?php echo $course['Cours'] ?></option>
@@ -93,12 +106,12 @@ class RegisterFormBody
         </div>
 
       <!---->
-      <div class="form-outline mb-4">
-          <select class="form-select" name="RegisterPromotion">
-            <option class="text-center" selected>Selectionner votre promotion (instructeurs laisser vide)</option>
+      <div class="form-outline mb-4" id="promotion">
+          <select class="form-select" name="RegisterPromotion" id="selectPromotion">
+            <option class="text-center" selected>Selectionner votre promotion</option>
             <?php foreach ($this->getPromotions() as $promotion) { ?>
             <option class="text-center" value="<?php echo $promotion['PID'] ?>">
-            <?php echo $promotion['Promotion'] ?></option>
+            <?php echo $promotion['Cours'].' '.$promotion['Promotion'] ?></option>
             <?php
             }?>
           </select>
@@ -162,6 +175,12 @@ class RegisterFormBody
 <?php
     }
 
+
+    public function getGroupements()
+    {
+      return $this->db->getGroupements();
+    }
+
     public function getCourses()
     {
       return $this->db->getCourses();
@@ -170,5 +189,59 @@ class RegisterFormBody
     public function getPromotions()
     {
       return $this->db->getPromotions();
+    }
+
+    public function userIsAdmin($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        return $this->db->userIsAdmin($uid);
+    }
+
+    public function userIsInstructor($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        return $this->db->userIsInstructor($uid);
+    }
+
+    public function userIsPilote($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        return $this->db->userIsPilote($uid);
+    }
+
+    public function userIsStudent($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        return $this->db->userIsStudent($uid);
+    }
+
+    public function deleteFromAdmins($uid)
+    {
+        //supprime l'utilisateur de la table administrateurs
+        return $this->db->deleteFromAdmins($uid);
+    }
+
+    public function deleteFromPilotes($uid)
+    {
+        //supprime l'utilisateur de la table pilotes
+        return $this->db->deleteFromPilotes($uid);
+    }
+
+    public function deleteFromInstructeurs($uid)
+    {
+        //supprime l'utilisateur de la table instructeurs
+        return $this->db->deleteFromInstructeurs($uid);
+    }
+
+    public function deleteFromStudents($uid)
+    {
+        //supprime l'utilisateur de la table students
+        return $this->db->deleteFromStudents($uid);
+    }
+
+    public function getStudentCourse($uid)
+    {
+        //retourne le cours suivi par l'eleve.
+        return $this->db->getStudentCourse($uid);
     }
 }

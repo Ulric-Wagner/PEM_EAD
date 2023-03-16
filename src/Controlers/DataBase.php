@@ -16,11 +16,31 @@ class DataBase
             $view = "office";
         }
         $this->DONE = "Location: ?view=$view&success=done";
-        $this->DBNOK = "Location: ?view=$view&success=DBNOK";
+        $this->DBNOK = "Location: ?view=$view&error=DBNOK";
         $this->LOCATION_DBPREPARE_ERROR = "location: ?view=$view&error=dbPrepare";
         $this->iocleaner = new IOCleaner();
         $this->cipher = new Cipher();
         $this->connect();
+        if (isset($_POST['RegisterGrade'])
+            && isset($_POST['RegisterNom'])
+            && isset($_POST['RegisterPrenom'])
+            && isset($_POST['RegisterMatricule'])
+            && isset($_POST['RegisterRole'])
+            && isset($_POST['RegisterCourse'])
+            && isset($_POST['RegisterPromotion'])
+            && isset($_POST['RegisterMail'])
+            && isset($_POST['RegisterPassword'])
+            ) {
+        $this->registerGrade = $this->iocleaner->inputFilter(strtoupper($_POST['RegisterGrade']));
+        $this->registerNom = $this->iocleaner->inputFilter(strtoupper($_POST['RegisterNom']));
+        $this->registerPrenom = $this->iocleaner->inputFilter(ucfirst($_POST['RegisterPrenom']));
+        $this->registerMatricule = $this->iocleaner->inputFilter($_POST['RegisterMatricule']);
+        $this->registerRole = $this->iocleaner->inputFilter($_POST['RegisterRole']);
+        $this->registerCourse = $this->iocleaner->inputFilter($_POST['RegisterCourse']);
+        $this->registerPromotion = $this->iocleaner->inputFilter($_POST['RegisterPromotion']);
+        $this->registerMail = $this->iocleaner->inputFilter(strtolower($_POST['RegisterMail']));
+        $this->registerPassword = $this->cipher->sha256($this->iocleaner->inputFilter($_POST['RegisterPassword']));
+        }
     }
 
     public function connect()
@@ -42,10 +62,19 @@ class DataBase
         }
     }
 
-    public function createUser($grade, $nom, $prenom, $matricule, $mail, $password)
+    public function createUser()
     {
+        //Si l'utilisateur est le premier à s'enregister et qu'il n'est pas élève le
+        //comptes est actif et administrateur.
+
+        $count = $this->countUsers();
+        if ($count < 1) {
+            $statut = 0;
+        } else {
+            $statut = 1;
+        }
+
         // création d'un nouvel uilisateur dans la base de donnée
-        $sha256 = $this->cipher->sha256($this->iocleaner->inputFilter($password));
         $sql = 'INSERT INTO users (`Grade`, `Nom`, `Prenom`, `Matricule`, `Mail`, `Sha256`)
                 VALUES (:Grade, :Nom, :Prenom, :Matricule, :Mail, :Sha256);';
         try {
@@ -54,26 +83,30 @@ class DataBase
             header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
-            $insert->execute(array('Grade' => $this->iocleaner->inputFilter($grade),
-                                   'Nom' => $this->iocleaner->inputFilter($nom),
-                                   'Prenom' => $this->iocleaner->inputFilter($prenom),
-                                   'Matricule' => $this->iocleaner->inputFilter($matricule),
-                                   'Mail' => $this->iocleaner->inputFilter($mail),
-                                   'Sha256' => $sha256));
-            header('location: ?view=signup&success=registred');
+            $insert->execute(array('Grade' => $this->registerGrade,
+                                   'Nom' =>$this->registerNom,
+                                   'Prenom' => $this->registerPrenom,
+                                   'Matricule' => $this->registerMatricule,
+                                   'Mail' => $this->registerMail,
+                                   'Sha256' => $this->registerPassword));
+            if ($statut) {
+                header('location: ?view=signup&success=registred');
+            } else {
+                header('location: ?view=signup&success=firstRegistred');
+            }
         } catch (PDOException $e) {
 
             //Mail déjà existant
             $patern = "#pour la clef 'Mail'$#";
             $mailAlreadyUsed = preg_match($patern, $e->getMessage());
             if ($mailAlreadyUsed) {
-                header("location: ?view=register&error=mailAlreadyUsed&mail=$mail");
+                header("location: ?view=register&error=mailAlreadyUsed&mail=$this->registerMail");
             } else {
                 //Matricule déjà existant
                 $patern = "#pour la clef 'Matricule'$#";
                 $matriculeAlreadyUsed = preg_match($patern, $e->getMessage());
                 if ($matriculeAlreadyUsed) {
-                    header("location: ?view=register&error=matriculeAlreadyUsed&matricule=$matricule");
+                    header("location: ?view=register&error=matriculeAlreadyUsed&matricule=$this->registerMatricule");
                 } else {
                     //erreur inatendue
                     header($this->DBNOK);
@@ -84,11 +117,44 @@ class DataBase
             
         }
 
+        if (!$statut) {
+            //activation du compte
+            $this->validUser(
+                $this->getUserID($this->registerMail)
+            );
+            // déclaration de l'administrateur
+            $this->setRoleAdministrateur(
+                $this->getUserID($this->registerMail)
+            );
+        }
+
+        if ($this->registerRole === "Pilote") {
+            $this->setRolePilote(
+                $this->getUserID($this->registerMail),
+                $this->registerCourse
+            );
+        }
+
+        if ($this->registerRole === "Instructeur") {
+            $this->setRoleInstructor(
+                $this->getUserID($this->registerMail),
+                $this->iocleaner->inputFilter($this->registerCourse)
+            );
+        }
+
+        if ($this->registerRole === "Student") {
+            $this->setRoleStudent(
+                $this->getUserID($this->registerMail),
+                $this->registerCourse,
+                $this->registerPromotion
+            );
+        }
+
     }
 
     public function getUserID($mail)
         {
-            $sql = 'SELECT UID FROM `users` WHERE `Mail` LIKE :Mail;';
+            $sql = 'SELECT `UID` FROM `users` WHERE `Mail` LIKE :Mail;';
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
@@ -96,7 +162,7 @@ class DataBase
             }
             try {
                 $reponse->execute(array('Mail' => $mail));
-                return $reponse->fetch();
+                return $reponse->fetch()['UID'];
 
                    
             } catch (PDOException $e) {
@@ -108,6 +174,82 @@ class DataBase
         public function setRoleInstructor($uid, $cid)
         {
             $sql = "INSERT INTO `instructeurs` (`UID`, `CID`)
+            VALUE (:UID, :CID);";
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid,
+                                        'CID' => $cid));
+
+                   
+            } catch (PDOException $e) {
+                //Pas de CID
+                $patern = "#for column 'CID' at row 1$#";
+                $noCID = preg_match($patern, $e->getMessage());
+                if ($noCID) {
+                    //pass
+                } else {
+                //erreur inatendue
+                header($this->DBNOK);
+                }
+            }
+        }
+
+        public function setRolePilote($uid, $cid)
+        {
+            $sql = "INSERT INTO `pilotes` (`UID`, `CID`)
+            VALUE (:UID, :CID);";
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid,
+                                        'CID' => $cid));
+
+                   
+            } catch (PDOException $e) {
+                //Pas de CID
+                $patern = "#for column 'CID' at row 1$#";
+                $noCID = preg_match($patern, $e->getMessage());
+                if ($noCID) {
+                    //pass
+                } else {
+                //erreur inatendue
+                header($this->DBNOK);
+                }
+    
+            }
+        }
+
+        public function setRoleStudent($uid, $cid, $pid)
+        {
+            $sql = "INSERT INTO `students` (`UID`, `CID`, `PID`)
+            VALUE (:UID, :CID, :PID);";
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid,
+                                        'CID' => $cid,
+                                        'PID' => $pid));
+
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+        }
+
+        public function setRoleAdministrateur($uid)
+        {
+            $sql = "INSERT INTO `administrateurs` (`UID`)
             VALUE (:UID);";
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
@@ -116,6 +258,26 @@ class DataBase
             }
             try {
                 $reponse->execute(array('UID' => $uid));
+
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+        }
+
+        public function countUsers()
+        {
+            $sql = 'SELECT COUNT(*) FROM `users`;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetch()['COUNT(*)'];
+                
 
                    
             } catch (PDOException $e) {
@@ -259,10 +421,29 @@ class DataBase
             }
     }
 
+    public function getGroupements()
+    {
+        //retourne une array contenant les information sur les cours
+        $sql = 'SELECT * FROM `groupements`';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
     public function getCourses()
     {
         //retourne une array contenant les information sur les cours
-        $sql = 'SELECT * FROM `Cours`';
+        $sql = 'SELECT * FROM `cours` JOIN `groupements` ON cours.GID = groupements.GID';
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
@@ -309,7 +490,10 @@ class DataBase
         try {
             $insert->execute(array('UID' => $this->iocleaner->inputFilter($uid),
                                    'Statut' => '1'));
+            if (isset($_POST['process'])
+                && ($_POST['process'] != 'register')) {
             header($this->DONE);
+            }
         } catch (PDOException $e) {
             //erreur inatendue
             header($this->DBNOK);
@@ -353,18 +537,88 @@ class DataBase
         }
     }
 
-    public function createCourse($cours)
+    public function createGroupement($groupement)
     {
         // création d'un nouvel uilisateur dans la base de donnée
-        $sql = 'INSERT INTO cours (`Cours`)
-                VALUES (:Cours);';
+        $sql = 'INSERT INTO groupements (`Groupement`)
+                VALUES (:Groupement);';
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
             header($this->LOCATION_DBPREPARE_ERROR);
         }
         try {
-            $insert->execute(array('Cours' => $this->iocleaner->inputFilter($cours)));
+            $insert->execute(array('Groupement' => $this->iocleaner->inputFilter($groupement)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+
+            //Cours déjà existant
+            $patern = "#pour la clef 'Groupement'$#";
+            $groupementAlreadyUsed = preg_match($patern, $e->getMessage());
+            if ($groupementAlreadyUsed) {
+                header("location: ?view=groupementsManagement&error=groupementAlreadyUsed&groupement=$groupement");
+            } else {
+                //erreur inatendue
+                header($this->DBNOK);
+                
+            }
+
+        }
+
+    }
+
+    public function renameGroupement($gid, $groupement)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sql = 'UPDATE groupements SET Groupement = :Groupement WHERE GID = :GID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('Groupement' => $this->iocleaner->inputFilter($groupement),
+                                   'GID' => $this->iocleaner->inputFilter($gid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+            //erreur innatendue
+            header($this->DBNOK);
+        }
+
+    }
+
+    public function removeGroupement($gid)
+    {
+        // création d'un nouvel uilisateur dans la base de donnée
+        $sql = 'DELETE FROM groupements WHERE GID = :GID;';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('GID' => $this->iocleaner->inputFilter($gid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+            //erreur innatendue
+            header($this->DBNOK);
+        }
+
+    }
+
+    public function createCourse($cours, $gid)
+    {
+        // création d'un nouveau cours dans la base de donnée
+        $sql = 'INSERT INTO cours (`Cours`, `GID`)
+                VALUES (:Cours, :GID);';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('Cours' => $this->iocleaner->inputFilter($cours),
+                                   'GID' => $this->iocleaner->inputFilter($gid)));
             header($this->DONE);
         } catch (PDOException $e) {
 
@@ -479,5 +733,159 @@ class DataBase
             header($this->DBNOK);
         }
 
+    }
+
+    public function userIsAdmin($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        $sql = 'SELECT COUNT(*) FROM `administrateurs` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function userIsInstructor($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        $sql = 'SELECT COUNT(*) FROM `instructeurs` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function userIsPilote($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        $sql = 'SELECT COUNT(*) FROM `pilotes` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function userIsStudent($uid)
+    {
+        //return true si l'utilisateur est administrateur
+        $sql = 'SELECT COUNT(*) FROM `students` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function deleteFromAdmins($uid)
+    {
+        //supprime l'utilisateur de la table administrateurs
+        $sql = 'DELETE FROM `administrateurs` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function deleteFromPilotes($uid)
+    {
+        //supprime l'utilisateur de la table pilotes
+        $sql = 'DELETE FROM `pilotes` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function deleteFromInstructeurs($uid)
+    {
+        //supprime l'utilisateur de la table instructeurs
+        $sql = 'DELETE FROM `instructeurs` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function deleteFromStudents($uid)
+    {
+        //supprime l'utilisateur de la table students
+        $sql = 'DELETE FROM `Students` WHERE UID = :UID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('UID' => $uid));
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getStudentCourse($uid)
+    {
+        //retourne le cours suivi par l'eleve.
+        
     }
 }

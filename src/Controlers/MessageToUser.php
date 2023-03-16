@@ -21,6 +21,20 @@ class MessageToUser
         }
 
         if (isset($_GET['success'])
+        && ($_GET['success'] === "firstRegistred")) {?>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <strong>Enregistré!!</strong> Votre compte utilisateur a été créé!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+            <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+                <strong>Oncle Ben:</strong> Un grand pouvoir implique de grande responsabilités,
+                en tant que premier utilisateur vous êtes l'administrateur de ce portail!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
+
+        if (isset($_GET['success'])
         && ($_GET['success'] === "logedIn")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>Vous revoilà!!</strong> Vous êtes connecté, au travail! &#x1F609;.

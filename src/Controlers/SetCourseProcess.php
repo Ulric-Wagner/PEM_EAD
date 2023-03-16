@@ -23,6 +23,51 @@ class SetCourseProcess
         return $token === $_SESSION['CSRFToken'];
     }
 
+    public function createGroupement()
+    {
+        if (isset($_POST['createGroupement'])
+        && !empty($_POST['createGroupement'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->createGroupement(strtoupper($_POST['createGroupement']));
+        
+        } else {
+            header($this->NOK);
+            
+        }
+    }
+
+    public function renameGroupement()
+    {
+        if (isset($_POST['newGroupementName'])
+        && !empty($_POST['newGroupementName'])
+        && isset($_POST['GID'])
+        && !empty($_POST['GID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->renameGroupement($_POST['GID'], strtoupper($_POST['newGroupementName']));
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
+    public function removeGroupement()
+    {
+        if (isset($_POST['removeGroupement'])
+        && !empty($_POST['removeGroupement'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->removeGroupement($_POST['removeGroupement']);
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
     public function createCourse()
     {
         if (isset($_POST['createCourse'])
@@ -30,7 +75,7 @@ class SetCourseProcess
         && isset($_POST['CSRFToken'])
         && $this->verifyCSRF($_POST['CSRFToken'])) {
         $create = new DataBase();
-        $create->createCourse(strtoupper($_POST['createCourse']));
+        $create->createCourse(strtoupper($_POST['createCourse']), $_POST['GID']);
         
         } else {
             header($this->NOK);

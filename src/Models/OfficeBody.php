@@ -33,6 +33,23 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-secondary">
+        <a href="?view=groupementsManagement" class="btn stretched-link">
+          <div class="card-header">Administration</div>
+          <div class="card-body">
+            <h5 class="card-title text-start">Gestion des groupements (Pools)</h5>
+              <p class="card-text text-start">
+                Cette interface vous permet de créer/modifier/supprimer un groupement.
+                (ex: "CYBER", "ASM")
+              </p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!---->
+
+    <!---->
+    <div class="col">
+      <div class="card text-white bg-secondary">
         <a href="?view=coursesManagement" class="btn stretched-link">
           <div class="card-header">Administration</div>
           <div class="card-body">

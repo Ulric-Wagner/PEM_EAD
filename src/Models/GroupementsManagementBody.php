@@ -3,7 +3,7 @@ namespace Csupcyber\Pemead\Models;
 
 use Csupcyber\Pemead\Controlers\DataBase;
 
-class CoursesManagementBody
+class GroupementsManagementBody
 {
     public function __construct()
     {
@@ -13,33 +13,24 @@ class CoursesManagementBody
 
 <div class="d-flex justify-content-center p-2">
   <div class="col-8 text-center">
-    <H3>Gestion des cours:</H3>
+    <H3>Gestion des groupements:</H3>
   </div>
 </div>
 <div class="px-5">
   <div class="row g-3 align-items-center p-5">
     <div>
-      <H3>Créer un cours:</H3>
+      <H3>Créer un groupement:</H3>
     </div>
-    <form method="post" action="?view=coursesManagement&process=createCourse">
+    <form method="post" action="?view=groupementsManagement&process=createGroupement">
       <div class="row g-3 align-items-center">
         <div class="col-auto">
-          <label for="createCourse" class="col-form-label">Nom du cours</label>
+          <label for="createGroupement" class="col-form-label">Nom du groupement</label>
           </div>
           <div class="col-auto">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-            <input type="text" name="createCourse" id="createCourse" class="form-control" aria-describedby="HelpInline">
+            <input type="text" name="createGroupement" id="createGroupement"
+            class="form-control" aria-describedby="HelpInline">
           </div>
-          <div class="col-auto">
-          <select class="form-select" name="GID">
-            <option selected>Selectionner un groupement pour ce cours</option>
-            <?php foreach ($this->getGroupements() as $groupement) { ?>
-            <option value="<?php echo $groupement['GID'] ?>">
-            <?php echo $groupement['Groupement'] ?></option>
-            <?php
-            } ?>
-          </select>
-        </div>
           <div class="col-auto">
             <button type="submit" class="btn btn-secondary btn-block">Créer</button>
           </div>
@@ -54,28 +45,25 @@ class CoursesManagementBody
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">CID</th>
-          <th scope="col">Nom du cours</th>
-          <th scope="col">Groupement</th>
+          <th scope="col">GID</th>
+          <th scope="col">Nom du groupement</th>
           <th scope="col">Nouveau nom</th>
-          <th scope="col"></th>
           <th scope="col"></th>
           <th scope="col"></th>
       </thead>
       <tbody>
-        <?php foreach ($this->getCourses() as $course) { ?>
+        <?php foreach ($this->getGroupements() as $groupement) { ?>
         <tr>
-          <th scope="row"><?php echo $course['CID'] ?></th>
-          <td><?php echo $course['Cours'] ?></td>
-          <td><?php echo $course['Groupement'] ?></td>
+          <th scope="row"><?php echo $groupement['GID'] ?></th>
+          <td><?php echo $groupement['Groupement'] ?></td>
           <td>
-          <form method="post" action="?view=coursesManagement&process=renameCourse">
+          <form method="post" action="?view=groupementsManagement&process=renameGroupement">
             <div class="row g-3 align-items-center">
               <div class="col-auto">
                 <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-                <input type="text" name="newCourseName" id="newCourseName"
+                <input type="text" name="newGroupementName" id="newGroupementName"
                 class="form-control" aria-describedby="HelpInline">
-                <input type="hidden" name="CID" value="<?php echo $course['CID'] ?>" />
+                <input type="hidden" name="GID" value="<?php echo $groupement['GID'] ?>" />
               </div>
             
         </td>
@@ -84,9 +72,9 @@ class CoursesManagementBody
             </form>
           </td>
           <td>
-            <form method="post" action="?view=coursesManagement&process=removeCourse">
+            <form method="post" action="?view=groupementsManagement&process=removeGroupement">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-              <input type="hidden" name="removeCourse" value="<?php echo $course['CID'] ?>" />
+              <input type="hidden" name="removeGroupement" value="<?php echo $groupement['GID'] ?>" />
               <button type="submit" class="btn btn-danger">Supprimer</button>
             </form>
           </td>
@@ -99,11 +87,6 @@ class CoursesManagementBody
   </div>
 </div>
 <?php }
-
-      public function getCourses()
-      {
-        return $this->db->getCourses();
-      }
 
       public function getGroupements()
       {

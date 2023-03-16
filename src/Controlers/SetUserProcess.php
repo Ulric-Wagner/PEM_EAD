@@ -92,17 +92,7 @@ class SetUserProcess
         && $this->verifyPasswordComplexity($_POST['RegisterPassword'])
         && isset($_POST['CSRFToken'])
         && $this->verifyCSRF($_POST['CSRFToken'])) {
-            $this->db->createUser(
-                strtoupper($_POST['RegisterGrade']),
-                strtoupper($_POST['RegisterNom']),
-                ucfirst($_POST['RegisterPrenom']),
-                $_POST['RegisterMatricule'],
-                $_POST['RegisterRole'],
-                $_POST['RegisterCourse'],
-                $_POST['RegisterPromotion'],
-                strtolower($_POST['RegisterMail']),
-                $_POST['RegisterPassword']
-            );
+            $this->db->createUser();
         } elseif (!$this->verifyMailFormat($_POST['RegisterMail'])) {
             header('Location: ?view=register&error=mailFormat');
         } elseif (!$this->verifyPasswordComplexity($_POST['RegisterPassword'])) {
@@ -128,4 +118,27 @@ class SetUserProcess
         }
     }
 
+    public function deleteFromAdmins($uid)
+    {
+        //supprime l'utilisateur de la table administrateurs
+        return $this->db->deleteFromAdmins($uid);
+    }
+
+    public function deleteFromPilotes($uid)
+    {
+        //supprime l'utilisateur de la table pilotes
+        return $this->db->deleteFromPilotes($uid);
+    }
+
+    public function deleteFromInstructeurs($uid)
+    {
+        //supprime l'utilisateur de la table instructeurs
+        return $this->db->deleteFromInstructeurs($uid);
+    }
+
+    public function deleteFromStudents($uid)
+    {
+        //supprime l'utilisateur de la table students
+        return $this->db->deleteFromStudents($uid);
+    }
 }

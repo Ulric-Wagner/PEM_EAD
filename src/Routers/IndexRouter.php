@@ -10,6 +10,7 @@ use Csupcyber\Pemead\Controlers\RegisterForm;
 use Csupcyber\Pemead\Controlers\SetPasswordForm;
 use Csupcyber\Pemead\Controlers\Office;
 use Csupcyber\Pemead\Controlers\AccountsManagement;
+use Csupcyber\Pemead\Controlers\GroupementsManagement;
 use Csupcyber\Pemead\Controlers\CoursesManagement;
 use Csupcyber\Pemead\Controlers\SetUserProcess;
 use Csupcyber\Pemead\Controlers\SetCourseProcess;
@@ -55,6 +56,15 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'createCourse')) {
             $process = new SetCourseProcess();
             $process->createCourse();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createGroupement')) {
+            $process = new SetCourseProcess();
+            $process->createGroupement();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameGroupement')) {
+            $process = new SetCourseProcess();
+            $process->renameGroupement();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removeGroupement')) {
+            $process = new SetCourseProcess();
+            $process->removeGroupement();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameCourse')) {
             $process = new SetCourseProcess();
             $process->renameCourse();
@@ -126,6 +136,16 @@ class IndexRouter{
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'coursesManagement')
         && ($_SESSION['authentication'] === 'authenticated')) {
         $courses = new CoursesManagement();
+        $courses->header();
+        $courses->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $courses->body();
+        $courses->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'groupementsManagement')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $courses = new GroupementsManagement();
         $courses->header();
         $courses->navbar();
         $msg->error();

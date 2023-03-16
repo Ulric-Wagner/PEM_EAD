@@ -91,6 +91,15 @@ class NavBar
         if (isset($_SESSION['authentication'])
         &&($_SESSION['authentication'] === 'authenticated')
         && isset($_GET['view'])
+        && ($_GET['view'] === 'groupementsManagement')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=groupementsManagement">Gestion des groupements</a>
+          <?php
+        }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
         && ($_GET['view'] === 'coursesManagement')) {?>
           <li class="nav-item active">
           <a class="nav-link" href="?view=coursesManagement">Gestion des cours</a>
