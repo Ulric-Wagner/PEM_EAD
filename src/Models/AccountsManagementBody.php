@@ -105,9 +105,11 @@ class AccountsManagementBody
         <th scope="col">Prénom</th>
         <th scope="col">Matricule</th>
         <th scope="col">E-mail</th>
+        <th scope="col">Rôle</th>
+        <th scope="col">Groupement</th>
         <th scope="col">Cours</th>
         <th scope="col">Promotion</th>
-        <th scope="col">Rôle</th>
+        
         <th scope="col"></th>
     </thead>
     <tbody>
@@ -120,41 +122,133 @@ class AccountsManagementBody
         <td><?php echo $user['Matricule'] ?></td>
         <td><?php echo $user['Mail'] ?></td>
         <td>
-        <form id="EnabledCourseForm" method="post" action="?view=accountsManagement&process=setCourse">
+        <?php
+        if ($this->userIsStudent($user['UID'])) {?>
+        <div id="EnabledRoleForm" method="post" action="?view=accountsManagement&process=setUser">
+          <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+            <select class="form-select" name="Course" id="EnabledRoleSelect">
+              <option value="Student" selected>Elève</option>
+              <option value="Instructeur">Instructeur</option>
+              <option value="Pilote">Pilote de cours</option>
+            </select>
+        </td>
+        <td>
+
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+            <select class="form-select" name="Groupement" id="EnabledGroupementSelect" >
+            <option selected class="text-center">Selectionner votre groupement d'instruction</option>
+            <?php foreach ($this->getGroupements() as $groupement) { ?>
+            <option class="text-center" value="<?php echo $groupement['GID'] ?>">
+            <?php echo $groupement['Groupement'] ?></option>
+            <?php
+            }?>
+            </select>
+
+        </td>
+        <td>
+        <div id="EnabledCourseForm">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select class="form-select" name="Course" id="EnabledCourseSelect" >
-            <option value="Student">Test</option>
+            <option selected class="text-center">Selectionner le cours que vous allez piloter</option>
+            <?php foreach ($this->getCourses() as $course) { ?>
+            <option class="text-center" value="<?php echo $course['CID'] ?>">
+            <?php echo $course['Cours'] ?></option>
+            <?php
+            }?>
             </select>
-          </form>
         </td>
         <td>
-        <form id="EnabledPromoForm" method="post" action="?view=accountsManagement&process=setPromo">
+        <div id="EnabledPromoForm">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select class="form-select" name="Course" id="EnabledPromoSelect" >
-            <option value="Student">Test</option>
+            <?php
+            $promotion = $this->getStudentPromotion($user['UID']);
+            ?>
+            <option class="text-center" value="<?php echo $promotion['PID'] ?>" selected><?php echo $promotion['Cours'].' '.$promotion['Promotion'];?></option>
+            <?php foreach ($this->getPromotions() as $promotion) { ?>
+            <option class="text-center" value="<?php echo $promotion['PID'] ?>">
+            <?php echo $promotion['Cours'].' '.$promotion['Promotion'] ?></option>
+            <?php
+            }?>
             </select>
-          </form>
         </td>
-        <td>
-        <form id="EnabledRoleForm" method="post" action="?view=accountsManagement&process=setRole">
+        <?php
+      }
+      
+      if ($this->userIsInstructor($user['UID'])) {?>
+        <div id="EnabledRoleForm" method="post" action="?view=accountsManagement&process=setUser">
           <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <select class="form-select" name="Course" id="EnabledRoleSelect">
               <option value="Student">Elève</option>
-              <option value="Instructeur">Instructeur</option>
-              <option value="Administrateur">Administrateur</option>
+              <option value="Instructeur" selected>Instructeur</option>
+              <option value="Pilote">Pilote de cours</option>
             </select>
-          </form>
         </td>
-        <td class="row">
-          <form class="col-5" method="post" action="?view=accountsManagement&process=disableUser">
+        <td>
+
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+            <select class="form-select" name="Groupement" id="EnabledGroupementSelect" >
+            <option selected class="text-center">Selectionner votre groupement d'instruction</option>
+            <?php foreach ($this->getGroupements() as $groupement) { ?>
+            <option class="text-center" value="<?php echo $groupement['GID'] ?>">
+            <?php echo $groupement['Groupement'] ?></option>
+            <?php
+            }?>
+            </select>
+
+        </td>
+        <td>
+        <div id="EnabledCourseForm">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+            <select class="form-select" name="Course" id="EnabledCourseSelect" >
+            <option selected class="text-center">Selectionner le cours que vous allez piloter</option>
+            <?php foreach ($this->getCourses() as $course) { ?>
+            <option class="text-center" value="<?php echo $course['CID'] ?>">
+            <?php echo $course['Cours'] ?></option>
+            <?php
+            }?>
+            </select>
+        </td>
+        <td>
+        <div id="EnabledPromoForm">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+            <select class="form-select" name="Course" id="EnabledPromoSelect" >
+            <?php
+            $promotion = $this->getStudentPromotion($user['UID']);
+            if ($promotion) {
+            ?>
+            <option class="text-center" value="<?php echo $promotion['PID'] ?>" selected>
+            <?php echo $promotion['Cours'].' '.$promotion['Promotion'];?></option>
+            <?php
+            }
+            if ($this->getPromotions()) {
+              foreach ($this->getPromotions() as $promotion) { ?>
+            <option class="text-center" value="<?php echo $promotion['PID'] ?>">
+            <?php echo $promotion['Cours'].' '.$promotion['Promotion'] ?></option>
+            <?php
+            }
+          }?>
+            </select>
+        </td>
+        <?php
+      }
+        ?>
+
+        
+        <td>
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+            <input type="hidden" name="EditedUser" value="<?php echo $user['UID'] ?>" />
+            <button type="submit" class="col-12 btn btn-success">Modifier</button>
+          </form>
+          <form method="post" action="?view=accountsManagement&process=disableUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="DisabledUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="btn btn-warning">Désactiver</button>
+            <button type="submit" class="col-12 btn btn-warning">Désactiver</button>
           </form>
-          <form class="col-5" method="post" action="?view=accountsManagement&process=rejectUser">
+          <form method="post" action="?view=accountsManagement&process=rejectUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="RejectedUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="btn btn-danger">Supprimer</button>
+            <button type="submit" class="col-12 btn btn-danger">Supprimer</button>
           </form>
         </td>
       </tr>
@@ -174,4 +268,70 @@ class AccountsManagementBody
       {
         return $this->db->getEnabledUsers();
       }
+
+      public function userIsAdmin($uid)
+    {
+        return $this->db->userIsAdmin($uid);
+    }
+
+    public function userIsPilote($uid)
+    {
+        return $this->db->userIsPilote($uid);
+    }
+
+    public function userIsInstructor($uid)
+    {
+        return $this->db->userIsInstructor($uid);
+    }
+
+    public function userIsStudent($uid)
+    {
+        return $this->db->userIsStudent($uid);
+    }
+
+    public function getGroupements()
+    {
+      return $this->db->getGroupements();
+    }
+
+    public function getCourses()
+    {
+      return $this->db->getCourses();
+    }
+
+    public function getPromotions()
+    {
+      return $this->db->getPromotions();
+    }
+
+    public function deleteFromAdmins($uid)
+    {
+        //supprime l'utilisateur de la table administrateurs
+        return $this->db->deleteFromAdmins($uid);
+    }
+
+    public function deleteFromPilotes($uid)
+    {
+        //supprime l'utilisateur de la table pilotes
+        return $this->db->deleteFromPilotes($uid);
+    }
+
+    public function deleteFromInstructeurs($uid)
+    {
+        //supprime l'utilisateur de la table instructeurs
+        return $this->db->deleteFromInstructeurs($uid);
+    }
+
+    public function deleteFromStudents($uid)
+    {
+        //supprime l'utilisateur de la table students
+        return $this->db->deleteFromStudents($uid);
+    }
+
+    public function getStudentPromotion($uid)
+    {
+        //retourne le cours suivi par l'eleve.
+        return $this->db->getStudentPromotion($uid);
+    }
+
 }

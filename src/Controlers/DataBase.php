@@ -26,6 +26,7 @@ class DataBase
             && isset($_POST['RegisterPrenom'])
             && isset($_POST['RegisterMatricule'])
             && isset($_POST['RegisterRole'])
+            && isset($_POST['RegisterGroupement'])
             && isset($_POST['RegisterCourse'])
             && isset($_POST['RegisterPromotion'])
             && isset($_POST['RegisterMail'])
@@ -36,6 +37,7 @@ class DataBase
         $this->registerPrenom = $this->iocleaner->inputFilter(ucfirst($_POST['RegisterPrenom']));
         $this->registerMatricule = $this->iocleaner->inputFilter($_POST['RegisterMatricule']);
         $this->registerRole = $this->iocleaner->inputFilter($_POST['RegisterRole']);
+        $this->registerGroupement = $this->iocleaner->inputFilter($_POST['RegisterGroupement']);
         $this->registerCourse = $this->iocleaner->inputFilter($_POST['RegisterCourse']);
         $this->registerPromotion = $this->iocleaner->inputFilter($_POST['RegisterPromotion']);
         $this->registerMail = $this->iocleaner->inputFilter(strtolower($_POST['RegisterMail']));
@@ -118,7 +120,7 @@ class DataBase
         }
 
         if (!$statut) {
-            //activation du compte
+            //activation du compte du premier utilisateur
             $this->validUser(
                 $this->getUserID($this->registerMail)
             );
@@ -138,14 +140,12 @@ class DataBase
         if ($this->registerRole === "Instructeur") {
             $this->setRoleInstructor(
                 $this->getUserID($this->registerMail),
-                $this->iocleaner->inputFilter($this->registerCourse)
-            );
+                $this->registerGroupement);
         }
 
         if ($this->registerRole === "Student") {
             $this->setRoleStudent(
                 $this->getUserID($this->registerMail),
-                $this->registerCourse,
                 $this->registerPromotion
             );
         }
@@ -173,8 +173,8 @@ class DataBase
 
         public function setRoleInstructor($uid, $cid)
         {
-            $sql = "INSERT INTO `instructeurs` (`UID`, `CID`)
-            VALUE (:UID, :CID);";
+            $sql = "INSERT INTO `instructeurs` (`UID`, `GID`)
+            VALUE (:UID, :GID);";
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
@@ -182,12 +182,12 @@ class DataBase
             }
             try {
                 $reponse->execute(array('UID' => $uid,
-                                        'CID' => $cid));
+                                        'GID' => $cid));
 
                    
             } catch (PDOException $e) {
-                //Pas de CID
-                $patern = "#for column 'CID' at row 1$#";
+                //Pas de GID
+                $patern = "#for column 'GID' at row 1$#";
                 $noCID = preg_match($patern, $e->getMessage());
                 if ($noCID) {
                     //pass
@@ -224,12 +224,17 @@ class DataBase
                 }
     
             }
+
+            $this->setRoleInstructor(
+                $uid,
+                $this->getCourseGID($cid) 
+            );
         }
 
-        public function setRoleStudent($uid, $cid, $pid)
+        public function setRoleStudent($uid, $pid)
         {
-            $sql = "INSERT INTO `students` (`UID`, `CID`, `PID`)
-            VALUE (:UID, :CID, :PID);";
+            $sql = "INSERT INTO `students` (`UID`, `PID`)
+            VALUE (:UID, :PID);";
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
@@ -237,7 +242,6 @@ class DataBase
             }
             try {
                 $reponse->execute(array('UID' => $uid,
-                                        'CID' => $cid,
                                         'PID' => $pid));
 
                    
@@ -452,6 +456,25 @@ class DataBase
             try {
                 $reponse->execute();
                 return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getCourseGID($cid)
+    {
+        $sql = 'SELECT * FROM `cours` WHERE `CID` LIKE :CID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('CID' => $cid));
+                $infos = $reponse->fetch()['GID'];
+
                    
             } catch (PDOException $e) {
                 //erreur inatendue
@@ -883,9 +906,26 @@ class DataBase
             }
     }
 
-    public function getStudentCourse($uid)
+    public function getStudentPromotion($uid)
     {
-        //retourne le cours suivi par l'eleve.
-        
+        //retourne le cours et la promotion suivi par l'eleve.
+        $sql = 'SELECT promotions.PID, cours.Cours, promotions.Promotion
+        FROM students JOIN promotions ON students.PID = promotions.PID
+        JOIN cours ON promotions.CID = cours.CID
+        WHERE students.UID = :UID;';
+        try {
+            $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $reponse->execute(array('UID' => $uid));
+            return $reponse->fetch();
+
+               
+        } catch (PDOException $e) {
+            //erreur inatendue
+            header($this->DBNOK);
+        }
     }
 }

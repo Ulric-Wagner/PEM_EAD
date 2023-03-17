@@ -70,7 +70,7 @@ class RegisterFormBody
 
       <!---->
       <div class="form-outline mb-4" id="role">
-          <select class="form-select" name="RegisterRole" id="selectRole">
+          <select class="form-select text-center" name="RegisterRole" id="selectRole">
             <option selected class="text-center">Selectionner votre type de profil</option>
             <option class="text-center" value="Student">Elève</option>
             <option class="text-center" value="Instructeur">Instructeur</option>
@@ -81,7 +81,7 @@ class RegisterFormBody
 
       <!---->
         <div class="form-outline mb-4" id="groupement">
-          <select class="form-select" name="RegisterGroupement" id="selectGroupement">
+          <select class="form-select text-center" name="RegisterGroupement" id="selectGroupement">
             <option selected class="text-center">Selectionner votre groupement d'instruction</option>
             <?php foreach ($this->getGroupements() as $groupement) { ?>
             <option class="text-center" value="<?php echo $groupement['GID'] ?>">
@@ -94,7 +94,7 @@ class RegisterFormBody
 
         <!---->
         <div class="form-outline mb-4" id="course">
-          <select class="form-select" name="RegisterCourse" id="selectCourse">
+          <select class="form-select text-center" name="RegisterCourse" id="selectCourse">
             <option selected class="text-center">Selectionner le cours que vous allez piloter</option>
             <?php foreach ($this->getCourses() as $course) { ?>
             <option class="text-center" value="<?php echo $course['CID'] ?>">
@@ -107,7 +107,7 @@ class RegisterFormBody
 
       <!---->
       <div class="form-outline mb-4" id="promotion">
-          <select class="form-select" name="RegisterPromotion" id="selectPromotion">
+          <select class="form-select text-center" name="RegisterPromotion" id="selectPromotion">
             <option class="text-center" selected>Selectionner votre promotion</option>
             <?php foreach ($this->getPromotions() as $promotion) { ?>
             <option class="text-center" value="<?php echo $promotion['PID'] ?>">
@@ -213,30 +213,6 @@ class RegisterFormBody
     {
         //return true si l'utilisateur est administrateur
         return $this->db->userIsStudent($uid);
-    }
-
-    public function deleteFromAdmins($uid)
-    {
-        //supprime l'utilisateur de la table administrateurs
-        return $this->db->deleteFromAdmins($uid);
-    }
-
-    public function deleteFromPilotes($uid)
-    {
-        //supprime l'utilisateur de la table pilotes
-        return $this->db->deleteFromPilotes($uid);
-    }
-
-    public function deleteFromInstructeurs($uid)
-    {
-        //supprime l'utilisateur de la table instructeurs
-        return $this->db->deleteFromInstructeurs($uid);
-    }
-
-    public function deleteFromStudents($uid)
-    {
-        //supprime l'utilisateur de la table students
-        return $this->db->deleteFromStudents($uid);
     }
 
     public function getStudentCourse($uid)
