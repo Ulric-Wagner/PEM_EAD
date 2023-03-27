@@ -69,9 +69,12 @@ class RegisterFormBody
       </div>
 
       <!---->
+      <?php
+      if ($this->isThereUsers()) {
+      ?>
       <div class="form-outline mb-4" id="role">
           <select class="form-select text-center" name="RegisterRole" id="selectRole">
-            <option selected class="text-center">Selectionner votre type de profil</option>
+            <option selected class="text-center" value="None">Selectionner votre type de profil</option>
             <option class="text-center" value="Student">Elève</option>
             <option class="text-center" value="Instructeur">Instructeur</option>
             <option class="text-center" value="Pilote">Pilote de cours ou adjoint</option>
@@ -82,7 +85,7 @@ class RegisterFormBody
       <!---->
         <div class="form-outline mb-4" id="groupement">
           <select class="form-select text-center" name="RegisterGroupement" id="selectGroupement">
-            <option selected class="text-center">Selectionner votre groupement d'instruction</option>
+            <option selected class="text-center" value="None">Selectionner votre groupement d'instruction</option>
             <?php foreach ($this->getGroupements() as $groupement) { ?>
             <option class="text-center" value="<?php echo $groupement['GID'] ?>">
             <?php echo $groupement['Groupement'] ?></option>
@@ -95,7 +98,7 @@ class RegisterFormBody
         <!---->
         <div class="form-outline mb-4" id="course">
           <select class="form-select text-center" name="RegisterCourse" id="selectCourse">
-            <option selected class="text-center">Selectionner le cours que vous allez piloter</option>
+            <option selected class="text-center" value="None">Selectionner le cours que vous allez piloter</option>
             <?php foreach ($this->getCourses() as $course) { ?>
             <option class="text-center" value="<?php echo $course['CID'] ?>">
             <?php echo $course['Cours'] ?></option>
@@ -108,7 +111,7 @@ class RegisterFormBody
       <!---->
       <div class="form-outline mb-4" id="promotion">
           <select class="form-select text-center" name="RegisterPromotion" id="selectPromotion">
-            <option class="text-center" selected>Selectionner votre promotion</option>
+            <option class="text-center" value="None" selected>Selectionner votre promotion</option>
             <?php foreach ($this->getPromotions() as $promotion) { ?>
             <option class="text-center" value="<?php echo $promotion['PID'] ?>">
             <?php echo $promotion['Cours'].' '.$promotion['Promotion'] ?></option>
@@ -118,6 +121,7 @@ class RegisterFormBody
           <label class="form-label d-flex justify-content-center">Promotion</label>
         </div>
 
+      <?php } ?>
       <!-- Email input -->
       <div class="form-outline mb-4">
         <input
@@ -219,5 +223,10 @@ class RegisterFormBody
     {
         //retourne le cours suivi par l'eleve.
         return $this->db->getStudentCourse($uid);
+    }
+
+    public function isThereUsers() {
+      //verifie la presence d'utilisateur dans la base de donnée
+      return $this->db->countUsers();
     }
 }

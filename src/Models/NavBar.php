@@ -122,7 +122,7 @@ class NavBar
     public function rightLinks()
       {
         if (isset($_SESSION['authentication'])
-        && $_SESSION['authentication'] === 'authenticated') {?>?>
+        && $_SESSION['authentication'] === 'authenticated') {?>
         <li class="nav-item">
           <a class="nav-link" href="#"><?php echo $_SESSION['Grade']?> <?php echo $_SESSION['Nom']?>
           <?php echo $_SESSION['Prenom']?></a>

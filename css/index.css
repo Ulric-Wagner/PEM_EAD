@@ -10,7 +10,21 @@ thead {
     background-color: #e7eaee;
 }
 
+.account-table-container {
+    background-color: #f3eeee;
+    color: #0f0f0f;
+    opacity: .8;
+    border-radius: 30px;
+    margin: 12px;
+    max-height: 500px;
+    border-radius: 30px;
+}
+
 .course-table-container {
+    background-color: #f3eeee;
+    color: #0f0f0f;
+    opacity: .8;
+    border-radius: 30px;
     max-height: 500px;
     margin-bottom: 12px;
 }
@@ -19,3 +33,10 @@ thead {
     max-height: 2500px;
     margin-bottom: 12px;
 }
+
+body {
+    background-image: url("../img/background.jpg");
+    background-size: cover;
+    color: white;
+  }
+

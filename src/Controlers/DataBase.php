@@ -25,10 +25,6 @@ class DataBase
             && isset($_POST['RegisterNom'])
             && isset($_POST['RegisterPrenom'])
             && isset($_POST['RegisterMatricule'])
-            && isset($_POST['RegisterRole'])
-            && isset($_POST['RegisterGroupement'])
-            && isset($_POST['RegisterCourse'])
-            && isset($_POST['RegisterPromotion'])
             && isset($_POST['RegisterMail'])
             && isset($_POST['RegisterPassword'])
             ) {
@@ -36,13 +32,26 @@ class DataBase
         $this->registerNom = $this->iocleaner->inputFilter(strtoupper($_POST['RegisterNom']));
         $this->registerPrenom = $this->iocleaner->inputFilter(ucfirst($_POST['RegisterPrenom']));
         $this->registerMatricule = $this->iocleaner->inputFilter($_POST['RegisterMatricule']);
-        $this->registerRole = $this->iocleaner->inputFilter($_POST['RegisterRole']);
-        $this->registerGroupement = $this->iocleaner->inputFilter($_POST['RegisterGroupement']);
-        $this->registerCourse = $this->iocleaner->inputFilter($_POST['RegisterCourse']);
-        $this->registerPromotion = $this->iocleaner->inputFilter($_POST['RegisterPromotion']);
         $this->registerMail = $this->iocleaner->inputFilter(strtolower($_POST['RegisterMail']));
         $this->registerPassword = $this->cipher->sha256($this->iocleaner->inputFilter($_POST['RegisterPassword']));
         }
+
+        if (isset($_POST['RegisterRole'])) {
+            $this->registerRole = $this->iocleaner->inputFilter($_POST['RegisterRole']);
+        }
+
+        if (isset($_POST['RegisterGroupement'])) {
+            $this->registerGroupement = $this->iocleaner->inputFilter($_POST['RegisterGroupement']);
+        }
+
+        if (isset($_POST['RegisterCourse'])) {
+            $this->registerCourse = $this->iocleaner->inputFilter($_POST['RegisterCourse']);
+        }
+
+        if (isset($_POST['RegisterPromotion'])) {
+            $this->registerPromotion = $this->iocleaner->inputFilter($_POST['RegisterPromotion']);
+        }
+        
     }
 
     public function connect()
@@ -130,24 +139,36 @@ class DataBase
             );
         }
 
-        if ($this->registerRole === "Pilote") {
+        if ($this->registerRole === "Pilote"
+        && $this->registerCourse != "None") {
             $this->setRolePilote(
                 $this->getUserID($this->registerMail),
                 $this->registerCourse
             );
+        } elseif ($this->registerRole === "Pilote"
+        && $this->registerCourse === "None") {
+            header("Location: ?view=register&error=noCourse");
         }
 
-        if ($this->registerRole === "Instructeur") {
+        if ($this->registerRole === "Instructeur"
+        && $this->registerGroupement != "None") {
             $this->setRoleInstructor(
                 $this->getUserID($this->registerMail),
                 $this->registerGroupement);
+        } elseif ($this->registerRole === "Instructeur"
+        && $this->registerGroupement === "None") {
+            header("Location: ?view=register&error=noGroupement");
         }
 
-        if ($this->registerRole === "Student") {
+        if ($this->registerRole === "Student"
+        && $this->registerPromotion != "None") {
             $this->setRoleStudent(
                 $this->getUserID($this->registerMail),
                 $this->registerPromotion
             );
+        } elseif ($this->registerRole === "Student"
+        && $this->registerPromotion === "None") {
+            header("Location: ?view=register&error=noPromotion");
         }
 
     }
@@ -227,7 +248,7 @@ class DataBase
 
             $this->setRoleInstructor(
                 $uid,
-                $this->getCourseGID($cid) 
+                $this->getCourseGID($cid)
             );
         }
 
@@ -473,7 +494,7 @@ class DataBase
             }
             try {
                 $reponse->execute(array('CID' => $cid));
-                $infos = $reponse->fetch()['GID'];
+                return $reponse->fetch()['GID'];
 
                    
             } catch (PDOException $e) {

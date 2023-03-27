@@ -16,7 +16,7 @@ class OfficeBody
   <div class="row row-cols-1 row-cols-md-4 g-4">
     <!---->
     <div class="col">
-      <div class="card text-white bg-secondary">
+      <div class="card bg-warning">
         <a href="?view=accountsManagement" class="btn stretched-link">
           <div class="card-header">Administration</div>
           <div class="card-body">
@@ -32,7 +32,7 @@ class OfficeBody
 
     <!---->
     <div class="col">
-      <div class="card text-white bg-secondary">
+      <div class="card bg-warning">
         <a href="?view=groupementsManagement" class="btn stretched-link">
           <div class="card-header">Administration</div>
           <div class="card-body">
@@ -49,7 +49,7 @@ class OfficeBody
 
     <!---->
     <div class="col">
-      <div class="card text-white bg-secondary">
+      <div class="card bg-warning">
         <a href="?view=coursesManagement" class="btn stretched-link">
           <div class="card-header">Administration</div>
           <div class="card-body">

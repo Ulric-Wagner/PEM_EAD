@@ -192,6 +192,36 @@ class MessageToUser
             </div>
         <?php
         }
+
+        // erreur dans le formulaire d'enregistrement
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "noCourse")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Erreur!</strong> Veuillez selectionner un cours à piloter.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
+
+        // erreur dans le formulaire d'enregistrement
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "noGroupement")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Erreur!</strong> Veuillez selectionner votre groupement d'instruction.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
+
+        // erreur dans le formulaire d'enregistrement
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "noPromotion")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Erreur!</strong> Veuillez selectionner votre promotion.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
     
     }
 
