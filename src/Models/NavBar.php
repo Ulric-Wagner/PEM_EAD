@@ -125,7 +125,7 @@ class NavBar
         && $_SESSION['authentication'] === 'authenticated') {?>
         <li class="nav-item">
           <a class="nav-link" href="#"><?php echo $_SESSION['Grade']?> <?php echo $_SESSION['Nom']?>
-          <?php echo $_SESSION['Prenom']?></a>
+          <?php echo $_SESSION['Prenom']?> / <?php echo $_SESSION['Profil']?></a>
         </li>
  <?php }
       }

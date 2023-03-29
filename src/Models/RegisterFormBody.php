@@ -68,6 +68,17 @@ class RegisterFormBody
         <label class="form-label d-flex justify-content-center" for="registerRegistrationNumber">Matricule</label>
       </div>
 
+      <!-- RegisterDateOfBirth input -->
+      <div class="form-outline mb-4">
+        <input
+        type="date"
+        id="registerDateOfBirth"
+        class="form-control d-flex justify-content-center text-center"
+        name="RegisterDateOfBirth"
+        required/>
+        <label class="form-label d-flex justify-content-center" for="registerDateOfBirth">Date de naissance</label>
+      </div>
+
       <!---->
       <?php
       if ($this->isThereUsers()) {

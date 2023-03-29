@@ -136,6 +136,7 @@ class IOCleaner
             $input = str_replace($this->lt, "<", $input);
             $input = str_replace($this->gt, ">", $input);
             $input = htmlspecialchars($input, ENT_QUOTES);
+            $input = html_entity_decode($input, ENT_QUOTES);
         }elseif (is_array($input)) {
             foreach ($input as $key => $value) {
                 //pour les sous array reboucle la fonction jusqu'a la valeur finale

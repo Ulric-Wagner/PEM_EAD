@@ -25,6 +25,7 @@ class DataBase
             && isset($_POST['RegisterNom'])
             && isset($_POST['RegisterPrenom'])
             && isset($_POST['RegisterMatricule'])
+            && isset($_POST['RegisterDateOfBirth'])
             && isset($_POST['RegisterMail'])
             && isset($_POST['RegisterPassword'])
             ) {
@@ -32,6 +33,7 @@ class DataBase
         $this->registerNom = $this->iocleaner->inputFilter(strtoupper($_POST['RegisterNom']));
         $this->registerPrenom = $this->iocleaner->inputFilter(ucfirst($_POST['RegisterPrenom']));
         $this->registerMatricule = $this->iocleaner->inputFilter($_POST['RegisterMatricule']);
+        $this->registerDateOfBirth = $this->iocleaner->inputFilter($_POST['RegisterDateOfBirth']);
         $this->registerMail = $this->iocleaner->inputFilter(strtolower($_POST['RegisterMail']));
         $this->registerPassword = $this->cipher->sha256($this->iocleaner->inputFilter($_POST['RegisterPassword']));
         }
@@ -86,8 +88,8 @@ class DataBase
         }
 
         // création d'un nouvel uilisateur dans la base de donnée
-        $sql = 'INSERT INTO users (`Grade`, `Nom`, `Prenom`, `Matricule`, `Mail`, `Sha256`)
-                VALUES (:Grade, :Nom, :Prenom, :Matricule, :Mail, :Sha256);';
+        $sql = 'INSERT INTO users (`Grade`, `Nom`, `Prenom`, `Matricule`, `DateOfBirth`, `Mail`, `Sha256`)
+                VALUES (:Grade, :Nom, :Prenom, :Matricule, :DoB, :Mail, :Sha256);';
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {
@@ -98,6 +100,7 @@ class DataBase
                                    'Nom' =>$this->registerNom,
                                    'Prenom' => $this->registerPrenom,
                                    'Matricule' => $this->registerMatricule,
+                                   'DoB' => $this->registerDateOfBirth,
                                    'Mail' => $this->registerMail,
                                    'Sha256' => $this->registerPassword));
             if ($statut) {
@@ -400,11 +403,40 @@ class DataBase
                 $_SESSION['Nom'] = $infos['Nom'];
                 $_SESSION['Prenom'] = $infos['Prenom'];
                 $_SESSION['Matricule'] = $infos['Matricule'];
+                $_SESSION['Admin'] = 'None';
+                $_SESSION['Pilote'] = 'None';
+                $_SESSION['Instructeur'] = 'None';
+                $_SESSION['Student'] = 'None';
+                $_SESSION['Role'] = '(Utilisateur)';
+                $_SESSION['Profil'] = 'None';
 
                    
             } catch (PDOException $e) {
                 //erreur inatendue
                 header($this->DBNOK);
+            }
+
+            if ($this->userIsAdmin($_SESSION['UID'])) {
+                $_SESSION['Admin'] = 'Admin';
+                $_SESSION['Role'] = '(Administrateur)';
+            }
+
+            if ($this->userIsInstructor($_SESSION['UID'])) {
+                $_SESSION['Instructeur'] = 'Instructeur';
+                $_SESSION['Profil'] = "Instructeur ".$this->getInstructorGroupement($_SESSION['UID'])['Groupement'];
+            }
+
+            if ($this->userIsPilote($_SESSION['UID'])) {
+                $_SESSION['Pilote'] = 'Pilote';
+                $_SESSION['Profil'] = "Pilote du cours ".$this->getPiloteCourse($_SESSION['UID'])['Cours'];
+                $_SESSION['PiloteCID'] = $this->getPiloteCourse($_SESSION['UID'])['CID'];
+            }
+
+
+            if ($this->userIsStudent($_SESSION['UID'])) {
+                $_SESSION['Student'] = 'Student';
+                $promotion = $this->getStudentPromotion(($_SESSION['UID']));
+                $_SESSION['Profil'] = "Elève ".$promotion['Cours']." ".$promotion['Promotion'];
             }
     }
 
@@ -544,6 +576,48 @@ class DataBase
         }
     }
 
+    public function setUserAsPilote($uid, $course)
+    {
+        //cette fonction permet de modifier un utilisateur pour lui donner le role de pilote de cours
+
+        //supression de l'utilisateur de la table Students et instructeurs
+        $this->deleteFromStudents($uid);
+        $this->deleteFromInstructeurs($uid);
+        //Ajout du role pilote
+        $this->setRolePilote($uid, $course);
+
+    }
+
+    public function setUserAsInstructor($uid, $groupement)
+    {
+        //cette fonction permet de modifier un utilisateur pour lui donner le role
+        //d'instructeur pour un groupement d'instruction donnée
+
+        //supression de l'utilisateur de la table Students
+        $this->deleteFromStudents($uid);
+        //supression de l'utilisateur de la table Pilotes
+        $this->deleteFromPilotes($uid);
+        //Ajout du role Instructeur
+        $this->setRoleInstructor($uid, $groupement);
+
+    }
+
+    public function setUserAsStudent($uid, $promotion)
+    {
+        //cette fonction permet de modifier un utilisateur pour lui donner le role
+        //d'instructeur pour un groupement d'instruction donnée
+
+        //supression de l'utilisateur de la table Pilotes
+        $this->deleteFromPilotes($uid);
+        //supression de l'utilisateur de la table Instructeurs
+        $this->deleteFromInstructeurs($uid);
+        //Ajout du role Instructeur
+        $this->setRoleStudent($uid, $promotion);
+
+    }
+
+
+
     public function disableUser($uid)
     {
         // validation d'un nouvel uilisateur
@@ -579,6 +653,11 @@ class DataBase
             //erreur inatendue
             header($this->DBNOK);
         }
+
+        // suppresion de toute les tables
+        $this->deleteFromInstructeurs($uid);
+        $this->deleteFromPilotes($uid);
+        $this->deleteFromStudents($uid);
     }
 
     public function createGroupement($groupement)
@@ -934,6 +1013,50 @@ class DataBase
         FROM students JOIN promotions ON students.PID = promotions.PID
         JOIN cours ON promotions.CID = cours.CID
         WHERE students.UID = :UID;';
+        try {
+            $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $reponse->execute(array('UID' => $uid));
+            return $reponse->fetch();
+
+               
+        } catch (PDOException $e) {
+            //erreur inatendue
+            header($this->DBNOK);
+        }
+    }
+
+    public function getInstructorGroupement($uid)
+    {
+        //retourne le cours et la promotion suivi par l'eleve.
+        $sql = 'SELECT groupements.GID, groupements.Groupement FROM instructeurs
+        JOIN groupements ON groupements.GID = instructeurs.GID
+        WHERE instructeurs.UID = :UID;';
+        try {
+            $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $reponse->execute(array('UID' => $uid));
+            return $reponse->fetch();
+
+               
+        } catch (PDOException $e) {
+            //erreur inatendue
+            header($this->DBNOK);
+        }
+    }
+
+    public function getPiloteCourse($uid)
+    {
+        //retourne le cours et la promotion suivi par l'eleve.
+        $sql = 'SELECT cours.CID, cours.Cours FROM Cours
+        JOIN Pilotes ON Pilotes.CID = cours.CID
+        WHERE pilotes.UID = :UID;';
         try {
             $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (PDOException $e) {

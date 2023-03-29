@@ -146,7 +146,7 @@ class Session
     public function tokenCSRF()
     {
         if (empty($_SESSION['CSRFToken'])){
-            $this->cipher->generateToken();
+            $this->cipher->generateCSRFToken();
         }
     }
     

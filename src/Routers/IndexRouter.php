@@ -14,7 +14,6 @@ use Csupcyber\Pemead\Controlers\GroupementsManagement;
 use Csupcyber\Pemead\Controlers\CoursesManagement;
 use Csupcyber\Pemead\Controlers\SetUserProcess;
 use Csupcyber\Pemead\Controlers\SetCourseProcess;
-use Csupcyber\Pemead\Controlers\CourseAccountsManagement;
 use Csupcyber\Pemead\Controlers\PromotionsManagement;
 
 
@@ -44,6 +43,9 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'setPassword')) {
             $process = new SetUserProcess();
             $process->updatePassword();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'setUser')) {
+            $process = new SetUserProcess();
+            $process->edit();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'validUser')) {
             $process = new SetUserProcess();
             $process->valid();
@@ -153,16 +155,6 @@ class IndexRouter{
         $msg->success();
         $courses->body();
         $courses->footer();
-    } elseif (isset($_GET['view']) && ($_GET['view'] === 'courseAccountsManagement')
-        && ($_SESSION['authentication'] === 'authenticated')) {
-        $accounts = new CourseAccountsManagement();
-        $accounts->header();
-        $accounts->navbar();
-        $msg->error();
-        $msg->warning();
-        $msg->success();
-        $accounts->body();
-        $accounts->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'promotionsManagement')
         && ($_SESSION['authentication'] === 'authenticated')) {
         $promotions = new PromotionsManagement();

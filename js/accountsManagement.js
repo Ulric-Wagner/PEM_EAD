@@ -36,6 +36,8 @@ class Selector {
     constructor() {
       this.EnabledRoleSelect = document.querySelectorAll('[id^=EnabledRoleSelect]');
       this.EnabledGroupementSelect = document.querySelectorAll('[id^=EnabledGroupementSelect]');
+      this.EnabledCourseSelect = document.querySelectorAll('[id^=EnabledCourseSelect]');
+      this.EnabledPromoSelect = document.querySelectorAll('[id^=EnabledPromoSelect]');
       this.SelectedRow = 0;
     }
 
@@ -43,16 +45,92 @@ class Selector {
         this.EnabledRoleSelect.forEach( (self) => {
             self.addEventListener('change', (self)=>{
                 this.SelectedRow = self.target.id.split("EnabledRoleSelect")[1];
-                this.EnabledGroupementSelect.forEach( (self) => {
-                    if (self.id.split("EnabledGroupementSelect")[1] === this.SelectedRow) {
-                        console.log(self); // selection reussi, need to add action to hide ect and duplicate for every needs!
-                    }
-                })
+                this.SelectedValue = self.target.value;
+
+                if (this.SelectedValue === "None") {
+                    this.EnabledGroupementSelect.forEach( (self) => {
+                        if (self.id.split("EnabledGroupementSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    })
+
+                    this.EnabledCourseSelect.forEach( (self) => {
+                        if (self.id.split("EnabledCourseSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    })
+
+                    this.EnabledPromoSelect.forEach( (self) => {
+                        if (self.id.split("EnabledPromoSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    }) 
+                }
+
+                if (this.SelectedValue === "Student") {
+                    this.EnabledGroupementSelect.forEach( (self) => {
+                        if (self.id.split("EnabledGroupementSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    })
+
+                    this.EnabledCourseSelect.forEach( (self) => {
+                        if (self.id.split("EnabledCourseSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    })
+
+                    this.EnabledPromoSelect.forEach( (self) => {
+                        if (self.id.split("EnabledPromoSelect")[1] === this.SelectedRow) {
+                            self.hidden = false;
+                        }
+                    }) 
+                }
+
+                if (this.SelectedValue === "Instructeur") {
+                    this.EnabledGroupementSelect.forEach( (self) => {
+                        if (self.id.split("EnabledGroupementSelect")[1] === this.SelectedRow) {
+                            self.hidden = false;
+                        }
+                    })
+
+                    this.EnabledCourseSelect.forEach( (self) => {
+                        if (self.id.split("EnabledCourseSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    })
+
+                    this.EnabledPromoSelect.forEach( (self) => {
+                        if (self.id.split("EnabledPromoSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    }) 
+                }
+
+                if (this.SelectedValue === "Pilote") {
+                    this.EnabledGroupementSelect.forEach( (self) => {
+                        if (self.id.split("EnabledGroupementSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    })
+
+                    this.EnabledCourseSelect.forEach( (self) => {
+                        if (self.id.split("EnabledCourseSelect")[1] === this.SelectedRow) {
+                            self.hidden = false;
+                        }
+                    })
+
+                    this.EnabledPromoSelect.forEach( (self) => {
+                        if (self.id.split("EnabledPromoSelect")[1] === this.SelectedRow) {
+                            self.hidden = true;
+                        }
+                    }) 
+                }
             })
         })
     }
 }
 
-let test = new Selector();
-test.onChange();
-  
+
+let select = new Selector();
+select.onChange();

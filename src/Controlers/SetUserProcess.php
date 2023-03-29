@@ -12,6 +12,67 @@ class SetUserProcess
         $this->NOK = "Location: ?view=$view&error=nok";
     }
 
+    public function edit()
+    {
+        if (isset($_POST['Role'])
+        && isset($_POST['Course'])
+        && isset($_POST['EditedUser'])
+        && ($_POST['Role'] === "Pilote")
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $validation = new DataBase();
+        $validation->setUserAsPilote($_POST['EditedUser'], $_POST['Course']);
+        $this->setRoleAdmin();
+        
+        } elseif (isset($_POST['Role'])
+        && isset($_POST['Groupement'])
+        && isset($_POST['EditedUser'])
+        && ($_POST['Role'] === "Instructeur")
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $validation = new DataBase();
+        $validation->setUserAsInstructor($_POST['EditedUser'], $_POST['Groupement']);
+        $this->setRoleAdmin();
+        
+        } elseif (isset($_POST['Role'])
+        && isset($_POST['Promotion'])
+        && isset($_POST['EditedUser'])
+        && ($_POST['Role'] === "Student")
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $validation = new DataBase();
+        $validation->setUserAsStudent($_POST['EditedUser'], $_POST['Promotion']);
+        $this->setRoleAdmin();
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
+    public function setRoleAdmin()
+    {
+        if (isset($_POST['EditedUser'])
+        && isset($_POST['Admin'])
+        && ($_POST['Admin'] === "on")
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $admin = new DataBase();
+        $admin->setRoleAdministrateur($_POST['EditedUser']);
+        
+        } elseif (isset($_POST['EditedUser'])
+        && isset($_POST['Admin'])
+        && ($_POST['Admin'] === "off")
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $admin = new DataBase();
+        $admin->deleteFromAdmins($_POST['EditedUser']);
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
+
     public function valid()
     {
         if (isset($_POST['ValidatedUser'])
@@ -86,6 +147,7 @@ class SetUserProcess
         if (isset($_POST['RegisterNom'])
         && isset($_POST['RegisterPrenom'])
         && isset($_POST['RegisterMatricule'])
+        && isset($_POST['RegisterDateOfBirth'])
         && isset($_POST['RegisterMail'])
         && $this->verifyMailFormat($_POST['RegisterMail'])
         && isset($_POST['RegisterPassword'])
