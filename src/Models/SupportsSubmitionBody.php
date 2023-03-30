@@ -13,7 +13,7 @@ class SupportsSubmitionBody
 
 <div class="d-flex justify-content-center p-2">
   <div class="col-8 text-center">
-    <H3>:</H3>
+    <H3>Téléversement et soumission des supports de cours</H3>
   </div>
 </div>
 
@@ -21,7 +21,7 @@ class SupportsSubmitionBody
   <div>
     <H3>Soumission des supports:</H3>
   </div>
-  <form method="post" action="?view=supportSubmition&process=sendFile">
+  <form method="post" enctype="multipart/form-data" action="?view=supportSubmition&process=sendFile">
     <div class="row g-3 align-items-center">
       <div class="col-auto">
         <label for="sendFile" class="col-form-label">Selectionner un fichier</label>

@@ -2,6 +2,7 @@
 namespace Csupcyber\Pemead\Controlers;
 
 use Csupcyber\Pemead\Controlers\DataBase;
+use \PDO;
 
 class FilesManagement extends DataBase
 {
@@ -9,6 +10,7 @@ class FilesManagement extends DataBase
     {
         $view = $_GET['view'];
         $this->NOK = "Location: ?view=$view&error=nok";
+        parent::__construct();
     }
 
     public function fileUpload()
@@ -19,9 +21,9 @@ class FilesManagement extends DataBase
         $fileType = strtolower(pathinfo($targetFile,PATHINFO_EXTENSION));
         $fileName = pathinfo($targetFile,PATHINFO_BASENAME);
         $fileName = str_replace(".$fileType", "", $fileName);
-
+        
         // upload du fichier
-        if (isset($_POST["sendFile"]))
+        if (isset($_FILES["fileToUpload"]))
         {
         $uploadOk = 1;
         // Check file size
@@ -133,26 +135,28 @@ class FilesManagement extends DataBase
             
         }
 
-
         // Check if $uploadOk is set to 0 by an error
         if ($uploadOk === 1) {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)){
-            $out =  "Le fichier: ". outputFilter(basename($targetFile)). " a été importé avec succès.";
+            $out =  "Le fichier:" . $this->iocleaner->outputFilter(basename($targetFile)) . " a
+            été importé avec succès.";
             
         //--------------------
 
         //record the file
         
-        $sql = 'INSERT INTO fichiers (Fichier, Type, GID, Path, Poster)
+        $sql = 'INSERT INTO fichiers (`Fichier`, `Type`, `GID`, `Path`, `Poster`)
         VALUES (:Fichier, :Type, :GID, :Path, :Poster);';
         try {
             $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         } catch (Exception $e) {
             header($this->LOCATION_DBPREPARE_ERROR);
         }
-        try {$insert->execute(array('Fichier' => outputFilter(basename($target_file)),
-                               'Type' => outputFilter($FileType),
-                               'Poster' => $_SESSION['Grade'].' '.$_SESSION['Nom'].' '.$_SESSION['Prenom']));
+        try {$insert->execute(array('Fichier' => $this->iocleaner->outputFilter(basename($targetFile)),
+                               'Type' => $this->iocleaner->outputFilter($fileType),
+                               'Path' => $this->iocleaner->outputFilter($targetFile),
+                               'GID' => $_SESSION['GID'],
+                               'Poster' => $_SESSION['Grade']));
             header($this->DONE);
             
         } catch (PDOException $e) {
@@ -167,6 +171,10 @@ class FilesManagement extends DataBase
         $_SESSION['ERROR'] = $out;
 
         }
+        }
+        else {
+            //erreur inatendue
+            header($this->DBNOK);
         }
 
     }

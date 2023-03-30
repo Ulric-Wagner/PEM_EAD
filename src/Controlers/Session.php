@@ -38,6 +38,12 @@ class Session
         // probabilité de suppression des sessions expirées
         //(10% de chance de detruire les session expirées lors d'une requête utilisateur)
         ini_set('session.gc_divisor', 100);
+        //autoriser l'upload jusqu'à 50M
+        ini_set('file_uploads', 1);
+        ini_set('post_max_size', "50M");
+        ini_set('upload_max_filesize', "50M");
+        //definition d'un repertoire temporaire
+        //ini_set('upload_tmp_dir', "files/tmp");
     }
 
     public function setSecurityHeaders()
