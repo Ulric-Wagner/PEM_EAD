@@ -424,6 +424,7 @@ class DataBase
             if ($this->userIsInstructor($_SESSION['UID'])) {
                 $_SESSION['Instructeur'] = 'Instructeur';
                 $_SESSION['Profil'] = "Instructeur ".$this->getInstructorGroupement($_SESSION['UID'])['Groupement'];
+                $_SESSION['GID'] = $this->getInstructorGroupement($_SESSION['UID'])['GID'];
             }
 
             if ($this->userIsPilote($_SESSION['UID'])) {
@@ -546,6 +547,44 @@ class DataBase
             }
             try {
                 $reponse->execute();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getMatieres()
+    {
+        //retourne une array contenant les information sur les promotions
+        $sql = 'SELECT * FROM Cours JOIN Matieres ON Cours.CID = Matieres.CID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getFiles($gid)
+    {
+        //retourne une array contenant les information sur les promotions
+        $sql = 'SELECT * FROM fichiers WHERE GID = :GID ';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('GID' => $gid));
                 return $reponse->fetchall();
                    
             } catch (PDOException $e) {
@@ -810,6 +849,26 @@ class DataBase
         }
         try {
             $insert->execute(array('Promotion' => $this->iocleaner->inputFilter($promotion),
+                                   'CID' => $this->iocleaner->inputFilter($cid)));
+            header($this->DONE);
+        } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+        }
+    }
+
+    public function createMatiere($cid, $matiere)
+    {
+        // création d'une nouvelle matiere dans la base de donnée
+        $sql = 'INSERT INTO matieres (`CID`, `Matiere`)
+                VALUES (:CID, :Matiere);';
+        try {
+            $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        } catch (PDOException $e) {
+            header($this->LOCATION_DBPREPARE_ERROR);
+        }
+        try {
+            $insert->execute(array('Matiere' => $this->iocleaner->inputFilter($matiere),
                                    'CID' => $this->iocleaner->inputFilter($cid)));
             header($this->DONE);
         } catch (PDOException $e) {

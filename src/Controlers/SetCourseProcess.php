@@ -157,4 +157,18 @@ class SetCourseProcess
         }
     }
 
+    public function createMatiere()
+    {
+        if (isset($_POST['createMatiere'])
+        && isset($_POST['CID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+        $create = new DataBase();
+        $create->createMatiere($_POST['CID'], strtoupper($_POST['createMatiere']));
+        
+        } else {
+            header($this->NOK);
+        }
+    }
+
 }

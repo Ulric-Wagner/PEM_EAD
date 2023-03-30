@@ -117,7 +117,7 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-dark">
-        <a href="?view=promotionsManagement" class="text-info btn stretched-link">
+        <a href="?view=matieresCreation" class="text-info btn stretched-link">
           <div class="card-header">Instructeur</div>
           <div class="card-body">
             <h5 class="card-title text-start">Créer une matière</h5>
@@ -134,7 +134,7 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-dark">
-        <a href="?view=promotionsManagement" class="text-info btn stretched-link">
+        <a href="?view=supportsSubmition" class="text-info btn stretched-link">
           <div class="card-header">Instructeur</div>
           <div class="card-body">
             <h5 class="card-title text-start">Soumettre un support</h5>

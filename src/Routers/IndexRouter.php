@@ -15,6 +15,9 @@ use Csupcyber\Pemead\Controlers\CoursesManagement;
 use Csupcyber\Pemead\Controlers\SetUserProcess;
 use Csupcyber\Pemead\Controlers\SetCourseProcess;
 use Csupcyber\Pemead\Controlers\PromotionsManagement;
+use Csupcyber\Pemead\Controlers\MatieresCreation;
+use Csupcyber\Pemead\Controlers\SupportsSubmition;
+use Csupcyber\Pemead\Controlers\FilesManagement;
 
 
 class IndexRouter{
@@ -76,12 +79,18 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'createPromotion')) {
             $process = new SetCourseProcess();
             $process->createPromotion();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createMatiere')) {
+            $process = new SetCourseProcess();
+            $process->createMatiere();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'renamePromotion')) {
             $process = new SetCourseProcess();
             $process->renamePromotion();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'removePromotion')) {
             $process = new SetCourseProcess();
             $process->removePromotion();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'sendFile')) {
+            $process = new FilesManagement();
+            $process->fileUpload();
         }
 
         if ((!isset($_GET['view'])
@@ -165,6 +174,26 @@ class IndexRouter{
         $msg->success();
         $promotions->body();
         $promotions->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresCreation')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $matieres = new MatieresCreation();
+        $matieres->header();
+        $matieres->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $matieres->body();
+        $matieres->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'supportsSubmition')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $supports = new SupportsSubmition();
+        $supports->header();
+        $supports->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $supports->body();
+        $supports->footer();
     } elseif (isset($_GET['view'])
     && ($_GET['view'] === 'signup')
     && ($_SESSION['authentication'] === 'authenticated')) {

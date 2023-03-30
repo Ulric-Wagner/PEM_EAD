@@ -114,6 +114,24 @@ class NavBar
           <a class="nav-link" href="?view=promotionsManagement">Gestion des promotions</a>
           <?php
         }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'matieresCreation')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=matieresCreation">Creation des matières</a>
+          <?php
+        }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'supportsSubmition')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=supportsSubmition">Soumission des supports de cours</a>
+          <?php
+        }
         ?>
         <?php
         
