@@ -43,7 +43,7 @@ class Session
         ini_set('post_max_size', "50M");
         ini_set('upload_max_filesize', "50M");
         //definition d'un repertoire temporaire
-        //ini_set('upload_tmp_dir', "files/tmp");
+        ini_set('upload_tmp_dir', "files/tmp");
     }
 
     public function setSecurityHeaders()

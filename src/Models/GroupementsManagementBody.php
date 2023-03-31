@@ -11,12 +11,7 @@ class GroupementsManagementBody
       ?>
 
 
-<div class="d-flex justify-content-center p-2">
-  <div class="col-8 text-center">
-    <H3>Gestion des groupements:</H3>
-  </div>
-</div>
-<div class="px-5">
+<div class="px-3">
   <div class="row g-3 align-items-center p-5">
     <div>
       <H3>Créer un groupement:</H3>
@@ -40,8 +35,8 @@ class GroupementsManagementBody
 </div>
 <!--  -->
 </div>
-<div class="px-5">
-  <div class="course-table-container tableFixHead px-5">
+<div class="px-3">
+  <div class="course-table-container tableFixHead px-3">
     <table class="table table-hover">
       <thead>
         <tr>

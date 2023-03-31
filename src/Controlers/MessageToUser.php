@@ -222,6 +222,16 @@ class MessageToUser
             </div>
         <?php
         }
+
+        // erreur dans le formulaire d'enregistrement
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "uploadError")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Erreur!</strong> <?php echo  $_SESSION['ERROR']; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
     
     }
 

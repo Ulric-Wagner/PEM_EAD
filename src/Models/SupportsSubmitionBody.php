@@ -10,18 +10,11 @@ class SupportsSubmitionBody
       $this->db = new DataBase();
       ?>
 
-
-<div class="d-flex justify-content-center p-2">
-  <div class="col-8 text-center">
-    <H3>Téléversement et soumission des supports de cours</H3>
-  </div>
-</div>
-
 <div class="row g-3 align-items-center p-5">
   <div>
-    <H3>Soumission des supports:</H3>
+    <H3>Télversement des supports:</H3>
   </div>
-  <form method="post" enctype="multipart/form-data" action="?view=supportSubmition&process=sendFile">
+  <form method="post" enctype="multipart/form-data" action="?view=supportsSubmition&process=sendFile">
     <div class="row g-3 align-items-center">
       <div class="col-auto">
         <label for="sendFile" class="col-form-label">Selectionner un fichier</label>
@@ -31,7 +24,7 @@ class SupportsSubmitionBody
           <input
                       name="fileToUpload"
                       type="file"
-                      accept=".pdf, .ppt, .pptx"
+                      accept=".pdf, .ppt, .pptx, .odp"
                       id="fileToUpload"
                       value=""
                       class="form-control d-flex justify-content-center"
@@ -47,21 +40,59 @@ class SupportsSubmitionBody
 </div>
 <!--  -->
 </div>
-<div class="course-table-container tableFixHead px-5">
-  <table class="table table-hover">
+<div class="px-3">
+  <div class="file-table-container tableFixHead px-3">
+    <table class="table table-hover">
     <thead>
       <tr>
         <th scope="col">Nom du fichier</th>
-        <th scope="col">Type du fichier</th>
-        <th scope="col"></th>
+        <th scope="col">Auteur</th>
+        <th scope="col">Téléchargement</th>
     </thead>
     <tbody>
     <?php foreach ($this->getFiles($_SESSION['GID']) as $File) { ?>
         <tr>
           <td><?php echo $File['Fichier'] ?></td>
-          <td><?php echo $File['Type'] ?></td>
+          <td><?php echo $File['Poster'] ?></td>
           <td><div class="col-auto">
-          <button type="submit" class="btn btn-secondary btn-block">Téléchargement</button>
+          <?php
+          if ($File['Type'] === 'pdf') { ?>
+                                                    
+            <form method="post" action="?view=supportSubmition&process=download">
+            <input
+              type="image" src="./img/pdf.png"
+              alt="Submit"
+              data-toggle="tooltip"
+              title="<?php echo $this->db->iocleaner->outputFilter($File['Fichier']) ?>"
+              data-placement="bottom">
+            <input
+              type="hidden"
+              name="FileToRead"
+              value="<?php echo $this->db->iocleaner->outputFilter($File['Fichier']) ?>">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken'] ?>">
+            <label><?php echo $this->db->iocleaner->outputFilter($File['Fichier']) ?></label>
+            </form>
+          <?php
+          } elseif ($File['Type'] === 'ppt'
+          || $File['Type'] === 'pptx'
+          || $File['Type'] === 'odp') { ?>
+            <form method="post" action="?view=supportSubmition&process=download">
+            <input
+              type="image" src="./img/ppt.png"
+              alt="Submit"
+              data-toggle="tooltip"
+              title="<?php echo $this->db->iocleaner->outputFilter($File['Fichier']) ?>"
+              data-placement="bottom">
+            <input
+              type="hidden"
+              name="FileToRead"
+              value="<?php echo $this->db->iocleaner->outputFilter($File['Fichier']) ?>">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken'] ?>">
+            <label><?php echo $this->db->iocleaner->outputFilter($File['Fichier']) ?></label>
+            </form>
+          <?php
+          }
+          ?>
         </div></td>
         </tr>
         <?php
@@ -69,7 +100,10 @@ class SupportsSubmitionBody
     </tbody>
   </table>
 </div>
+      </div>
+
 <?php }
+
 
       public function getFiles($gid)
       {

@@ -16,7 +16,7 @@ class CoursesManagementBody
     <H3>Gestion des cours:</H3>
   </div>
 </div>
-<div class="px-5">
+<div class="px-3">
   <div class="row g-3 align-items-center p-5">
     <div>
       <H3>Créer un cours:</H3>
@@ -49,8 +49,8 @@ class CoursesManagementBody
 </div>
 <!--  -->
 </div>
-<div class="px-5">
-  <div class="course-table-container tableFixHead px-5">
+<div class="px-3">
+  <div class="course-table-container tableFixHead px-3">
     <table class="table table-hover">
       <thead>
         <tr>

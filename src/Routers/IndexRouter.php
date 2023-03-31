@@ -18,6 +18,7 @@ use Csupcyber\Pemead\Controlers\PromotionsManagement;
 use Csupcyber\Pemead\Controlers\MatieresCreation;
 use Csupcyber\Pemead\Controlers\SupportsSubmition;
 use Csupcyber\Pemead\Controlers\FilesManagement;
+use Csupcyber\Pemead\Controlers\MatieresFeeding;
 
 
 class IndexRouter{
@@ -91,6 +92,9 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'sendFile')) {
             $process = new FilesManagement();
             $process->fileUpload();
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'download')) {
+            $process = new FilesManagement();
+            $process->download();
         }
 
         if ((!isset($_GET['view'])
@@ -194,7 +198,17 @@ class IndexRouter{
         $msg->success();
         $supports->body();
         $supports->footer();
-    } elseif (isset($_GET['view'])
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresFeeding')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $matieres = new MatieresFeeding();
+        $matieres->header();
+        $matieres->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $matieres->body();
+        $matieres->footer();
+    }elseif (isset($_GET['view'])
     && ($_GET['view'] === 'signup')
     && ($_SESSION['authentication'] === 'authenticated')) {
     header('Location: ?view=office');

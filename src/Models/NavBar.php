@@ -134,6 +134,17 @@ class NavBar
         }
         ?>
         <?php
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'matieresFeeding')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=matieresFeeding">Enrichir les matières</a>
+          <?php
+        }
+        ?>
+        <?php
         
    }
 

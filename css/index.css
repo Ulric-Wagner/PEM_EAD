@@ -4,6 +4,7 @@
     min-height: 10%; 
 }
 
+
 thead { 
     position: sticky; top: 0; 
     z-index: 1; 
@@ -16,8 +17,11 @@ thead {
     opacity: .8;
     border-radius: 30px;
     margin: 12px;
-    max-height: 500px;
+    max-height: 400px;
     border-radius: 30px;
+    font-size: 15px;
+    overflow: auto; 
+   
 }
 
 .course-table-container {
@@ -25,14 +29,35 @@ thead {
     color: #0f0f0f;
     opacity: .8;
     border-radius: 30px;
-    max-height: 500px;
+    max-height: 600px;
     margin-bottom: 12px;
+    font-size: 15px;
+    overflow: auto; 
+   
 }
 
-.course-table-container {
-    max-height: 2500px;
+.file-table-container {
+    background-color: #f3eeee;
+    color: #0f0f0f;
+    opacity: .8;
+    border-radius: 30px;
+    max-height: 600px;
     margin-bottom: 12px;
+    font-size: 15px;
+    overflow: auto; 
+   
 }
+
+.matieres-container {
+   
+    color: #faf4f4;
+    max-height: 700px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    overflow: auto; 
+   
+}
+
 
 body {
     background-image: url("../img/background.jpg");

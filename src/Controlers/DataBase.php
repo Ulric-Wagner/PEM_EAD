@@ -574,10 +574,30 @@ class DataBase
             }
     }
 
+    public function getCourseMatieres($cid)
+    {
+        //retourne une array contenant les information sur les promotions
+        $sql = 'SELECT * FROM Cours JOIN Matieres ON Cours.CID = Matieres.CID WHERE Cours.CID = :CID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('CID' => $cid));
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+
     public function getFiles($gid)
     {
         //retourne une array contenant les information sur les promotions
-        $sql = 'SELECT * FROM fichiers WHERE GID = :GID ';
+        $sql = 'SELECT * FROM fichiers WHERE GID = :GID ORDER BY Fichier ASC ';
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {

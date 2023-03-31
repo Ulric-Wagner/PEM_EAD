@@ -137,11 +137,28 @@ class OfficeBody
         <a href="?view=supportsSubmition" class="text-info btn stretched-link">
           <div class="card-header">Instructeur</div>
           <div class="card-body">
-            <h5 class="card-title text-start">Soumettre un support</h5>
+            <h5 class="card-title text-start">Téléverser un support</h5>
               <p class="card-text text-start">
-                Cette interface vous permet de joindre un support à une matière,
-                il sera soumit à la validation du pilote de cours.
+                Cette interface vous permet de téléverser vos support de cours,
+                vous pouvez ensuite les ajouter à une matière.
                 (ex: pdf, powerpoint)
+              </p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!---->
+
+    <!---->
+    <div class="col">
+      <div class="card text-white bg-dark">
+        <a href="?view=matieresFeeding" class="text-info btn stretched-link">
+          <div class="card-header">Instructeur</div>
+          <div class="card-body">
+            <h5 class="card-title text-start">Enrichir les matières</h5>
+              <p class="card-text text-start">
+                Cette interface vous permet de lier les supports de cours disponible à une matière.
+                (ex: PENTEST.pptx)
               </p>
           </div>
         </a>

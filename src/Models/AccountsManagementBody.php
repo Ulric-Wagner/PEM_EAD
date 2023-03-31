@@ -11,14 +11,12 @@ class AccountsManagementBody
       $this->db = new DataBase();
       ?>
 
-<div class="d-flex justify-content-center p-2">
-  <div class="col-8 text-center">
-    <H3>Gestion des comptes:</H3>
-  </div>
+<div class="row g-3 align-items-center p-3">
+    <H4>Comptes en attente de validation:</H4>
 </div>
-<div class="account-table-container tableFixHead p-5">
-  <table class="table table-hover">
-  <figcaption><H5>Utilisateurs en attente de validation:</H5></figcaption>
+<div class="px-3">
+  <div class="account-table-container tableFixHead px-3">
+    <table class="table table-hover">
     <thead>
       <tr>
         <th scope="col">Grade / Civilité</th>
@@ -387,12 +385,15 @@ class AccountsManagementBody
     </tbody>
   </table>
 </div>
+    </div>
 
 <!---->
-
-<div class="account-table-container tableFixHead p-5">
-  <table class="table table-hover">
-  <figcaption><H5>Utilisateurs actifs:</H5></figcaption>
+<div class="row g-3 align-items-center p-3">
+    <H4>Comptes actifs:</H4>
+</div>
+<div class="px-3">
+  <div class="account-table-container tableFixHead px-3">
+    <table class="table table-hover">
     <thead>
       <tr>
         <th scope="col">Grade / Civilité</th>
@@ -762,6 +763,7 @@ class AccountsManagementBody
     </tbody>
   </table>
 </div>
+    </div>
 <?php }
 
       public function getNewUsers()

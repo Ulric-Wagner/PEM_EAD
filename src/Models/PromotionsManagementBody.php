@@ -11,13 +11,7 @@ class PromotionsManagementBody
       ?>
 
 
-<div class="d-flex justify-content-center p-2">
-  <div class="col-8 text-center">
-    <H3>Gestion des promotions:</H3>
-  </div>
-</div>
-
-<div class="row g-3 align-items-center p-5">
+<div class="row g-3 align-items-center p-3">
   <div>
     <H3>Créer une promotion:</H3>
   </div>
@@ -50,8 +44,9 @@ class PromotionsManagementBody
 </div>
 <!--  -->
 </div>
-<div class="course-table-container tableFixHead px-5">
-  <table class="table table-hover">
+<div class="px-3">
+  <div class="course-table-container tableFixHead px-3">
+    <table class="table table-hover">
     <thead>
       <tr>
         <th scope="col">CID</th>
@@ -98,6 +93,7 @@ class PromotionsManagementBody
     </tbody>
   </table>
 </div>
+      </div>
 <?php }
 
       public function getCourses()
