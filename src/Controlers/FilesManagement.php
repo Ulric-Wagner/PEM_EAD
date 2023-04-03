@@ -246,6 +246,25 @@ class FilesManagement extends DataBase
             }
     }
 
+    public function getFilePath($fid)
+    {
+        //retourne une array contenant les information sur les promotions
+        $sql = 'SELECT * FROM fichiers WHERE FID = :FID ORDER BY Fichier ASC ';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('FID' => $fid));
+                return $reponse->fetch()['Path'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
     public function getDocuments($mid)
     {
         //retourne une array contenant les information sur les documents
@@ -315,7 +334,7 @@ class FilesManagement extends DataBase
     public function countUnvalidatedDocuments()
     {
         //retourne une array contenant les information sur les documents à valider
-        $sql = 'SELECT COUNT(*) FROM `documents` WHERE 1;';
+        $sql = 'SELECT COUNT(*) FROM `documents` WHERE statut = "0";';
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
@@ -323,6 +342,25 @@ class FilesManagement extends DataBase
             }
             try {
                 $reponse->execute();
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function countUnvalidatedDocumentsForMID($mid)
+    {
+        //retourne une array contenant les information sur les documents à valider pour une matiere
+        $sql = 'SELECT COUNT(*) FROM `documents` WHERE statut = "0" AND MID = :MID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('MID' => $mid));
                 return $reponse->fetch()['COUNT(*)'];
                    
             } catch (PDOException $e) {
@@ -357,6 +395,108 @@ class FilesManagement extends DataBase
                     //erreur inatendue
                     header($this->DBNOK);
                 }
+        }
+    
+    }
+
+    public function validDocument()
+    {
+        if (isset($_POST['Valid'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+
+            $sql = 'UPDATE documents SET statut = 1
+            WHERE DID = :DID;';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (Exception $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {$insert->execute(array('DID' => $this->iocleaner->inputFilter($_POST['Valid'])));
+                header($this->DONE);
+                
+            } catch (PDOException $e) {
+    
+                    //erreur inatendue
+                    header($this->DBNOK);
+                }
+        }
+    
+    }
+
+    public function rejectDocument()
+    {
+        if (isset($_POST['Reject'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+
+            $sql = 'DELETE FROM `documents` WHERE DID = :DID;';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (Exception $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {$insert->execute(array('DID' => $this->iocleaner->inputFilter($_POST['Reject'])));
+                header($this->DONE);
+                
+            } catch (PDOException $e) {
+    
+                    //erreur inatendue
+                    header($this->DBNOK);
+                }
+        }
+    
+    }
+
+    public function countDocumentsForFID($fid)
+    {
+        //retourne une array contenant les information sur les documents à valider
+        $sql = 'SELECT COUNT(*)
+        FROM `documents` JOIN `fichiers` ON documents.FID = fichiers.FID
+        WHERE fichiers.FID = :FID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('FID' => $fid));
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function removeFIle()
+    {
+        if (isset($_POST['Remove'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])
+        && !$this->countDocumentsForFID($_POST['Remove'])) {
+
+            $sql = 'DELETE FROM `fichiers` WHERE FID = :FID;';
+            try {
+                $delete = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (Exception $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $targetFile = $this->getFilePath($_POST['Remove']);
+                unlink($targetFile);
+                
+                $delete->execute(array('FID' => $this->iocleaner->inputFilter($_POST['Remove'])));
+                
+            } catch (PDOException $e) {
+    
+                    //erreur inatendue
+                    header($this->DBNOK);
+                }
+        } elseif (isset($_POST['Remove'])
+        && $this->countDocumentsForFID($_POST['Remove'])
+        && isset($_POST['CSRFToken'])) {
+            header("Location: ?view=$this->view&error=busyFile");
         }
     
     }

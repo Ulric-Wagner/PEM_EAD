@@ -88,7 +88,8 @@ class MatieresCreationBody
             <form method="post" action="?view=promotionsManagement&process=removePromotion">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
               <input type="hidden" name="removePromotion" value="<?php echo $promotion['PID'] ?>" />
-              <button type="submit" class="btn btn-danger">Supprimer</button>
+              <button type="submit" class="btn btn-danger"
+              data-confirm="Etes vous sure de vouloir supprimer cet promotion?">Supprimer</button>
             </form>
           </td>
           

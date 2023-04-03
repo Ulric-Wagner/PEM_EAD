@@ -87,7 +87,7 @@ class CoursesManagementBody
             <form method="post" action="?view=coursesManagement&process=removeCourse">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
               <input type="hidden" name="removeCourse" value="<?php echo $course['CID'] ?>" />
-              <button type="submit" class="btn btn-danger">Supprimer</button>
+              <button type="submit" class="btn btn-danger" data-confirm="Etes vous sure de vouloir supprimer ce cours?">Supprimer</button>
             </form>
           </td>
           

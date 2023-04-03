@@ -19,6 +19,7 @@ use Csupcyber\Pemead\Controlers\MatieresCreation;
 use Csupcyber\Pemead\Controlers\SupportsSubmition;
 use Csupcyber\Pemead\Controlers\FilesManagement;
 use Csupcyber\Pemead\Controlers\MatieresFeeding;
+use Csupcyber\Pemead\Controlers\MatieresValidation;
 
 
 class IndexRouter{
@@ -208,7 +209,17 @@ class IndexRouter{
         $msg->success();
         $matieres->body();
         $matieres->footer();
-    }elseif (isset($_GET['view'])
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresValidation')
+    && ($_SESSION['authentication'] === 'authenticated')) {
+    $matieres = new MatieresValidation();
+    $matieres->header();
+    $matieres->navbar();
+    $msg->error();
+    $msg->warning();
+    $msg->success();
+    $matieres->body();
+    $matieres->footer();
+} elseif (isset($_GET['view'])
     && ($_GET['view'] === 'signup')
     && ($_SESSION['authentication'] === 'authenticated')) {
     header('Location: ?view=office');

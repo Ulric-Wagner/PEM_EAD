@@ -232,6 +232,17 @@ class MessageToUser
             </div>
         <?php
         }
+
+        // erreur lors de la suppression de fichier
+        if (isset($_GET['error'])
+        && ($_GET['error'] === "busyFile")) {?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <strong>Erreur!</strong> Le fichier que vous essayez de supprimer est attaché à un ou plusieurs
+                cours / matières en tant que document et ne peut être supprimé.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+            </div>
+        <?php
+        }
     
     }
 

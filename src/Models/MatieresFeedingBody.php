@@ -55,8 +55,13 @@ class MatieresFeedingBody
       <div class="col">
         <div class="card bg-light">
           <div class="text-dark">
-            <div class="card-header"><?php echo $Matiere['Cours'] ?> : <?php echo $Matiere['Matiere']?></div>
-            <div class="card-body">
+            <div class="card-header">
+            <a href="#matiere<?php echo $Matiere['MID']?>"
+            class="card-link btn btn-info" data-bs-toggle="collapse">+</a>
+
+              <?php echo $Matiere['Cours'] ?> : <?php echo $Matiere['Matiere']?>
+              </div>
+            <div class="card-body collapse" id="matiere<?php echo $Matiere['MID']?>">
               <h5 class="card-title text-start">Documents disponible:</h5>
                 <p class="card-text text-start">
                 <div class="px-3">

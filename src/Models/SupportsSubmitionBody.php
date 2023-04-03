@@ -10,6 +10,9 @@ class SupportsSubmitionBody
     {
       $this->db = new DataBase();
       $this->files = new FilesManagement();
+
+      //traitement du bouton supprimer
+      $this->files->removeFile();
       ?>
 
 <div class="row g-3 align-items-center p-5">
@@ -50,13 +53,15 @@ class SupportsSubmitionBody
         <th scope="col">Nom du fichier</th>
         <th scope="col">Auteur</th>
         <th scope="col">Téléchargement</th>
+        <th scope="col">Action</th>
+
     </thead>
     <tbody>
     <?php foreach ($this->getFiles($_SESSION['GID']) as $File) { ?>
         <tr>
-          <td><?php echo $File['Fichier'] ?></td>
-          <td><?php echo $File['Poster'] ?></td>
-          <td><div class="col-auto">
+          <td class="align-middle"><?php echo $File['Fichier'] ?></td>
+          <td class="align-middle"><?php echo $File['Poster'] ?></td>
+          <td class="align-middle"><div class="col-auto">
           <?php
           if ($File['Type'] === 'pdf') { ?>
                                                     
@@ -96,6 +101,14 @@ class SupportsSubmitionBody
           }
           ?>
         </div></td>
+        <td class="align-middle">
+        <form method="post">
+            <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
+            <input type="hidden" name="Remove" value="<?php echo $File['FID'] ?>" />
+            <?php $this->suppressionButton($File['FID']); ?>
+          </form>
+
+        </td>
         </tr>
         <?php
         } ?>
@@ -110,5 +123,14 @@ class SupportsSubmitionBody
       public function getFiles($gid)
       {
         return $this->files->getFiles($gid);
+      }
+
+      public function suppressionButton($fid) {
+        if ($this->files->countDocumentsForFID($fid)) { ?>
+          <div class="col-12 btn btn-secondary" data-bs-toggle="tooltip"
+          data-bs-placement="bottom" title="Le fichier est utilisé en tant que document de cours">Supprimer</div>
+        <?php } else { ?>
+          <button type="submit" class="col-12 btn btn-warning" data-confirm="Etes vous sure de vouloir supprimer ce fichier?">Supprimer</button>
+        <?php }
       }
 }

@@ -90,10 +90,11 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-info">
-        <a href="?view=promotionsManagement" class="btn stretched-link">
+        <a href="?view=matieresValidation" class="btn stretched-link">
           <div class="card-header">Pilote de cours </div>
           <div class="card-body">
-            <h5 class="card-title text-start">Valider les supports de cours <?php $this->documentBadge() ?></h5>
+            <h5 class="card-title text-start">
+              Valider les supports de cours <?php $this->documentBadge() ?></h5>
               <p class="card-text text-start">
                 Cette interface vous permet de valider ou rejeter les support de cours.
                 (ex: powerpoint, pdf)
@@ -243,15 +244,19 @@ class OfficeBody
 
       public function accountBadge()
       {
+        if ($this->db->countNewUsers()) {
         ?>
         <span class="badge bg-secondary"><?php echo $this->db->countNewUsers(); ?></span>
         <?php
+        }
       }
 
       public function documentBadge()
       {
+        if ($this->files->countUnvalidatedDocuments()) {
         ?>
         <span class="badge bg-danger"><?php echo $this->files->countUnvalidatedDocuments(); ?></span>
         <?php
+        }
       }
 }
