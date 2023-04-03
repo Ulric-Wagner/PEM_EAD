@@ -2,12 +2,14 @@
 namespace Csupcyber\Pemead\Models;
 
 use Csupcyber\Pemead\Controlers\DataBase;
+use Csupcyber\Pemead\Controlers\FilesManagement;
 
 class SupportsSubmitionBody
 {
     public function __construct()
     {
       $this->db = new DataBase();
+      $this->files = new FilesManagement();
       ?>
 
 <div class="row g-3 align-items-center p-5">
@@ -107,6 +109,6 @@ class SupportsSubmitionBody
 
       public function getFiles($gid)
       {
-        return $this->db->getFiles($gid);
+        return $this->files->getFiles($gid);
       }
 }

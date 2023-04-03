@@ -227,5 +227,138 @@ class FilesManagement extends DataBase
         }
     }
 
+    public function getFiles($gid)
+    {
+        //retourne une array contenant les information sur les promotions
+        $sql = 'SELECT * FROM fichiers WHERE GID = :GID ORDER BY Fichier ASC ';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('GID' => $gid));
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getDocuments($mid)
+    {
+        //retourne une array contenant les information sur les documents
+        $sql = 'SELECT DID, Document, Description, MID, fichiers.FID, statut, Fichier, Type, Path, Poster
+        FROM `documents` JOIN `fichiers` ON documents.FID = fichiers.FID WHERE MID = :MID ORDER BY Document ASC ';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('MID' => $mid));
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getValidatedDocuments($mid)
+    {
+        //retourne une array contenant les information sur les documents validés
+        $sql = 'SELECT DID, Document, Description, MID, fichiers.FID, statut, Fichier, Type, Path, Poster
+        FROM `documents` JOIN `fichiers` ON documents.FID = fichiers.FID
+        WHERE MID = :MID
+        AND statut = "1"
+        ORDER BY Document ASC ';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('MID' => $mid));
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getUnvalidatedDocuments($mid)
+    {
+        //retourne une array contenant les information sur les documents à valider
+        $sql = 'SELECT DID, Document, Description, MID, fichiers.FID, statut, Fichier, Type, Path, Poster
+        FROM `documents` JOIN `fichiers` ON documents.FID = fichiers.FID
+        WHERE MID = :MID
+        AND statut = "0"
+        ORDER BY Document ASC ';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('MID' => $mid));
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function countUnvalidatedDocuments()
+    {
+        //retourne une array contenant les information sur les documents à valider
+        $sql = 'SELECT COUNT(*) FROM `documents` WHERE 1;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function createDocument()
+    {
+        if (isset($_POST['FID'])
+        && isset($_POST['description'])
+        && isset($_POST['title'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+
+            $sql = 'INSERT INTO documents (`Document`, `Description`, `FID`, `MID`)
+            VALUES (:Document,:Description, :FID, :MID);';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (Exception $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {$insert->execute(array('Document' => $this->iocleaner->inputFilter($_POST['title']),
+                                   'Description' => $this->iocleaner->inputFilter($_POST['description']),
+                                   'MID' => $this->iocleaner->inputFilter($_POST['MID']),
+                                   'FID' => $this->iocleaner->inputFilter($_POST['FID'])));
+                header($this->DONE);
+                
+            } catch (PDOException $e) {
     
+                    //erreur inatendue
+                    header($this->DBNOK);
+                }
+        }
+    
+    }
+
 }

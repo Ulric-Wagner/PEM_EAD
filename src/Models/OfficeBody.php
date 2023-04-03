@@ -1,10 +1,16 @@
 <?php
 namespace Csupcyber\Pemead\Models;
 
+use Csupcyber\Pemead\Controlers\FIlesManagement;
+use Csupcyber\Pemead\Controlers\DataBase;
+
 class OfficeBody
 {
     public function __construct()
-    { ?>
+    {
+      $this->files = new FilesManagement();
+      $this->db = new DataBase();
+      ?>
 
 <div class="d-flex justify-content-center mt-4">
   <div class="col-7 text-center">
@@ -20,7 +26,7 @@ class OfficeBody
         <a href="?view=accountsManagement" class="btn stretched-link">
           <div class="card-header">Administration</div>
           <div class="card-body">
-            <h5 class="card-title text-start">Gestion des comptes</h5>
+            <h5 class="card-title text-start">Gestion des comptes <?php $this->accountBadge() ?></h5>
               <p class="card-text text-start">
                 Cette interface vous permet de valider/rejeter/modifier les accèss des utilisateurs.
               </p>
@@ -85,9 +91,9 @@ class OfficeBody
     <div class="col">
       <div class="card text-white bg-info">
         <a href="?view=promotionsManagement" class="btn stretched-link">
-          <div class="card-header">Pilote de cours</div>
+          <div class="card-header">Pilote de cours </div>
           <div class="card-body">
-            <h5 class="card-title text-start">Valider les supports de cours</h5>
+            <h5 class="card-title text-start">Valider les supports de cours <?php $this->documentBadge() ?></h5>
               <p class="card-text text-start">
                 Cette interface vous permet de valider ou rejeter les support de cours.
                 (ex: powerpoint, pdf)
@@ -234,4 +240,18 @@ class OfficeBody
   </div>
 </div>
 <?php }
+
+      public function accountBadge()
+      {
+        ?>
+        <span class="badge bg-secondary"><?php echo $this->db->countNewUsers(); ?></span>
+        <?php
+      }
+
+      public function documentBadge()
+      {
+        ?>
+        <span class="badge bg-danger"><?php echo $this->files->countUnvalidatedDocuments(); ?></span>
+        <?php
+      }
 }

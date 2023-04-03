@@ -460,6 +460,25 @@ class DataBase
             }
     }
 
+    public function countNewUsers()
+    {
+        //retourne une array contenant les information sur les utilisateurs en attente de validation
+        $sql = 'SELECT COUNT(*) FROM `users` WHERE `Statut` = 0';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetch()['COUNT(*)'];
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
     public function getEnabledUsers()
     {
         //retourne une array contenant les information sur les utilisateurs actifs
@@ -585,26 +604,6 @@ class DataBase
             }
             try {
                 $reponse->execute(array('CID' => $cid));
-                return $reponse->fetchall();
-                   
-            } catch (PDOException $e) {
-                //erreur inatendue
-                header($this->DBNOK);
-            }
-    }
-
-
-    public function getFiles($gid)
-    {
-        //retourne une array contenant les information sur les promotions
-        $sql = 'SELECT * FROM fichiers WHERE GID = :GID ORDER BY Fichier ASC ';
-            try {
-                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-            } catch (PDOException $e) {
-                header($this->LOCATION_DBPREPARE_ERROR);
-            }
-            try {
-                $reponse->execute(array('GID' => $gid));
                 return $reponse->fetchall();
                    
             } catch (PDOException $e) {
