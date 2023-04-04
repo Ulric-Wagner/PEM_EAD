@@ -56,12 +56,12 @@ class MatieresFeedingBody
         <div class="card bg-light">
           <div class="text-dark">
             <div class="card-header">
-            <a href="#matiere<?php echo $Matiere['MID']?>"
+            <a href="#matiere<?php echo $this->iocleaner->outputFilter($Matiere['MID'])?>"
             class="card-link btn btn-info" data-bs-toggle="collapse">+</a>
 
-              <?php echo $Matiere['Cours'] ?> : <?php echo $Matiere['Matiere']?>
+              <?php echo $this->iocleaner->inputFilter($Matiere['Cours']) ?> : <?php echo $this->iocleaner->inputFilter($Matiere['Matiere'])?>
               </div>
-            <div class="card-body collapse" id="matiere<?php echo $Matiere['MID']?>">
+            <div class="card-body collapse" id="matiere<?php echo $this->iocleaner->inputFilter($Matiere['MID'])?>">
               <h5 class="card-title text-start">Documents disponible:</h5>
                 <p class="card-text text-start">
                 <div class="px-3">
@@ -78,9 +78,9 @@ class MatieresFeedingBody
     <tbody>
     <?php foreach ($this->files->getValidatedDocuments($Matiere['MID']) as $File) { ?>
         <tr>
-          <td><?php echo $File['Document'] ?></td>
-          <td><?php echo $File['Description'] ?></td>
-          <td><?php echo $File['Poster'] ?></td>
+          <td><?php echo $this->iocleaner->outputFilter($File['Document']) ?></td>
+          <td><?php echo $this->iocleaner->outputFilter($File['Description']) ?></td>
+          <td><?php echo $this->iocleaner->outputFilter($File['Poster']) ?></td>
           <td><div class="col-auto">
           <?php
           if ($File['Type'] === 'pdf') { ?>
@@ -144,9 +144,9 @@ class MatieresFeedingBody
     <tbody>
     <?php foreach ($this->files->getUnvalidatedDocuments($Matiere['MID']) as $File) { ?>
         <tr>
-          <td><?php echo $File['Document'] ?></td>
-          <td><?php echo $File['Description'] ?></td>
-          <td><?php echo $File['Poster'] ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Document']) ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Description']) ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Poster']) ?></td>
           <td><div class="col-auto">
           <?php
           if ($File['Type'] === 'pdf') { ?>

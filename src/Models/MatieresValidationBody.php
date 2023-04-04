@@ -32,13 +32,14 @@ class MatieresValidationBody
         <div class="card bg-light">
           <div class="text-dark">
             <div class="card-header">
-            <a href="#matiere<?php echo $Matiere['MID']?>"
+            <a href="#matiere<?php echo  $this->iocleaner->outputFilter($Matiere['MID'])?>"
             class="card-link btn btn-info" data-bs-toggle="collapse">+</a>
 
-              <?php echo $Matiere['Cours'] ?> : <?php echo $Matiere['Matiere']?>
+              <?php echo  $this->iocleaner->outputFilter($Matiere['Cours']) ?> :
+              <?php echo  $this->iocleaner->outputFilter($Matiere['Matiere'])?>
               <?php $this->validationBadge($Matiere['MID']) ?>
               </div>
-            <div class="card-body collapse" id="matiere<?php echo $Matiere['MID']?>">
+            <div class="card-body collapse" id="matiere<?php echo  $this->iocleaner->outputFilter($Matiere['MID'])?>">
               <h5 class="card-title text-start">Documents disponible:</h5>
                 <p class="card-text text-start">
                 <div class="px-3">
@@ -57,9 +58,9 @@ class MatieresValidationBody
     <tbody>
     <?php foreach ($this->files->getValidatedDocuments($Matiere['MID']) as $File) { ?>
         <tr>
-          <td><?php echo $File['Document'] ?></td>
-          <td><?php echo $File['Description'] ?></td>
-          <td><?php echo $File['Poster'] ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Document']) ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Description']) ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Poster']) ?></td>
           <td><div class="col-auto">
           <?php
           if ($File['Type'] === 'pdf') { ?>
@@ -103,7 +104,7 @@ class MatieresValidationBody
         <td>
         <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-            <input type="hidden" name="Reject" value="<?php echo $File['DID'] ?>" />
+            <input type="hidden" name="Reject" value="<?php echo  $this->iocleaner->outputFilter($File['DID']) ?>" />
             <button type="submit" class="col-12 btn btn-warning confirmButton">dépublier</button>
           </form>
         </td>
@@ -131,9 +132,9 @@ class MatieresValidationBody
     <tbody>
     <?php foreach ($this->files->getUnvalidatedDocuments($Matiere['MID']) as $File) { ?>
         <tr>
-          <td><?php echo $File['Document'] ?></td>
-          <td><?php echo $File['Description'] ?></td>
-          <td><?php echo $File['Poster'] ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Document']) ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Description']) ?></td>
+          <td><?php echo  $this->iocleaner->outputFilter($File['Poster']) ?></td>
           <td><div class="col-auto">
           <?php
           if ($File['Type'] === 'pdf') { ?>
@@ -177,12 +178,12 @@ class MatieresValidationBody
         <td>
         <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-            <input type="hidden" name="Valid" value="<?php echo $File['DID'] ?>" />
+            <input type="hidden" name="Valid" value="<?php echo  $this->iocleaner->outputFilter($File['DID']) ?>" />
             <button type="submit" class="col-12 btn btn-success confirmButton">Valider</button>
           </form>
           <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-            <input type="hidden" name="Reject" value="<?php echo $File['DID'] ?>" />
+            <input type="hidden" name="Reject" value="<?php echo  $this->iocleaner->outputFilter($File['DID']) ?>" />
             <button type="submit" class="col-12 btn btn-danger confirmButton">Rejeter</button>
           </form>
         </td>
@@ -204,7 +205,8 @@ class MatieresValidationBody
                           </div>
                           <div class="col-8">
                             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-                            <input type="hidden" name="MID" value="<?php echo $Matiere['MID']; ?>">
+                            <input type="hidden" name="MID"
+                            value="<?php echo  $this->iocleaner->outputFilter($Matiere['MID']); ?>">
                             <input type="text" name="title" id="title"
                             class="form-control" aria-describedby="HelpInline" required>
                           </div>
@@ -223,7 +225,7 @@ class MatieresValidationBody
                           <select class="form-select" name="FID">
                             <option value="None" selected>Selectionner un fichier</option>
                             <?php foreach ($this->getFiles($_SESSION['GID']) as $file) { ?>
-                            <option value="<?php echo $file['FID'] ?>">
+                            <option value="<?php echo  $this->iocleaner->outputFilter($file['FID']) ?>">
                             <?php echo $file['Fichier'] ?></option>
                             <?php
                             } ?>

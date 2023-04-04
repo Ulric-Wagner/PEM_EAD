@@ -289,8 +289,15 @@ class DataBase
 
                    
             } catch (PDOException $e) {
+                //Matricule déjà existant
+                $patern = "#pour la clef 'UID'$#";
+                $alreadyUsed = preg_match($patern, $e->getMessage());
+                if ($alreadyUsed) {
+                    // pass exception duplication de la clé UID
+                } else {
                 //erreur inatendue
                 header($this->DBNOK);
+                }
             }
         }
 
@@ -419,6 +426,9 @@ class DataBase
             if ($this->userIsAdmin($_SESSION['UID'])) {
                 $_SESSION['Admin'] = 'Admin';
                 $_SESSION['Role'] = '(Administrateur)';
+                if ($_SESSION['Profil'] === 'None') {
+                    $_SESSION['Profil'] = $_SESSION['Role'];
+                }
             }
 
             if ($this->userIsInstructor($_SESSION['UID'])) {
@@ -661,6 +671,7 @@ class DataBase
         //supression de l'utilisateur de la table Students et instructeurs
         $this->deleteFromStudents($uid);
         $this->deleteFromInstructeurs($uid);
+        $this->deleteFromPilotes($uid);
         //Ajout du role pilote
         $this->setRolePilote($uid, $course);
 
@@ -914,6 +925,55 @@ class DataBase
                 //erreur inatendue
                 header($this->DBNOK);
         }
+    }
+
+    public function createEvalTemplate()
+    {
+        //Création d'un template d'évaluation
+        if (isset($_POST['title'])
+        && isset($_POST['description'])
+        && isset($_POST['MID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // création d'une nouvelle matiere dans la base de donnée
+            $sql = 'INSERT INTO evaltemplates (`Eval`, `Description`, `MID`)
+                    VALUES (:Eval, :Description, :MID);';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $insert->execute(array('Eval' => $this->iocleaner->inputFilter($_POST['title']),
+                                    'Description' => $this->iocleaner->inputFilter($_POST['description']),
+                                    'MID' => $this->iocleaner->inputFilter($_POST['MID'])));
+                header($this->DONE);
+            } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+            }
+        }
+    }
+
+    public function getEvalTemplates()
+    {
+        //retourne une array contenant les information sur les promotions
+        $sql = 'SELECT cours.CID, Cours, matieres.MID, Matiere, ETID, Eval, Description
+        FROM cours JOIN matieres ON cours.CID = matieres.CID
+        JOIN evaltemplates ON evaltemplates.MID = matieres.MID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
     }
 
 
@@ -1170,4 +1230,9 @@ class DataBase
             header($this->DBNOK);
         }
     }
+
+    public function verifyCSRF($token)
+      {
+          return $token === $_SESSION['CSRFToken'];
+      }
 }

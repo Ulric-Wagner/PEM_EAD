@@ -159,6 +159,24 @@ class NavBar
           <a class="nav-link" href="?view=matieresValidation">Validation des supports de cours</a>
           <?php
         }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'learning')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=learning">Consultation des cours</a>
+          <?php
+        }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'evalTemplate')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=evalTemplate">Création de templates d'évaluations</a>
+          <?php
+        }
         
    }
 

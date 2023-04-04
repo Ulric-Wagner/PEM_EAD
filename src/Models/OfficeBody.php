@@ -17,10 +17,10 @@ class OfficeBody
     <H1>Bienvenue dans votre bureau.</H1>
   </div>
 </div>
-<?php if ($_SESSION['Admin'] === 'Admin') { ?>
 <div class="p-5">
   <div class="row row-cols-1 row-cols-md-4 g-4">
     <!---->
+    <?php if ($_SESSION['Admin'] === 'Admin') { ?>
     <div class="col">
       <div class="card bg-warning">
         <a href="?view=accountsManagement" class="btn stretched-link">
@@ -178,7 +178,7 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-dark">
-        <a href="?view=promotionsManagement" class="text-info btn stretched-link">
+        <a href="?view=evalTemplate" class="text-info btn stretched-link">
           <div class="card-header">Instructeur</div>
           <div class="card-body">
             <h5 class="card-title text-start">Créer un template d'évaluation</h5>
@@ -243,7 +243,7 @@ class OfficeBody
     <?php } ?>
   </div>
 </div>
-<?php 
+<?php
 }
 
       public function accountBadge()
