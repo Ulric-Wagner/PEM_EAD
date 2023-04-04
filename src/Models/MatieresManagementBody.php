@@ -2,12 +2,17 @@
 namespace Csupcyber\Pemead\Models;
 
 use Csupcyber\Pemead\Controlers\DataBase;
+use Csupcyber\Pemead\Controlers\FilesManagement;
 
 class MatieresManagementBody
 {
     public function __construct()
     {
       $this->db = new DataBase();
+      $this->files = new FilesManagement();
+
+      //traitement de la supresion
+      $this->files->removeMatiere();
       ?>
 
 <div class="d-flex justify-content-center p-2">
@@ -64,8 +69,8 @@ class MatieresManagementBody
           <td>
         <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
-            <input type="hidden" name="Reject" value="<?php echo $Matiere['MID'] ?>" />
-            <button type="button" class="col-12 btn btn-danger confirmButton">
+            <input type="hidden" name="Remove" value="<?php echo $Matiere['MID'] ?>" />
+            <button type="submit" class="col-12 btn btn-danger confirmButton">
             Supprimer</button>
           </form>
         </td>

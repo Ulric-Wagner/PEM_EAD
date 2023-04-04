@@ -501,4 +501,44 @@ class FilesManagement extends DataBase
     
     }
 
+    public function removeMatiere()
+    {
+        if (isset($_POST['Remove'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            //supprime une matiere et ses documents
+            $sql = 'DELETE FROM matieres WHERE MID = :MID';
+                try {
+                    $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                } catch (PDOException $e) {
+                    header($this->LOCATION_DBPREPARE_ERROR);
+                }
+                try {
+                    $reponse->execute(array("MID" => $_POST['Remove']));
+                    
+                    
+                } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+                }
+
+                $sql = 'DELETE FROM Documents WHERE MID = :MID';
+                try {
+                    $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                } catch (PDOException $e) {
+                    header($this->LOCATION_DBPREPARE_ERROR);
+                }
+                try {
+                    $reponse->execute(array("MID" => $_POST['Remove']));
+                    
+                    
+                } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+                }
+        }
+    }
+
+    
+
 }

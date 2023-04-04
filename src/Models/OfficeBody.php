@@ -17,7 +17,7 @@ class OfficeBody
     <H1>Bienvenue dans votre bureau.</H1>
   </div>
 </div>
-
+<?php if ($_SESSION['Admin'] === 'Admin') { ?>
 <div class="p-5">
   <div class="row row-cols-1 row-cols-md-4 g-4">
     <!---->
@@ -69,7 +69,8 @@ class OfficeBody
       </div>
     </div>
     <!---->
-
+  <?php }
+    if ($_SESSION['Pilote'] === 'Pilote') { ?>
     <!---->
     <div class="col">
       <div class="card text-white bg-info">
@@ -120,7 +121,8 @@ class OfficeBody
       </div>
     </div>
     <!---->
-
+<?php }
+   if ($_SESSION['Instructeur'] === 'Instructeur') { ?>
     <!---->
     <div class="col">
       <div class="card text-white bg-dark">
@@ -205,11 +207,12 @@ class OfficeBody
       </div>
     </div>
     <!---->
-
+<?php }
+ if ($_SESSION['Student'] === 'Student') { ?>
     <!---->
     <div class="col">
       <div class="card bg-success">
-        <a href="?view=coursesManagement" class="btn stretched-link">
+        <a href="?view=learning" class="btn stretched-link">
           <div class="card-header">Élèves</div>
           <div class="card-body">
             <h5 class="card-title text-start">Consulter mes cours</h5>
@@ -237,10 +240,11 @@ class OfficeBody
       </div>
     </div>
     <!---->
-
+    <?php } ?>
   </div>
 </div>
-<?php }
+<?php 
+}
 
       public function accountBadge()
       {

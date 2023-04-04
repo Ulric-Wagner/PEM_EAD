@@ -21,6 +21,7 @@ use Csupcyber\Pemead\Controlers\SupportsSubmition;
 use Csupcyber\Pemead\Controlers\FilesManagement;
 use Csupcyber\Pemead\Controlers\MatieresFeeding;
 use Csupcyber\Pemead\Controlers\MatieresValidation;
+use Csupcyber\Pemead\Controlers\Learning;
 
 
 class IndexRouter{
@@ -49,49 +50,80 @@ class IndexRouter{
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'setPassword')) {
             $process = new SetUserProcess();
             $process->updatePassword();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'setUser')) {
+        } elseif (isset($_GET['process'])
+        && ($_GET['process'] === 'setUser')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetUserProcess();
             $process->edit();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'validUser')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'validUser')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetUserProcess();
             $process->valid();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'rejectUser')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'rejectUser')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetUserProcess();
             $process->reject();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'disableUser')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'disableUser')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetUserProcess();
             $process->disable();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createCourse')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createCourse')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetCourseProcess();
             $process->createCourse();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createGroupement')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createGroupement')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetCourseProcess();
             $process->createGroupement();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameGroupement')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameGroupement')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetCourseProcess();
             $process->renameGroupement();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removeGroupement')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removeGroupement')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetCourseProcess();
             $process->removeGroupement();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameCourse')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renameCourse')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetCourseProcess();
             $process->renameCourse();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removeCourse')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removeCourse')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
             $process = new SetCourseProcess();
             $process->removeCourse();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createPromotion')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createPromotion')
+        && isset($_SESSION['Pilote'])
+        && ($_SESSION['Pilote'] === 'Pilote')) {
             $process = new SetCourseProcess();
             $process->createPromotion();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createMatiere')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'createMatiere')
+        && isset($_SESSION['Instructeur'])
+        && ($_SESSION['Instructeur'] === 'Instructeur')) {
             $process = new SetCourseProcess();
             $process->createMatiere();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renamePromotion')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'renamePromotion')
+        && isset($_SESSION['Pilote'])
+        && ($_SESSION['Pilote'] === 'Pilote')) {
             $process = new SetCourseProcess();
             $process->renamePromotion();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removePromotion')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'removePromotion')
+        && isset($_SESSION['Pilote'])
+        && ($_SESSION['Pilote'] === 'Pilote')) {
             $process = new SetCourseProcess();
             $process->removePromotion();
-        } elseif (isset($_GET['process']) && ($_GET['process'] === 'sendFile')) {
+        } elseif (isset($_GET['process']) && ($_GET['process'] === 'sendFile')
+        && isset($_SESSION['Instructeur'])
+        && ($_SESSION['Instructeur'] === 'Instructeur')) {
             $process = new FilesManagement();
             $process->fileUpload();
         } elseif (isset($_GET['process']) && ($_GET['process'] === 'download')) {
@@ -141,7 +173,9 @@ class IndexRouter{
         $office->body();
         $office->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'accountsManagement')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
         $accounts = new AccountsManagement();
         $accounts->header();
         $accounts->navbar();
@@ -151,7 +185,9 @@ class IndexRouter{
         $accounts->body();
         $accounts->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'coursesManagement')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
         $courses = new CoursesManagement();
         $courses->header();
         $courses->navbar();
@@ -161,7 +197,9 @@ class IndexRouter{
         $courses->body();
         $courses->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'groupementsManagement')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Admin'])
+        && ($_SESSION['Admin'] === 'Admin')) {
         $courses = new GroupementsManagement();
         $courses->header();
         $courses->navbar();
@@ -171,7 +209,9 @@ class IndexRouter{
         $courses->body();
         $courses->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'promotionsManagement')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Pilote'])
+        && ($_SESSION['Pilote'] === 'Pilote')) {
         $promotions = new PromotionsManagement();
         $promotions->header();
         $promotions->navbar();
@@ -181,7 +221,9 @@ class IndexRouter{
         $promotions->body();
         $promotions->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresCreation')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Instructeur'])
+        && ($_SESSION['Instructeur'] === 'Instructeur')) {
         $matieres = new MatieresCreation();
         $matieres->header();
         $matieres->navbar();
@@ -191,7 +233,9 @@ class IndexRouter{
         $matieres->body();
         $matieres->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresManagement')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Instructeur'])
+        && ($_SESSION['Instructeur'] === 'Instructeur')) {
         $matieres = new MatieresManagement();
         $matieres->header();
         $matieres->navbar();
@@ -201,7 +245,9 @@ class IndexRouter{
         $matieres->body();
         $matieres->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'supportsSubmition')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Instructeur'])
+        && ($_SESSION['Instructeur'] === 'Instructeur')) {
         $supports = new SupportsSubmition();
         $supports->header();
         $supports->navbar();
@@ -211,7 +257,9 @@ class IndexRouter{
         $supports->body();
         $supports->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresFeeding')
-        && ($_SESSION['authentication'] === 'authenticated')) {
+        && ($_SESSION['authentication'] === 'authenticated')
+        && isset($_SESSION['Instructeur'])
+        && ($_SESSION['Instructeur'] === 'Instructeur')) {
         $matieres = new MatieresFeeding();
         $matieres->header();
         $matieres->navbar();
@@ -221,8 +269,22 @@ class IndexRouter{
         $matieres->body();
         $matieres->footer();
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresValidation')
-    && ($_SESSION['authentication'] === 'authenticated')) {
+    && ($_SESSION['authentication'] === 'authenticated')
+    && isset($_SESSION['Pilote'])
+        && ($_SESSION['Pilote'] === 'Pilote')) {
     $matieres = new MatieresValidation();
+    $matieres->header();
+    $matieres->navbar();
+    $msg->error();
+    $msg->warning();
+    $msg->success();
+    $matieres->body();
+    $matieres->footer();
+} elseif (isset($_GET['view']) && ($_GET['view'] === 'learning')
+    && ($_SESSION['authentication'] === 'authenticated')
+    && isset($_SESSION['Student'])
+        && ($_SESSION['Student'] === 'Student')) {
+    $matieres = new Learning();
     $matieres->header();
     $matieres->navbar();
     $msg->error();

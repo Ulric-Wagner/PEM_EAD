@@ -438,6 +438,7 @@ class DataBase
                 $_SESSION['Student'] = 'Student';
                 $promotion = $this->getStudentPromotion(($_SESSION['UID']));
                 $_SESSION['Profil'] = "Elève ".$promotion['Cours']." ".$promotion['Promotion'];
+                $_SESSION['StudentCID'] = $promotion['CID'];
             }
     }
 
@@ -1106,7 +1107,7 @@ class DataBase
     public function getStudentPromotion($uid)
     {
         //retourne le cours et la promotion suivi par l'eleve.
-        $sql = 'SELECT promotions.PID, cours.Cours, promotions.Promotion
+        $sql = 'SELECT promotions.PID, cours.CID, cours.Cours, promotions.Promotion
         FROM students JOIN promotions ON students.PID = promotions.PID
         JOIN cours ON promotions.CID = cours.CID
         WHERE students.UID = :UID;';
