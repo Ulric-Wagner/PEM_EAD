@@ -231,7 +231,7 @@ class MatieresFeedingBody
                           </select>
                         </div>
                           <div class="col-auto">
-                            <button type="submit" class="btn btn-secondary btn-block">Ajouter</button>
+                            <button type="submit" class="btn btn-secondary btn-block confirmButton">Ajouter</button>
                           </div>
                         </div>
                       </form>

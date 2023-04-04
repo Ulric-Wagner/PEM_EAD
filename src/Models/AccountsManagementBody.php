@@ -361,21 +361,21 @@ class AccountsManagementBody
         <td>
         <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="EditedUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="btn btn-info">Modifier</button>
+            <button type="submit" class="btn btn-info confirmButton">Modifier</button>
           </form>
         </td>
         <td>
           <form class="col-5" method="post" action="?view=accountsManagement&process=validUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="ValidatedUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="btn btn-success">Valider</button>
+            <button type="submit" class="btn btn-success confirmButton">Valider</button>
           </form>
         </td>
         <td>
           <form class="col-5" method="post" action="?view=accountsManagement&process=rejectUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="RejectedUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="btn btn-danger">Rejeter</button>
+            <button type="submit" class="btn btn-danger confirmButton">Rejeter</button>
           </form>
         </td>
         
@@ -740,24 +740,21 @@ class AccountsManagementBody
         <td>
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="EditedUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="col-12 btn btn-success"
-            data-confirm="Etes vous sure de vouloir appliquer les modification pour cet utilisateur?">Modifier</button>
+            <button type="submit" class="col-12 btn btn-success confirmButton">Modifier</button>
           </form>
       </td>
       <td>
           <form method="post" action="?view=accountsManagement&process=disableUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="DisabledUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="col-12 btn btn-warning"
-            data-confirm="Etes vous sure de vouloir désactiver cet utilisateur?">Désactiver</button>
+            <button type="submit" class="col-12 btn btn-warning confirmButton">Désactiver</button>
           </form>
       </td>
       <td>
           <form method="post" action="?view=accountsManagement&process=rejectUser">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="RejectedUser" value="<?php echo $user['UID'] ?>" />
-            <button type="submit" class="col-12 btn btn-danger"
-            data-confirm="Etes vous sure de vouloir supprimer cet utilisateur?">Supprimer</button>
+            <button type="submit" class="col-12 btn btn-danger confirmButton">Supprimer</button>
           </form>
         </td>
       </tr>

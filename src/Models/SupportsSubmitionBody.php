@@ -37,7 +37,7 @@ class SupportsSubmitionBody
                     />
         </div>
         <div class="col-auto">
-          <button type="submit" class="btn btn-secondary btn-block">Soumettre</button>
+          <button type="submit" class="btn btn-secondary btn-block confirmButton">Soumettre</button>
         </div>
       </div>
     </form>
@@ -130,7 +130,7 @@ class SupportsSubmitionBody
           <div class="col-12 btn btn-secondary" data-bs-toggle="tooltip"
           data-bs-placement="bottom" title="Le fichier est utilisé en tant que document de cours">Supprimer</div>
         <?php } else { ?>
-          <button type="submit" class="col-12 btn btn-warning" data-confirm="Etes vous sure de vouloir supprimer ce fichier?">Supprimer</button>
+          <button type="submit" class="col-12 btn btn-warning">Supprimer</button>
         <?php }
       }
 }

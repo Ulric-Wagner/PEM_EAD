@@ -108,7 +108,7 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-info">
-        <a href="?view=promotionsManagement" class="btn stretched-link">
+        <a href="?view=matieresManagement" class="btn stretched-link">
           <div class="card-header">Pilote de cours</div>
           <div class="card-body">
             <h5 class="card-title text-start">Gerer les matières</h5>

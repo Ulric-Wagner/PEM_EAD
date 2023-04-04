@@ -555,6 +555,25 @@ class DataBase
             }
     }
 
+    public function getCourseByCID($cid)
+    {
+        $sql = 'SELECT * FROM `cours` WHERE `CID` LIKE :CID;';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('CID' => $cid));
+                return $reponse->fetchall();
+
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
     public function getPromotions()
     {
         //retourne une array contenant les information sur les promotions

@@ -41,7 +41,7 @@ class CoursesManagementBody
           </select>
         </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-secondary btn-block">Créer</button>
+            <button type="submit" class="btn btn-secondary btn-block confirmButton">Créer</button>
           </div>
         </div>
       </form>
@@ -87,7 +87,7 @@ class CoursesManagementBody
             <form method="post" action="?view=coursesManagement&process=removeCourse">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
               <input type="hidden" name="removeCourse" value="<?php echo $course['CID'] ?>" />
-              <button type="submit" class="btn btn-danger" data-confirm="Etes vous sure de vouloir supprimer ce cours?">Supprimer</button>
+              <button type="submit" class="btn btn-danger confirmButton">Supprimer</button>
             </form>
           </td>
           

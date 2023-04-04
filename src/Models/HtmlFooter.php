@@ -6,6 +6,7 @@ class HtmlFooter
     public function __construct()
     { ?>
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/index.js"></script>
     <?php
     if (isset($_GET['view']) && $_GET['view'] === 'setPassword') {
         ?>

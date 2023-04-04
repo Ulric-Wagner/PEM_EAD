@@ -104,7 +104,7 @@ class MatieresValidationBody
         <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="Reject" value="<?php echo $File['DID'] ?>" />
-            <button type="submit" class="col-12 btn btn-warning">dépublier</button>
+            <button type="submit" class="col-12 btn btn-warning confirmButton">dépublier</button>
           </form>
         </td>
         </tr>
@@ -178,12 +178,12 @@ class MatieresValidationBody
         <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="Valid" value="<?php echo $File['DID'] ?>" />
-            <button type="submit" class="col-12 btn btn-success">Valider</button>
+            <button type="submit" class="col-12 btn btn-success confirmButton">Valider</button>
           </form>
           <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="Reject" value="<?php echo $File['DID'] ?>" />
-            <button type="submit" class="col-12 btn btn-danger">Rejeter</button>
+            <button type="submit" class="col-12 btn btn-danger confirmButton">Rejeter</button>
           </form>
         </td>
         </tr>
@@ -230,7 +230,7 @@ class MatieresValidationBody
                           </select>
                         </div>
                           <div class="col-auto">
-                            <button type="submit" class="btn btn-secondary btn-block">Ajouter</button>
+                            <button type="submit" class="btn btn-secondary btn-block confirmButton">Ajouter</button>
                           </div>
                         </div>
                       </form>

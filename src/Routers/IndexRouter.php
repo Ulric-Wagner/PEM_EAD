@@ -16,6 +16,7 @@ use Csupcyber\Pemead\Controlers\SetUserProcess;
 use Csupcyber\Pemead\Controlers\SetCourseProcess;
 use Csupcyber\Pemead\Controlers\PromotionsManagement;
 use Csupcyber\Pemead\Controlers\MatieresCreation;
+use Csupcyber\Pemead\Controlers\MatieresManagement;
 use Csupcyber\Pemead\Controlers\SupportsSubmition;
 use Csupcyber\Pemead\Controlers\FilesManagement;
 use Csupcyber\Pemead\Controlers\MatieresFeeding;
@@ -182,6 +183,16 @@ class IndexRouter{
     } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresCreation')
         && ($_SESSION['authentication'] === 'authenticated')) {
         $matieres = new MatieresCreation();
+        $matieres->header();
+        $matieres->navbar();
+        $msg->error();
+        $msg->warning();
+        $msg->success();
+        $matieres->body();
+        $matieres->footer();
+    } elseif (isset($_GET['view']) && ($_GET['view'] === 'matieresManagement')
+        && ($_SESSION['authentication'] === 'authenticated')) {
+        $matieres = new MatieresManagement();
         $matieres->header();
         $matieres->navbar();
         $msg->error();

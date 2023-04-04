@@ -141,6 +141,15 @@ class NavBar
           <a class="nav-link" href="?view=matieresFeeding">Enrichir les matières</a>
           <?php
         }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'matieresManagement')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=matieresManagement">Gestion des matières</a>
+          <?php
+        }
         
         if (isset($_SESSION['authentication'])
         &&($_SESSION['authentication'] === 'authenticated')
