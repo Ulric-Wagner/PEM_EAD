@@ -195,7 +195,7 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card text-white bg-dark">
-        <a href="?view=promotionsManagement" class="text-info btn stretched-link">
+        <a href="?view=evalsManagement" class="text-info btn stretched-link">
           <div class="card-header">Instructeur</div>
           <div class="card-body">
             <h5 class="card-title text-start">Démarrer une évaluation</h5>

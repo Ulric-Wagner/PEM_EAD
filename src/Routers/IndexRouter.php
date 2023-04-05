@@ -23,6 +23,7 @@ use Csupcyber\Pemead\Controlers\MatieresFeeding;
 use Csupcyber\Pemead\Controlers\MatieresValidation;
 use Csupcyber\Pemead\Controlers\Learning;
 use Csupcyber\Pemead\Controlers\EvalTemplate;
+use Csupcyber\Pemead\Controlers\EvalsManagement;
 
 
 class IndexRouter{
@@ -298,6 +299,18 @@ class IndexRouter{
     && isset($_SESSION['Instructeur'])
         && ($_SESSION['Instructeur'] === 'Instructeur')) {
     $eval = new EvalTemplate();
+    $eval->header();
+    $eval->navbar();
+    $msg->error();
+    $msg->warning();
+    $msg->success();
+    $eval->body();
+    $eval->footer();
+} elseif (isset($_GET['view']) && ($_GET['view'] === 'evalsManagement')
+    && ($_SESSION['authentication'] === 'authenticated')
+    && isset($_SESSION['Instructeur'])
+        && ($_SESSION['Instructeur'] === 'Instructeur')) {
+    $eval = new EvalsManagement();
     $eval->header();
     $eval->navbar();
     $msg->error();

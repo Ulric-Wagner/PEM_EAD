@@ -955,12 +955,140 @@ class DataBase
         }
     }
 
+    public function createEval()
+    {
+        //Création  d'évaluation
+        if (isset($_POST['PID'])
+        && isset($_POST['ETID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            $sql = 'INSERT INTO evals (`ETID`, `PID`)
+                    VALUES (:ETID, :PID);';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $insert->execute(array('ETID' => $this->iocleaner->inputFilter($_POST['ETID']),
+                                       'PID' => $this->iocleaner->inputFilter($_POST['PID'])));
+                header($this->DONE);
+            } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+            }
+        }
+    }
+
+    public function enableEval()
+    {
+        //Création  d'évaluation
+        if (isset($_POST['EnableEAID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // activer eval
+    $sql = 'UPDATE evals SET Statut = :Statut WHERE EAID = :EAID;';
+    try {
+        $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    } catch (PDOException $e) {
+        header($this->LOCATION_DBPREPARE_ERROR);
+    }
+    try {
+        $insert->execute(array('EAID' => $this->iocleaner->inputFilter($_POST['EnableEAID']),
+                               'Statut' => '1'));
+    
+        header($this->DONE);
+        
+    } catch (PDOException $e) {
+        //erreur inatendue
+        header($this->DBNOK);
+    }
+        }
+    }
+
+    public function disableEval()
+    {
+        //Création  d'évaluation
+        if (isset($_POST['DisableEAID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // désactiver eval
+    $sql = 'UPDATE evals SET Statut = :Statut WHERE EAID = :EAID;';
+    try {
+        $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    } catch (PDOException $e) {
+        header($this->LOCATION_DBPREPARE_ERROR);
+    }
+    try {
+        $insert->execute(array('EAID' => $this->iocleaner->inputFilter($_POST['DisableEAID']),
+                               'Statut' => '0'));
+    
+        header($this->DONE);
+        
+    } catch (PDOException $e) {
+        //erreur inatendue
+        header($this->DBNOK);
+    }
+        }
+    }
+
+    public function removeEval()
+    {
+        
+        if (isset($_POST['RemoveEAID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // supprimer eval
+    $sql = 'DELETE FROM evals WHERE EAID = :EAID;';
+    try {
+        $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    } catch (PDOException $e) {
+        header($this->LOCATION_DBPREPARE_ERROR);
+    }
+    try {
+        $insert->execute(array('EAID' => $this->iocleaner->inputFilter($_POST['RemoveEAID'])));
+    
+        header($this->DONE);
+        
+    } catch (PDOException $e) {
+        //erreur inatendue
+        header($this->DBNOK);
+    }
+        }
+    }
+
+
     public function getEvalTemplates()
     {
-        //retourne une array contenant les information sur les promotions
+        //retourne une array contenant les information sur les template d'eval
         $sql = 'SELECT cours.CID, Cours, matieres.MID, Matiere, ETID, Eval, Description
         FROM cours JOIN matieres ON cours.CID = matieres.CID
         JOIN evaltemplates ON evaltemplates.MID = matieres.MID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute();
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function getEvals()
+    {
+        //retourne une array contenant les information sur les evals
+        $sql = 'SELECT EAID, evals.ETID, PID, Eval, Description, matieres.MID, matieres.Matiere, cours.CID, cours.Cours FROM evals
+        JOIN evaltemplates
+        ON evals.ETID = evaltemplates.ETID
+        JOIN matieres
+        ON matieres.MID = evaltemplates.MID
+        JOIN cours
+        ON matieres.CID = cours.CID;';
             try {
                 $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             } catch (PDOException $e) {
@@ -995,6 +1123,166 @@ class DataBase
             header($this->DBNOK);
         }
 
+    }
+
+    public function getQuestions($etid)
+    {
+        //retourne une array contenant les information sur les questions
+        $sql = 'SELECT * FROM questions WHERE ETID = :ETID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('ETID' => $this->iocleaner->inputFilter($etid)));
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
+    }
+
+    public function createQuestion()
+    {
+        //Création d'un template d'évaluation
+        if (isset($_POST['question'])
+        && isset($_POST['ETID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // création d'une nouvelle question dans la base de donnée
+            $sql = 'INSERT INTO questions (`Question`, `ETID`)
+                    VALUES (:Question, :ETID);';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $insert->execute(array('Question' => $this->iocleaner->inputFilter($_POST['question']),
+                                    'ETID' => $this->iocleaner->inputFilter($_POST['ETID'])));
+                header($this->DONE);
+            } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+            }
+        }
+    }
+
+    public function createReponse()
+    {
+        //Création d'un template d'évaluation
+        if (isset($_POST['reponse'])
+        && isset($_POST['QID'])
+        && isset($_POST['points'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // création d'une nouvelle reponse dans la base de donnée
+            $sql = 'INSERT INTO reponses (`Reponse`, `QID`, `Points`)
+                    VALUES (:Reponse, :QID, :Points);';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $insert->execute(array('Reponse' => $this->iocleaner->inputFilter($_POST['reponse']),
+                                    'QID' => $this->iocleaner->inputFilter($_POST['QID']),
+                                    'Points' => $this->iocleaner->inputFilter($_POST['points'])));
+                header($this->DONE);
+            } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+            }
+        }
+    }
+
+    public function removeReponse()
+    {
+        //Création d'un template d'évaluation
+        if (isset($_POST['RemoveRID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // supprime reponse dans la base de donnée
+            $sql = 'DELETE FROM reponses WHERE RID = :RID;';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $insert->execute(array('RID' => $this->iocleaner->inputFilter($_POST['RemoveRID'])));
+                header($this->DONE);
+            } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+            }
+        }
+    }
+
+    public function removeQuestion()
+    {
+        //Création d'un template d'évaluation
+        if (isset($_POST['RemoveQID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            // supprime question dans la base de donnée
+            $sql = 'DELETE FROM questions WHERE QID = :QID;';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $insert->execute(array('QID' => $this->iocleaner->inputFilter($_POST['RemoveQID'])));
+                header($this->DONE);
+            } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+            }
+        }
+    }
+
+    public function removeEvalTemplate()
+    {
+        //Suppression d'un template d'évaluation
+        if (isset($_POST['RemoveETID'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            $sql = 'DELETE FROM evaltemplates WHERE ETID = :ETID;';
+            try {
+                $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $insert->execute(array('ETID' => $this->iocleaner->inputFilter($_POST['RemoveETID'])));
+                header($this->DONE);
+            } catch (PDOException $e) {
+                    //erreur inatendue
+                    header($this->DBNOK);
+            }
+        }
+    }
+
+    public function getReponses($qid)
+    {
+        //retourne une array contenant les information sur les reponses
+        $sql = 'SELECT * FROM reponses WHERE QID = :QID';
+            try {
+                $reponse = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            } catch (PDOException $e) {
+                header($this->LOCATION_DBPREPARE_ERROR);
+            }
+            try {
+                $reponse->execute(array('QID' => $this->iocleaner->inputFilter($qid)));
+                return $reponse->fetchall();
+                   
+            } catch (PDOException $e) {
+                //erreur inatendue
+                header($this->DBNOK);
+            }
     }
 
     public function removePromotion($pid)

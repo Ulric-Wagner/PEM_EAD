@@ -177,6 +177,15 @@ class NavBar
           <a class="nav-link" href="?view=evalTemplate">Création de templates d'évaluations</a>
           <?php
         }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'evalsManagement')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=evalsManagement">Démarrer une évaluation</a>
+          <?php
+        }
         
    }
 
