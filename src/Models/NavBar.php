@@ -11,7 +11,7 @@ class NavBar
           <div class="container">
               <a href="?view=signup" class="navbar-brand d-flex w-50 me-auto justify-content-center">
                PEM EAD</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              <button class="navbar-toggler" type="submit"  data-bs-toggle="collapse"
               data-bs-target="#collapsingNavbar3">
                   <span class="navbar-toggler-icon"></span>
               </button>
@@ -184,6 +184,15 @@ class NavBar
         && ($_GET['view'] === 'evalsManagement')) {?>
           <li class="nav-item active">
           <a class="nav-link" href="?view=evalsManagement">Démarrer une évaluation</a>
+          <?php
+        }
+
+        if (isset($_SESSION['authentication'])
+        &&($_SESSION['authentication'] === 'authenticated')
+        && isset($_GET['view'])
+        && ($_GET['view'] === 'eval')) {?>
+          <li class="nav-item active">
+          <a class="nav-link" href="?view=eval">Évaluation</a>
           <?php
         }
         

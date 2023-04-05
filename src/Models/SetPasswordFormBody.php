@@ -46,7 +46,7 @@ class SetPasswordFormBody
       <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
       <!-- Submit button -->
       <div class="d-flex justify-content-center">
-      <button type="submit" class="btn btn-secondary btn-block mb-3 confirmButton">Modifier le mot de passe</button>
+      <button type="submit"  class="btn btn-secondary btn-block mb-3 confirmButton">Modifier le mot de passe</button>
     </div>
     </form>
   </div>

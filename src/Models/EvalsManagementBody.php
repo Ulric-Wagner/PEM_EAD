@@ -48,7 +48,7 @@ class EvalsManagementBody
           </select>
         </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-secondary btn-block confirmButton">Créer</button>
+            <button type="submit"  class="btn btn-secondary btn-block confirmButton">Créer</button>
           </div>
         </div>
       </form>
@@ -84,8 +84,9 @@ class EvalsManagementBody
                   value="<?php echo  $this->iocleaner->outputFilter($eval['EAID'])?>">
                   
                   <div class="col-auto">
-                    <button type="submit"
-                    class="btn btn-info btn-block confirmButton">Démarrer l'évaluation</button>
+                    <button type="submit" 
+                    class="btn btn-info btn-block confirmButton"
+                    <?php if ($eval['Statut'] === 1) {echo "disabled";}?>>Démarrer l'évaluation</button>
                   </div>
                 </form>
               <form method="post">
@@ -94,8 +95,9 @@ class EvalsManagementBody
                   value="<?php echo  $this->iocleaner->outputFilter($eval['EAID'])?>">
                   
                   <div class="col-auto">
-                    <button type="submit"
-                    class="btn btn-warning btn-block confirmButton">Terminer l'évaluation</button>
+                    <button type="submit" 
+                    class="btn btn-warning btn-block confirmButton"
+                    <?php if ($eval['Statut'] === 0) {echo "disabled";}?>>Terminer l'évaluation</button>
                   </div>
                 </form>
                 <form method="post">
@@ -104,8 +106,9 @@ class EvalsManagementBody
                   value="<?php echo  $this->iocleaner->outputFilter($eval['EAID'])?>">
                   
                   <div class="col-auto">
-                    <button type="submit"
-                    class="btn btn-danger btn-block confirmButton">Suprimer l'évaluation</button>
+                    <button type="submit" 
+                    class="btn btn-danger btn-block confirmButton"
+                    <?php if ($eval['Statut'] === 1) {echo "disabled";}?>>Suprimer l'évaluation</button>
                   </div>
                 </form>
 

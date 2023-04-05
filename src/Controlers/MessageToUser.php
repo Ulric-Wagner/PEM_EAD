@@ -15,7 +15,7 @@ class MessageToUser
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>Enregistré!!</strong> Votre compte utilisateur a été créé,
                 il sera actif après la validation d'un administrateur.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -24,12 +24,12 @@ class MessageToUser
         && ($_GET['success'] === "firstRegistred")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>Enregistré!!</strong> Votre compte utilisateur a été créé!
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
             <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
                 <strong>Oncle Ben:</strong> Un grand pouvoir implique de grande responsabilités,
                 en tant que premier utilisateur vous êtes l'administrateur de ce portail!
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -38,7 +38,7 @@ class MessageToUser
         && ($_GET['success'] === "logedIn")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>Vous revoilà!!</strong> Vous êtes connecté, au travail! &#x1F609;.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -47,7 +47,7 @@ class MessageToUser
         && ($_GET['success'] === "passwordChanged")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>Mot de passe modifié !!</strong> Merci de contribuer à la sécurité de la plateforme &#x1F609;.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -56,7 +56,7 @@ class MessageToUser
         && ($_GET['success'] === "done")) {?>
             <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
                 <strong>OK !! </strong> Action réalisée &#x1F609;.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -68,7 +68,7 @@ class MessageToUser
         && ($_GET['warning'] === "disconnected")) {?>
             <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
                 <strong>À bientôt!!</strong> Vous êtes déconnecté, bon repos! &#x1F44D;.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -81,7 +81,7 @@ class MessageToUser
         && ($_GET['error'] === "mailFormat")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Veuillez verifier le format de votre adresse e-mail.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -91,7 +91,7 @@ class MessageToUser
         && ($_GET['error'] === "mailAlreadyUsed")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> L'adresse e-mail <?php echo $_GET['mail'];?> est déjà utilisée.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -101,7 +101,7 @@ class MessageToUser
         && ($_GET['error'] === "courseAlreadyUsed")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Le nom de cours <?php echo $_GET['course'];?> est déjà utilisée.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -111,7 +111,7 @@ class MessageToUser
         && ($_GET['error'] === "dbConnect")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Connexion à la base de donnée impossible, veuillez contacter un administrateur.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -121,7 +121,7 @@ class MessageToUser
         && ($_GET['error'] === "dbPrepare")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> erreur dans une requête préparée, veuillez contacter votre administrateur.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -131,7 +131,7 @@ class MessageToUser
         && ($_GET['error'] === "matriculeAlreadyUsed")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Le matricule <?php echo $_GET['matricule'];?> est déjà utilisée.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -146,7 +146,7 @@ class MessageToUser
                 - Au moins un chiffre. <br/>
                 - Au moins un caractère spécial. <br/>
                 - Au moins 8 caractères.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -156,7 +156,7 @@ class MessageToUser
         && ($_GET['error'] === "RejectedAuth")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> L'association adresse e-mail et mot de passe saisie n'est pas valide.
-               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+               <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
              </div>
         <?php
         }
@@ -167,7 +167,7 @@ class MessageToUser
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Votre compte utilisateur est en attente de validation,
                 veuillez contacter un administrateur ou rééssayer plus tard.
-               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+               <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
              </div>
         <?php
         }
@@ -177,7 +177,7 @@ class MessageToUser
         && ($_GET['error'] === "nok")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Oups!</strong> L'action n'a pas été éfectuée...
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -188,7 +188,7 @@ class MessageToUser
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Oups!</strong> L'action n'a pas été éfectuée...
                 erreur lors de l'insertion dans la base de donnée.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -198,7 +198,7 @@ class MessageToUser
         && ($_GET['error'] === "noCourse")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Veuillez selectionner un cours à piloter.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -208,7 +208,7 @@ class MessageToUser
         && ($_GET['error'] === "noGroupement")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Veuillez selectionner votre groupement d'instruction.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -218,7 +218,7 @@ class MessageToUser
         && ($_GET['error'] === "noPromotion")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Veuillez selectionner votre promotion.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -228,7 +228,7 @@ class MessageToUser
         && ($_GET['error'] === "uploadError")) {?>
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> <?php echo  $_SESSION['ERROR']; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }
@@ -239,7 +239,7 @@ class MessageToUser
             <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                 <strong>Erreur!</strong> Le fichier que vous essayez de supprimer est attaché à un ou plusieurs
                 cours / matières en tant que document et ne peut être supprimé.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+                <button type="submit"  class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
             </div>
         <?php
         }

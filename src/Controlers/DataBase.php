@@ -1082,7 +1082,9 @@ class DataBase
     public function getEvals()
     {
         //retourne une array contenant les information sur les evals
-        $sql = 'SELECT EAID, evals.ETID, PID, Eval, Description, matieres.MID, matieres.Matiere, cours.CID, cours.Cours FROM evals
+        $sql = 'SELECT EAID, evals.ETID, PID, Eval,
+        Description, matieres.MID, matieres.Matiere, cours.CID, cours.Cours, evals.Statut
+        FROM evals
         JOIN evaltemplates
         ON evals.ETID = evaltemplates.ETID
         JOIN matieres
@@ -1103,6 +1105,33 @@ class DataBase
                 header($this->DBNOK);
             }
     }
+
+    public function startEval()
+    {
+        //Debuter évaluation
+        if (isset($_POST['start'])
+        && isset($_POST['CSRFToken'])
+        && $this->verifyCSRF($_POST['CSRFToken'])) {
+            
+    $sql = 'INSERT INTO copies (`EAID`, `UID`)
+    VALUES (:EAID, :UID);';
+    try {
+        $insert = $this->bdd->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    } catch (PDOException $e) {
+        header($this->LOCATION_DBPREPARE_ERROR);
+    }
+    try {
+        $insert->execute(array('EAID' => $this->iocleaner->inputFilter($_POST['start']),
+                               'UID' => $_SESSION['UID']));
+        $_SESSION['onEval'] = true;
+        
+    } catch (PDOException $e) {
+        //erreur inatendue
+        header($this->DBNOK);
+    }
+        }
+    }
+
 
 
     public function renamePromotion($pid, $promotion)

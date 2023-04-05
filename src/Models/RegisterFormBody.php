@@ -180,7 +180,7 @@ class RegisterFormBody
       <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
       <!-- Submit button -->
       <div class="d-flex justify-content-center">
-      <button type="submit" class="btn btn-dark btn-block mb-3">S'enregistrer</button>
+      <button type="submit"  class="btn btn-dark btn-block mb-3">S'enregistrer</button>
     </div>
     </form>
   </div>

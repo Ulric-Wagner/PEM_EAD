@@ -27,7 +27,7 @@ class GroupementsManagementBody
             class="form-control" aria-describedby="HelpInline">
           </div>
           <div class="col-auto">
-            <button type="submit" class="btn btn-secondary btn-block confirmButton">Créer</button>
+            <button type="submit"  class="btn btn-secondary btn-block confirmButton">Créer</button>
           </div>
         </div>
       </form>
@@ -63,14 +63,14 @@ class GroupementsManagementBody
             
         </td>
         <td>
-            <button type="submit" class="btn btn-info confirmButton">Renommer</button>
+            <button type="submit"  class="btn btn-info confirmButton">Renommer</button>
             </form>
           </td>
           <td>
             <form method="post" action="?view=groupementsManagement&process=removeGroupement">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
               <input type="hidden" name="removeGroupement" value="<?php echo $groupement['GID'] ?>" />
-              <button type="submit" class="btn btn-danger confirmButton">Supprimer</button>
+              <button type="submit"  class="btn btn-danger confirmButton">Supprimer</button>
             </form>
           </td>
           

@@ -36,7 +36,7 @@ class PromotionsManagementBody
           </select>
         </div>
         <div class="col-auto">
-          <button type="submit" class="btn btn-secondary btn-block confirmButton">Créer</button>
+          <button type="submit"  class="btn btn-secondary btn-block confirmButton">Créer</button>
         </div>
       </div>
     </form>
@@ -76,14 +76,14 @@ class PromotionsManagementBody
             
         </td>
         <td>
-            <button type="submit" class="btn btn-info confirmButton">Renommer</button>
+            <button type="submit"  class="btn btn-info confirmButton">Renommer</button>
             </form>
           </td>
           <td>
             <form method="post" action="?view=promotionsManagement&process=removePromotion">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
               <input type="hidden" name="removePromotion" value="<?php echo $promotion['PID'] ?>" />
-              <button type="submit" class="btn btn-danger confirmButton">Supprimer</button>
+              <button type="submit"  class="btn btn-danger confirmButton">Supprimer</button>
             </form>
           </td>
           

@@ -69,7 +69,7 @@ class EvalTemplateBody
          </select>
        </div>
        <div class="col-auto">
-         <button type="submit" class="btn btn-secondary btn-block confirmButton">Ajouter</button>
+         <button type="submit"  class="btn btn-secondary btn-block confirmButton">Ajouter</button>
        </div>
      </div>
    </form>
@@ -105,7 +105,7 @@ class EvalTemplateBody
                   value="<?php echo  $this->iocleaner->outputFilter($eval['ETID'])?>">
                   
                   <div class="col-auto">
-                    <button type="submit"
+                    <button type="submit" 
                     class="btn btn-danger btn-block confirmButton">Suprimer le template d'évaluation</button>
                   </div>
                 </form>
@@ -151,7 +151,7 @@ class EvalTemplateBody
        </div>
     </div>
     <div class="col-auto">
-      <button type="submit" class="btn btn-secondary btn-block confirmButton">Ajouter</button>
+      <button type="submit"  class="btn btn-secondary btn-block confirmButton">Ajouter</button>
     </div>
   </form>
 </div>
@@ -183,7 +183,7 @@ class EvalTemplateBody
                 value="<?php echo  $this->iocleaner->outputFilter($question['QID'])?>">
                   
                   <div class="col-auto">
-                    <button type="submit" class="btn btn-danger btn-block confirmButton">Suprimer la question</button>
+                    <button type="submit"  class="btn btn-danger btn-block confirmButton">Suprimer la question</button>
                   </div>
               </form>
 
@@ -242,7 +242,7 @@ class EvalTemplateBody
       </div>
       </div>
       <div class="col-auto">
-        <button type="submit" class="btn btn-secondary btn-block confirmButton">Ajouter</button>
+        <button type="submit"  class="btn btn-secondary btn-block confirmButton">Ajouter</button>
       </div>
     </form>
     <?php $this->showReponses($eval, $question); ?>
@@ -309,7 +309,7 @@ class EvalTemplateBody
     <input type="hidden" name="RemoveRID" value="<?php echo  $this->iocleaner->outputFilter($reponse['RID'])?>">
       
       <div class="col-auto">
-        <button type="submit" class="btn btn-danger btn-block confirmButton">Suprimer la reponse</button>
+        <button type="submit"  class="btn btn-danger btn-block confirmButton">Suprimer la reponse</button>
       </div>
     </form>
 </div>

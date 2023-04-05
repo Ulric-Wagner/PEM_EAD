@@ -45,7 +45,7 @@ class MatieresManagementBody
           </select>
         </div>
         <div class="col-auto">
-          <button type="submit" class="btn btn-secondary btn-block confirmButton">Créer</button>
+          <button type="submit"  class="btn btn-secondary btn-block confirmButton">Créer</button>
         </div>
       </div>
     </form>
@@ -70,7 +70,7 @@ class MatieresManagementBody
         <form method="post">
             <input type="hidden" name="CSRFToken" value="<?php echo $_SESSION['CSRFToken']; ?>">
             <input type="hidden" name="Remove" value="<?php echo $Matiere['MID'] ?>" />
-            <button type="submit" class="col-12 btn btn-danger confirmButton">
+            <button type="submit"  class="col-12 btn btn-danger confirmButton">
             Supprimer</button>
           </form>
         </td>

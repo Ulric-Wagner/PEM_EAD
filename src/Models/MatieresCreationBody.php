@@ -42,7 +42,7 @@ class MatieresCreationBody
           </select>
         </div>
         <div class="col-auto">
-          <button type="submit" class="btn btn-secondary btn-block confirmButton">Créer</button>
+          <button type="submit"  class="btn btn-secondary btn-block confirmButton">Créer</button>
         </div>
       </div>
     </form>

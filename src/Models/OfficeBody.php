@@ -228,12 +228,12 @@ class OfficeBody
     <!---->
     <div class="col">
       <div class="card bg-success">
-        <a href="?view=coursesManagement" class="btn stretched-link">
+        <a href="?view=eval" class="btn stretched-link">
           <div class="card-header">Élèves</div>
           <div class="card-body">
             <h5 class="card-title text-start">Entrer dans une évaluation</h5>
               <p class="card-text text-start">
-                En bonus peut-être...
+               En Construction...No time....
               </p>
           </div>
         </a>

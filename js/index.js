@@ -6,6 +6,7 @@ confirmButton.forEach( (self) => {
     })
 })
 
+
 //ouverture des collapse via url
 urlhash = location.hash.split('&');
 urlhash.forEach( (self) => {

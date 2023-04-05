@@ -37,7 +37,7 @@ class MatieresFeedingBody
           </div>
         
       
-          <button type="submit" class="btn btn-secondary btn-block col-3">Voir les matières</button>
+          <button type="submit"  class="btn btn-secondary btn-block col-3">Voir les matières</button>
     </form>
     </div>
 <!--  -->
@@ -231,7 +231,7 @@ class MatieresFeedingBody
                           </select>
                         </div>
                           <div class="col-auto">
-                            <button type="submit" class="btn btn-secondary btn-block confirmButton">Ajouter</button>
+                            <button type="submit"  class="btn btn-secondary btn-block confirmButton">Ajouter</button>
                           </div>
                         </div>
                       </form>
